@@ -1,11 +1,11 @@
 #Helper functions
 from flask              import Flask, render_template, session, redirect, url_for, flash
-from flask_bootstrap    import Bootstrap
-from flask_moment       import Moment
-from datetime           import datetime
 from flask_wtf          import FlaskForm
 from wtforms            import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = "hard to guess string"
 
 class validateEmail(object):
     def __call__(self, form, field):
@@ -21,3 +21,7 @@ class NameForm(FlaskForm):
     password    = StringField( 'Enter your Password', validators = [DataRequired()] )
     email       = StringField( 'Enter your Email Address', validators = [DataRequired(), validateEmail()] )
     submit      = SubmitField( 'Submit' )
+
+@app.route('/')
+def index():
+    return render_template("homepage.html")
