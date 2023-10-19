@@ -3,6 +3,9 @@ from flask              import Flask, render_template, session, redirect, url_fo
 from flask_wtf          import FlaskForm
 from wtforms            import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
+# import API routes
+from routes.user_auth_routes import user_auth
+from routes.event_feed_routes import event_feed
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "hard to guess string"
