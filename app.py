@@ -1,12 +1,12 @@
-#Helper functions
-from flask              import Flask, render_template, session, redirect, url_for, flash
-from flask_wtf          import FlaskForm
-from wtforms            import StringField, SubmitField
+from flask import Flask, render_template, session, redirect, url_for, flash
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "hard to guess string"
 
+#Helper functions
 class validateEmail(object):
     def __call__(self, form, field):
         email = field.data
