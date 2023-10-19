@@ -19,3 +19,16 @@
 ## Sample Contact Page
 
 <img width="680" alt="5" src="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/65524500/74b985ee-fdf3-4d96-9205-03343b2b678e">
+
+## Sample Log in Page
+
+![6](https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/97846637/1dd007fa-53ca-41c8-9980-1033bfd01e28)
+
+## Sample Create Account Page
+
+![7](https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/97846637/bf8371b8-f4ff-43bb-b70a-52ad9baa95f0)
+
+## Sample Create Club Page
+
+![8](https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/97846637/b47a5ebc-8afd-443c-887e-c587a18f6a2b)
+
