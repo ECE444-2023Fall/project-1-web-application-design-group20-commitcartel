@@ -232,7 +232,7 @@ Project Link: [https://github.com/ECE444-2023Fall/project-1-web-application-desi
 [license-url]: https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: [images/screenshot.png](https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/65524500/c12ea443-d7c5-43fb-a653-bd353daf7f3d)
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
