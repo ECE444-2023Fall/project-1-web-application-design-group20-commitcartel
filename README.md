@@ -37,7 +37,11 @@
 <h3 align="center">CampusConnect</h3>
 
   <p align="center">
-    project_description
+    Welcome to UofT’s CampusConnect page! A centralized
+    platform designed exclusively for the University of Toronto
+    community. Explore our page to leam about the latest
+    events, different teams and clubs you can join, and
+    seamlessly connect with other students, alumni, and staff
     <br />
     <a href="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel"><strong>Explore the docs »</strong></a>
     <br />
