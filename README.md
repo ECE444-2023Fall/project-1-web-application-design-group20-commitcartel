@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/65524500/c12ea443-d7c5-43fb-a653-bd353daf7f3d" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">CampusConnect</h3>
