@@ -1,4 +1,5 @@
 import pytest
+import json
 
 @pytest.fixture
 def test_search_events_with_user_input(client, user_search_string):
