@@ -69,4 +69,22 @@ def test_latest_events(client):
         assert 'date' in current_event
         assert 'date' in previous_event
         assert current_event['date'] >= previous_event['date']
+
+def test_following_feed(client):
+	# Send a GET request to obtain following feed from the /following_feed route
+	response = client.get('/following_feed')
+
+	# Check if the response status is 200, ensuring it is OK
+	assert response.status_code == 200
+
+	# Parse the response as JSON
+	response_data = json.loads(response.data)
+
+	# Check if the response is a list
+	assert isinstance(response_data, list)
+
+	# Check if the response corresponds to the user’s followed clubs
+	for event in response_data:
+		assert “club_id” in event
+		assert club_followed(event[“club_id”])
         
