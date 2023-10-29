@@ -30,3 +30,26 @@ def test_delete_event(client, event_id):
     # Ensure the event is being deleted
     rv = client.delete("/event_post/1")
     assert rv.status_code == 200
+
+def test_latest_events(client):
+    # Send a GET request to the /latest_events endpoint
+    response = client.get('/latest_events')
+
+    # Check if the response status code is 200, indicating success
+    assert response.status_code == 200
+
+    # Parse the response as JSON
+    response_data = json.loads(response.data)
+
+    # Check if the response_data is a list
+    assert isinstance(response_data, list)
+
+    # check that given events are in order of date
+    for event in range(1, len(response_data)):
+        current_event = response_data[i]
+        previous_event = response_data[i - 1]
+        
+        assert 'date' in current_event
+        assert 'date' in previous_event
+        assert current_event['date'] >= previous_event['date']
+        
