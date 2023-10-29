@@ -17,9 +17,9 @@ def make_post():
     # Return a response
     return jsonify({"message": "Post created successfully"})
 
-# Route to retrieve a post (GET request)
-@posting.route('/get_post/<post_id>', methods=['GET'])
-def get_post(post_id):
+# Route to get/delete a post (DELETE request)
+@posting.route('/event_post/<post_id>', methods=['GET', 'DELETE'])
+def post(post_id):
     # Retrieve the post with the specified ID from the database
     # Example: You can fetch the post from a database
     # Replace this with your database interaction code
@@ -29,5 +29,9 @@ def get_post(post_id):
     if post is None:
         return jsonify({"error": "Post not found"}, 404)
 
-    # Return the post data as JSON
-    return jsonify(post)
+    if request.method == "GET":
+        # Return the post data as JSON
+        return jsonify(post)
+    
+    elif request.method == "DELETE":
+        return ""
