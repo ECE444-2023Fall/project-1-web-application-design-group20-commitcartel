@@ -30,3 +30,19 @@ def test_delete_event(client, event_id):
     # Ensure the event is being deleted
     rv = client.delete("/event_post/1")
     assert rv.status_code == 200
+
+def test_make_post(client):
+    # Create a sample post data as a dictionary
+    post_data = {"title": "Test Post", "content": "This is a test post."}
+
+    # Send a POST request to the /make_post route with the sample post data
+    response = client.post('/make_post', json=post_data)
+
+    # Check if the response status code is 200 (OK)
+    assert response.status_code == 200
+
+    # Parse the response as JSON
+    response_data = json.loads(response.data)
+
+    # Check if the response contains the expected message
+    assert response_data["message"] == "Post created successfully"
