@@ -88,3 +88,17 @@ def test_following_feed(client):
 		assert “club_id” in event
 		assert club_followed(event[“club_id”])
         
+def test_search_clubs_with_user_input(client, user_search_string):
+    #This test is for the club page search bar to ensure output contains search string
+
+    response = client.post('/club_search', data={'query': user_search_string})
+
+    # Check if the response contains the search string
+    assert user_search_string.encode() in response.data
+
+    # Parse the response as JSON
+    response_data = json.loads(response.data)
+
+    # Check if the response is a list of club pages that contain the user's input string
+    for club in response_data:
+        assert user_search_string in club['name']
