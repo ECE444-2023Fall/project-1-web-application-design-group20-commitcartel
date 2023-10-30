@@ -11,6 +11,7 @@ def client():
         yield app.test_client() # tests run here
 
 
+# Adrian Chow
 def test_search_events_with_user_input(client, user_search_string):
     response = client.post('/search', data={'query': user_search_string})
 
@@ -26,11 +27,22 @@ def test_search_events_with_user_input(client, user_search_string):
         assert user_search_string in event['name']
 
 
+# Navidur Rahman
 def test_delete_event(client, event_id):
-    # Ensure the event is being deleted
-    rv = client.delete("/event_post/1")
-    assert rv.status_code == 200
+    # Ensure the event is being deleted by sending a DELETE request
+    response = client.delete("/event_post/1")
 
+    # Check if the response status code is 200 (OK)
+    assert response.status_code == 200
+
+    # Parse the response as JSON
+    response_data = json.loads(response.data)
+
+    # Check if the response contains the expected message
+    assert response_data["message"] == "Post deleted successfully"
+
+
+# Ismail Bennani
 def test_make_post(client):
     # Create a sample post data as a dictionary
     post_data = {"title": "Test Post", "content": "This is a test post."}
@@ -48,6 +60,7 @@ def test_make_post(client):
     assert response_data["message"] == "Post created successfully"
 
 
+# Arafat Syed Shah
 def test_latest_events(client):
     # Send a GET request to the /latest_events endpoint
     response = client.get('/latest_events')
@@ -70,6 +83,8 @@ def test_latest_events(client):
         assert 'date' in previous_event
         assert current_event['date'] >= previous_event['date']
 
+
+# Kavya Kadi
 def test_following_feed(client):
 	# Send a GET request to obtain following feed from the /following_feed route
 	response = client.get('/following_feed')
@@ -85,9 +100,11 @@ def test_following_feed(client):
 
 	# Check if the response corresponds to the user’s followed clubs
 	for event in response_data:
-		assert “club_id” in event
-		assert club_followed(event[“club_id”])
+		assert "club_id" in event
+		assert club_followed(event["club_id"])
         
+
+# Mahiliny Santhirakumar
 def test_search_clubs_with_user_input(client, user_search_string):
     #This test is for the club page search bar to ensure output contains search string
 
