@@ -2,25 +2,39 @@ from pymongo.mongo_client import MongoClient
 from pymongo.errors import *
 import certifi
 
-#Connect to MongoDB
+# Connect to MongoDB
 uri = "mongodb+srv://admin_user:admin@campusconnect.mlzgisz.mongodb.net/?retryWrites=true&w=majority"
 try:
     client = MongoClient(uri, tlsCAFile=certifi.where())
-    print("connected")
+    db_client = client['CampusConnect']
+    print("Connected to database")
   
 # return a friendly error if a URI error is thrown 
 except ConfigurationError:
     print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
 
-db = client.TestDB
-collection = db.TestGuy
+# Database wrapper functions for all database related tasks
+# Add in other wrappers as we need them
+def get_data(collection_name, query):
+    try:
+        collection = db_client[collection_name]
+        result = collection.find(query)
+        return list(result)
+    
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, "Failed to get data")
 
-doc = [{"1": "A", "Bob":"Alice"}, {"2": "B", "Hobo": "Bobo"}, {"1": 2}]
+def update_one(collection_name, query, update):
+    try:
+        collection = db_client[collection_name]
+        result = collection.update_one(query, update)
 
-try: 
-    result = collection.insert_many(doc)
-    print("inserted doc")
-
-# return a friendly error if the operation fails
-except OperationFailure:
-    print("An authentication error was received. Are you sure your database user is authorized to perform write operations?")
+        if result.modified_count > 0:
+            return (True, "Update Successful")
+        else:
+            return (False, "No matching documents found")
+        
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, "Failed to update data")
