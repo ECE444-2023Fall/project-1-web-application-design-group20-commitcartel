@@ -4,8 +4,8 @@ from flask import Blueprint, request, jsonify
 posting = Blueprint('posting', __name__)
 
 # Route to create a new post (POST request)
-@posting.route('/make_post', methods=['POST'])
-def make_post():
+@posting.route('/event_post', methods=['POST'])
+def create_post():
     # Get data from the request
     data = request.json  # Assuming the data is sent as JSON
 
@@ -19,19 +19,19 @@ def make_post():
 
 # Route to get/delete a post (DELETE request)
 @posting.route('/event_post/<post_id>', methods=['GET', 'DELETE'])
-def post(post_id):
+def get_or_delete_post(post_id):
     # Retrieve the post with the specified ID from the database
     # Example: You can fetch the post from a database
     # Replace this with your database interaction code
-    # post = db.get_post(post_id)
+    # post_id = db.get_post(post_id)
 
     # Check if the post exists
-    if post is None:
+    if post_id is None:
         return jsonify({"error": "Post not found"}, 404)
 
     if request.method == "GET":
         # Return the post data as JSON
-        return jsonify(post)
+        return jsonify(post_id)
     
     elif request.method == "DELETE":
         return ""
