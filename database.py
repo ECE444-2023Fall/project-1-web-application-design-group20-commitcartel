@@ -1,5 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.errors import *
+from bson.timestamp import Timestamp
+from database_helper import timestamp_to_dict
 import certifi
 
 # Connect to MongoDB
@@ -23,11 +25,11 @@ def get_data(collection_name, query=None, projection=None):
         result = collection.find(query, projection)
 
         return (True, list(result))
-    
+
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
-    
+
 # Get one document
 def get_data_one(collection_name, query=None, projection=None):
     try:
@@ -35,7 +37,7 @@ def get_data_one(collection_name, query=None, projection=None):
         result = collection.find_one(query, projection)
 
         return (True, result)
-    
+
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
@@ -54,3 +56,4 @@ def update_one(collection_name, query, update):
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
+    
