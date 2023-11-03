@@ -55,5 +55,5 @@ def update_one(collection_name, query, update):
         
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
-        return (False, "Failed to update data")
+        return (False, e)
     
