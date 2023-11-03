@@ -25,10 +25,22 @@ def get_data(collection_name, query=None, projection=None):
         result = collection.find(query, projection)
 
         return (True, list(result))
-    
+
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
-        return (False, "Failed to get data")
+        return (False, e)
+
+# Get one document
+def get_data_one(collection_name, query=None, projection=None):
+    try:
+        collection = db_client[collection_name]
+        result = collection.find_one(query, projection)
+
+        return (True, result)
+
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, e)
 
 # Update one document
 def update_one(collection_name, query, update):
