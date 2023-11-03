@@ -15,6 +15,8 @@ except ConfigurationError:
 
 # Database wrapper functions for all database related tasks
 # Add in other wrappers as we need them
+
+# Get multiple documents
 def get_data(collection_name, query=None, projection=None):
     try:
         collection = db_client[collection_name]
@@ -26,6 +28,7 @@ def get_data(collection_name, query=None, projection=None):
         print(f"Database error: {str(e)}")
         return (False, e)
     
+# Get one document
 def get_data_one(collection_name, query=None, projection=None):
     try:
         collection = db_client[collection_name]
@@ -37,6 +40,7 @@ def get_data_one(collection_name, query=None, projection=None):
         print(f"Database error: {str(e)}")
         return (False, e)
 
+# Update one document
 def update_one(collection_name, query, update):
     try:
         collection = db_client[collection_name]
