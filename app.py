@@ -6,11 +6,12 @@ from wtforms.validators import DataRequired, ValidationError
 from routes.user_auth_routes import user_auth
 from routes.event_feed_routes import event_feed
 from routes.query_routes import query
-
+from routes.posting_routes import posting
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(query)
+app.register_blueprint(posting)
 
 #Helper functions
 class validateEmail(object):

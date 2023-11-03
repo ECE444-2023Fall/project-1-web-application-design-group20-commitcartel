@@ -55,4 +55,7 @@ def update_one(collection_name, query, update):
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
-    
+
+# Function to get the MongoDB database
+def get_mongo_database():
+    return db_client
