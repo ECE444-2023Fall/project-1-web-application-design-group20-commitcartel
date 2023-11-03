@@ -31,8 +31,8 @@ def register_for_event():
     print(success1, result1)
 
     # Add the event to the list of registered events for the user
-    success2, result2 = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(user_id)}})
-    print(success1, result2)
+    success2, result2 = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(event_id)}})
+    print(success2, result2)
 
     if success1 and success2:
         return jsonify({'message': result1 + " " + result2})
