@@ -7,13 +7,31 @@ event_feed = Blueprint('event_feed', __name__)
 
 @event_feed.route('/explore_feed', methods=['GET'])
 def get_explore_feed():
-    #TODO
-    return "a json object of current events to explore"
+    # get most recent events
+    success, result = get_data('Events', query={}, sort=[{"time", -1}])
 
-@event_feed.route('/following_feed', methods=['GET'])
-def get_following_feed():
-    #TODO
-    return "a json object of current events from users following"
+    if success:
+        return json.loads(json_util.dumps(result))
+    else:
+        return jsonify({'error': str(result)}), 500
+
+@event_feed.route('/following_feed/<user_id>', methods=['GET'])
+def get_following_feed(user_id):
+
+    # Get clubs user follows
+    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'following_clubs': 1})
+    clubs = [item for item in data['following_clubs']]
+
+    if not success:
+        return jsonify({'error': str(clubs)}), 500
+
+    # get events from all the club ids
+    success, results = get_data('Events', {'club_id': {'$in': clubs}}, sort=[{"time", -1}])
+
+    if success:
+        return json.loads(json_util.dumps(results))
+    else:
+        return jsonify({'error': str(results)}), 500
 
 @event_feed.route('/registered_feed/<user_id>', methods=['GET'])
 def get_registered_feed(user_id):
