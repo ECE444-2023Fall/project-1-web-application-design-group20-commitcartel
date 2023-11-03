@@ -19,7 +19,6 @@ def get_following_feed():
 def get_registered_feed(user_id):
     # Get the list of the user's registered event IDs
     success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'registered_events': 1})
-    print(data)
     data = [item for item in data['registered_events']]
 
     if not success:
@@ -48,14 +47,12 @@ def register_for_event():
 
     # Add user to the list of registered attendees for the given event
     success, result = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'attendees': ObjectId(user_id)}})
-    print(result)
 
     if not success:
         return jsonify({'error': str(result)})
 
     # Add the event to the list of registered events for the user
     success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(event_id)}})
-    print(result)
 
     if success:
         return jsonify({'message': "registered successfully"})
