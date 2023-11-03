@@ -8,6 +8,7 @@ from routes.event_feed_routes import event_feed
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "hard to guess string"
+app.register_blueprint(event_feed)
 
 #Helper functions
 class validateEmail(object):
