@@ -1,7 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.errors import *
 from bson.timestamp import Timestamp
-from database_helper import timestamp_to_dict
 import certifi
 
 # Connect to MongoDB
