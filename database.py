@@ -18,10 +18,14 @@ except ConfigurationError:
 # Add in other wrappers as we need them
 
 # Get multiple documents
-def get_data(collection_name, query=None, projection=None):
+def get_data(collection_name, query=None, projection=None, sort=None):
     try:
         collection = db_client[collection_name]
         result = collection.find(query, projection)
+
+        # Apply sorting if provided
+        if sort is not None:
+            result = result.sort(sort)
 
         return (True, list(result))
 
