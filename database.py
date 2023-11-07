@@ -15,7 +15,7 @@ except ConfigurationError:
 
 # Database wrapper functions for all database related tasks
 # Add in other wrappers as we need them
-def get_data(collection_name, query):
+def get_data_one(collection_name, query):
     try:
         collection = db_client[collection_name]
         result = collection.find(query)
@@ -44,7 +44,7 @@ def insert_one(collection_name, query):
         collection = db_client[collection_name]
         result = collection.insert_one(query)
         result_id = result.inserted_id
-        return (result_id)
+        return (True, result_id)
     
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
