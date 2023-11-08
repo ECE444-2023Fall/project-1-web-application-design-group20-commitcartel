@@ -66,7 +66,7 @@ def insert_one(collection_name, data):
         result = collection.insert_one(data)
 
         if result.inserted_id:
-            return (True, "Insert Successful")
+            return (True, result.inserted_id)
         else:
             return (False, "Failed to insert document")
 
