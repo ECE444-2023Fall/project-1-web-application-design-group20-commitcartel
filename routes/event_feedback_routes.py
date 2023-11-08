@@ -14,13 +14,10 @@ def leave_event_feedback():
     comments = data['comments']
 
     # Add the event rating and comments to corresponding event                        
-    success_events, result_events = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'event_rating': rating, 'event_comments': comments}})
+    success_events, result_events = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'feedback_id': ObjectId(feedback_id), 'user_id': ObjectId(user_id), 'event_rating': rating, 'event_comments': comments}})
 
-    # Add the event rating and comments to Ratings
-    success_ratings, result_ratings = update_one('Ratings', {'_id': ObjectId(feedback_id)}, {'$set': {'event_id': ObjectId(event_id), 'user_id': ObjectId(user_id), 'rating': rating, 'comments': comments}})
-
-    if success_events and success_ratings:
-        return jsonify({'message': result_events + " " + result_ratings})
+    if success_events:
+        return jsonify({'message': result_events})
 
     else:
-        return jsonify({'error': result_events + " " + result_ratings}), 500
+        return jsonify({'error': result_events}), 500
