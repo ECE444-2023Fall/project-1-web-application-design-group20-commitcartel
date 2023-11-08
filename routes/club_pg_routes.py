@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField, FileField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from database import insert_one, get_data_one
 from bson.objectid import ObjectId
-
+from werkzeug.utils import secure_filename
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
@@ -15,7 +15,7 @@ class ClubForm(FlaskForm):
     email            = StringField('What is the Club Email Address?', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
     password         = StringField( 'Please Create a Password', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = StringField( 'Please Confirm the Password', validators = [DataRequired()] )
-    club_icon        = FileField('Please Attach Club Logo:', validators=[DataRequired()])
+    club_icon        = FileField('Please Attach Club Logo:', validators= [DataRequired()] )
     club_description = TextAreaField('Please Write a Short description About the Club:', validators=[DataRequired()])
     submit           = SubmitField('Submit') 
 
@@ -38,19 +38,16 @@ def clubs(club_id):
             event_name = event_info['name']
             event_list.append(event_name)     #create a list of event names from event IDs
 
-    return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email)
+    return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email, photo=photo)
 
 @club_pg.route('/create_club', methods=['GET', 'POST'])
 def create_club():
     form = ClubForm()    
     if form.validate_on_submit():
-      
         session['club_name']        = str(form.club_name.data)   
-        session['club_icon']        = form.club_icon
         session['email']            = str(form.email.data)
         session['club_description'] = str(form.club_description.data) 
         session['password']         = str(form.password.data)
-
 
         club_object = {
             'club_description': session.get('club_description'),
@@ -60,7 +57,7 @@ def create_club():
             'club_rating_avg': '', 
             'events': '', 
             'followers': '', 
-            'photo':  '' 
+            'photo': ''
         }
 
         success, club_id = insert_one('Clubs', club_object)      
