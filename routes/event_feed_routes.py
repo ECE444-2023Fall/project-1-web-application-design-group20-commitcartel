@@ -25,7 +25,7 @@ def get_registered_feed(user_id):
         return jsonify({'error': str(data)}), 500
     
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', {'_id': {'$in': data}})
+    success, results = get_data('Events', {'_id': {'$in': data}}, {'event_rating': 1})
     
     if success:
         return json.loads(json_util.dumps(results))
