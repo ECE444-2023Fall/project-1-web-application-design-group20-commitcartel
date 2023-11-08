@@ -59,4 +59,16 @@ def update_one(collection_name, query, update):
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
+
     
+def insert_one(collection_name, query):
+    try:
+        collection = db_client[collection_name]
+        result = collection.insert_one(query)
+        result_id = result.inserted_id
+        return (True, result_id)
+    
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, e)
+
