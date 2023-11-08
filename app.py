@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(query)
+app.register_blueprint(user_auth)
 
 #Helper functions
 class validateEmail(object):
