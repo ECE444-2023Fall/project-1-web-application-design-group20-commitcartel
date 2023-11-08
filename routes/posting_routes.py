@@ -1,6 +1,6 @@
 # Import the necessary libraries
 from flask import Blueprint, request, jsonify, json
-from database import get_data, get_data_one, update_one, get_mongo_database
+from database import get_data, get_data_one, update_one, get_mongo_database, insert_one, delete_one
 from bson import ObjectId, json_util
 
 # Create a Blueprint
@@ -34,38 +34,31 @@ def validate_data(data):
         if key not in data:
             return False, f"Missing key: {key}"
 
+    # Initialize the attendees and event_rating fields if they don't exist
+    if "attendees" not in data:
+        data["attendees"] = []
+
+    if "event_rating" not in data:
+        data["event_rating"] = []
+
+    # Initialize the event_rating_avg field if it doesn't exist
+    if "event_rating_avg" not in data:
+        data["event_rating_avg"] = -1
+
     # Additional validation checks can be added here
 
     return True, "Data is consistent with the schema"
 
 # Function to insert a post into the database with initialized fields
 def insert_post(data):
-    try:
-        db_client = get_mongo_database()
-        collection_name = 'Events'  
-        collection = db_client[collection_name]
+    # Validate the data
+    is_valid, validation_message = validate_data(data)
+    if not is_valid:
+        return False, validation_message
 
-        # Validate the data
-        is_valid, validation_message = validate_data(data)
-        if not is_valid:
-            return False, validation_message
+    result = insert_one("Events", data)
+    return True, result.inserted_id
 
-        # Initialize the attendees and event_rating fields if they don't exist
-        if "attendees" not in data:
-            data["attendees"] = []
-
-        if "event_rating" not in data:
-            data["event_rating"] = []
-
-        # Initialize the event_rating_avg field if it doesn't exist
-        if "event_rating_avg" not in data:
-            data["event_rating_avg"] = -1
-
-        result = collection.insert_one(data)
-        return True, result.inserted_id
-    except PyMongoError as e:
-        print(f"Database error: {str(e)}")
-        return False, str(e)
 
 # Route to get/delete a post (GET or DELETE request)
 @posting.route('/event_post/<post_id>', methods=['GET', 'DELETE'])
@@ -91,17 +84,11 @@ def get_or_delete_post(post_id):
 
 # Function to delete a post from the database
 def delete_post(post_id):
-    try:
-        db_client = get_mongo_database()
-        collection_name = 'Events'  
-        collection = db_client[collection_name]
-        result = collection.delete_one({"_id": post_id})
 
-        if result.deleted_count > 0:
-            return True, "Post deleted successfully"
-        else:
-            return False, "No matching documents found"
-    except PyMongoError as e:
-        print(f"Database error: {str(e)}")
-        return False, str(e)
+    result = delete_one("Events", {"_id": post_id})
+
+    if result.deleted_count > 0:
+        return True, "Post deleted successfully"
+    else:
+        return False, "No matching documents found"
 

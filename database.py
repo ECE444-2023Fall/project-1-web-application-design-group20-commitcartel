@@ -56,6 +56,16 @@ def update_one(collection_name, query, update):
         print(f"Database error: {str(e)}")
         return (False, e)
 
-# Function to get the MongoDB database
-def get_mongo_database():
-    return db_client
+def delete_one(collection_name, query):
+    try:
+        collection = db_client[collection_name]
+        result = collection.delete_one(query)
+
+        if result.deleted_count > 0:
+            return (True, "Delete Successful")
+        else:
+            return (False, "No matching documents found")
+        
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, str(e))
