@@ -7,7 +7,7 @@ from routes.user_auth_routes import user_auth
 from routes.event_feed_routes import event_feed
 from routes.query_routes import query
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(query)
@@ -31,3 +31,14 @@ class NameForm(FlaskForm):
 @app.route('/')
 def index():
     return render_template("homepage.html")
+
+@app.route('/following')
+def following():
+    return render_template('following.html')
+
+@app.route('/explore')
+def explore():
+    return render_template('explore.html')
+
+if __name__ == '__main__':
+    app.run()
