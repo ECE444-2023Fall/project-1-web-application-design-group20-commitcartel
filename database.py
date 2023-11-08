@@ -18,10 +18,14 @@ except ConfigurationError:
 # Add in other wrappers as we need them
 
 # Get multiple documents
-def get_data(collection_name, query=None, projection=None):
+def get_data(collection_name, query=None, projection=None, sort=None):
     try:
         collection = db_client[collection_name]
         result = collection.find(query, projection)
+
+        # Apply sorting if provided
+        if sort is not None:
+            result = result.sort(sort)
 
         return (True, list(result))
 
@@ -56,6 +60,7 @@ def update_one(collection_name, query, update):
         print(f"Database error: {str(e)}")
         return (False, e)
 
+
 def delete_one(collection_name, query):
     try:
         collection = db_client[collection_name]
@@ -69,3 +74,16 @@ def delete_one(collection_name, query):
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, str(e))
+
+    
+def insert_one(collection_name, query):
+    try:
+        collection = db_client[collection_name]
+        result = collection.insert_one(query)
+        result_id = result.inserted_id
+        return (True, result_id)
+    
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, e)
+
