@@ -1,5 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.errors import *
+from bson.timestamp import Timestamp
 import certifi
 
 # Connect to MongoDB
@@ -15,16 +16,36 @@ except ConfigurationError:
 
 # Database wrapper functions for all database related tasks
 # Add in other wrappers as we need them
-def get_data_one(collection_name, query):
+
+# Get multiple documents
+def get_data(collection_name, query=None, projection=None, sort=None):
     try:
         collection = db_client[collection_name]
-        result = collection.find(query)
-        return list(result)
-    
+        result = collection.find(query, projection)
+
+        # Apply sorting if provided
+        if sort is not None:
+            result = result.sort(sort)
+
+        return (True, list(result))
+
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
-        return (False, "Failed to get data")
+        return (False, e)
 
+# Get one document
+def get_data_one(collection_name, query=None, projection=None):
+    try:
+        collection = db_client[collection_name]
+        result = collection.find_one(query, projection)
+
+        return (True, result)
+
+    except PyMongoError as e:
+        print(f"Database error: {str(e)}")
+        return (False, e)
+
+# Update one document
 def update_one(collection_name, query, update):
     try:
         collection = db_client[collection_name]
@@ -37,7 +58,8 @@ def update_one(collection_name, query, update):
         
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
-        return (False, "Failed to update data")
+        return (False, e)
+
     
 def insert_one(collection_name, query):
     try:
@@ -48,4 +70,5 @@ def insert_one(collection_name, query):
     
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
-        return (False, "Failed to insert data")
+        return (False, e)
+
