@@ -18,7 +18,7 @@ def register_user():
     if "utoronto" not in data["email"]:
         return jsonify({"error": "Email not a UofT email"}), 400
 
-    # Check if the user already exists based on email (you might want to use a unique index in MongoDB)
+    # Check if the user already exists based on email
     _, existing_user = get_data_one("Users", {"email": data["email"]})
     if existing_user:
         return jsonify({"error": "Email is already registered"}), 400
