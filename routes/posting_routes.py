@@ -63,7 +63,6 @@ def insert_post(data):
 # Route to get/delete a post (GET or DELETE request)
 @posting.route('/event_post/<post_id>', methods=['GET', 'DELETE'])
 def get_or_delete_post(post_id):
-    print("hello")
     # Find the post with the specified ID in the database
     post = get_data_one('Events', {"_id": ObjectId(post_id)})
 
@@ -76,19 +75,8 @@ def get_or_delete_post(post_id):
     
     elif request.method == "DELETE":
         # Delete the post from the database
-        success, message = delete_post(ObjectId(post_id))
+        success, message = delete_one('Events', {"_id": ObjectId(post_id)})
         if success:
             return jsonify({"message": "Post deleted successfully"})
         else:
             return jsonify({"error": message}, 500)
-
-# Function to delete a post from the database
-def delete_post(post_id):
-
-    result = delete_one("Events", {"_id": post_id})
-
-    if result.deleted_count > 0:
-        return True, "Post deleted successfully"
-    else:
-        return False, "No matching documents found"
-
