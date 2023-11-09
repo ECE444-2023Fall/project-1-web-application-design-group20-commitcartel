@@ -1,6 +1,42 @@
+{% import 'list.html' as list_create %}
 {% extends "base.html" %}
 
 {% block content %}
     <h1>Welcome to the Explore Page</h1>
     <p>This is the content of the explore page.</p>
+
+    {{list_create.event_list(events)}}
+
+
+    <button id="sendPostRequestButton">Send POST Request</button>
+
+    <script>
+        // JavaScript code to handle the button click event
+        document.getElementById('sendPostRequestButton').addEventListener('click', function() {
+            sendPostRequest();
+        });
+
+        // Function to send the POST request
+        function sendPostRequest() {
+            // Define the data to be sent in the request
+            var data = {
+                key1: 'Bob'
+            };
+
+            fetch('/explore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(responseData => {
+                    // Handle the response data as needed
+                    console.log('Response:', responseData);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
 {% endblock %}
+

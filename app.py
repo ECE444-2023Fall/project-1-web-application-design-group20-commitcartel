@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
@@ -8,7 +8,7 @@ from flask_moment import Moment
 
 # import API routes
 from routes.user_auth_routes import user_auth
-from routes.event_feed_routes import event_feed
+from routes.event_feed_routes import event_feed, get_explore_feed, get_registered_feed
 from routes.club_pg_routes import club_pg
 from routes.query_routes import query
 from routes.user_account_routes import user_account
@@ -53,9 +53,23 @@ def index():
 def following():
     return render_template('following.html')
 
-@app.route('/explore')
+@app.route('/explore', methods=['GET', 'POST'])
 def explore():
-    return render_template('explore.html')
+    if request.method == 'POST':
+        session['query'] = request.json
+        return redirect(url_for('following'))
+    
+    elif request.method == 'GET':
+        print(bool(session['query']))
+        if session['query']:
+            events = get_registered_feed("65409591870327a571edea4a")
+            session['query'] = {}
+
+        else:
+            events = get_explore_feed()
+
+        print(events)
+        return render_template('explore.html', events=events)
 
 if __name__ == '__main__':
     app.run()
