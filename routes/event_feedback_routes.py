@@ -1,5 +1,5 @@
 from flask import request, Blueprint, jsonify
-from database import update_one
+from database import update_one, get_data_one
 from bson.objectid import ObjectId
 
 event_feedback = Blueprint('event_feedback', __name__)
@@ -21,7 +21,22 @@ def leave_event_feedback():
     success_events, result_events = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'event_ratings': event_object}})
 
     if success_events:
-        return jsonify({'message': result_events})
+        success1, current_event = get_data_one('Events', {'_id': ObjectId(event_id)})
+    
+    # Add the event rating average to corresponding event
+    if success1 and current_event:
+        event_ratings = [int(rating['rating']) for rating in current_event['event_ratings']]
+        
+        if event_ratings:
+            avg_rating = sum(event_ratings)/len(event_ratings)
+        else:
+            avg_rating = 0
 
+        success_avg_rating, result_avg_rating = update_one('Events', {'_id': ObjectId(event_id)}, {'$set': {'event_rating_avg': avg_rating}})
+
+        if success_avg_rating:
+            return jsonify({'message': result_events})
+        else:
+            return jsonify({'error': result_avg_rating}), 500
     else:
         return jsonify({'error': result_events}), 500
