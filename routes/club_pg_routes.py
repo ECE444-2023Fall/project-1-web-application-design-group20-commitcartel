@@ -27,7 +27,7 @@ def clubs(club_id):
     club_id   = ObjectId(club_id)
     club_find = get_data_one('Clubs',{'_id': club_id})
     if(len(club_find)> 0):
-        club_info = club_find[0]
+        club_info = club_find[1]
         club_name = club_info['club_name']
         club_description = club_info['club_description']
         email = club_info['email']
@@ -38,7 +38,7 @@ def clubs(club_id):
             event_name = event_info['name']
             event_list.append(event_name)     #create a list of event names from event IDs
 
-    return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email, photo=photo)
+    return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email)
 
 @club_pg.route('/create_club', methods=['GET', 'POST'])
 def create_club():
