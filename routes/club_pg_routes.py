@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField, FileField, TextAreaField, Password
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from database import insert_one, get_data_one
 from bson.objectid import ObjectId
-from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
@@ -47,7 +47,7 @@ def create_club():
         session['club_name']        = str(form.club_name.data)   
         session['email']            = str(form.email.data)
         session['club_description'] = str(form.club_description.data) 
-        session['password']         = str(form.password.data)
+        session['password']         = generate_password_hash(str(form.password.data))
 
         club_object = {
             'club_description': session.get('club_description'),
