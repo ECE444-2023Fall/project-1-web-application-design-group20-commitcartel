@@ -99,3 +99,61 @@
 .image-container:hover .dropdown-content {
     display: block;
 }
+
+
+/*
+CLUB PAGE EVENT CSS
+*/
+
+/* Define a container to hold the columns */
+/* Set up the flex container */
+.container {
+    display: flex;
+    flex-direction: row; /* Set the direction to row */
+    margin: 20px;
+}
+
+/* Style the individual columns */
+.column {
+    flex: 1; /* This makes all columns have an equal width */
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    text-align: center;
+    margin: 10px; /* Add some spacing and style */
+}
+
+/* Adjust the width of specific columns */
+#column1 {
+    flex: 1; /* This column will be twice as wide as the others */
+}
+
+#column2 {
+    flex: 2; /* This column will be half as wide as the others */
+    text-align: left; /* Align text to the left */
+}
+
+#column3 {
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
+}
+
+/* Constrain the image size */
+.club_event_logo {
+    min-width: 400px;
+    min-height: 400px;
+    object-fit: contain; /* You can use 'cover', 'fill', 'contain', etc. based on your preference */
+}
+
+.club_event_name {
+    font-family: Verdana, sans-serif;
+    color: #103B56;
+}
+
+/* Style for the scrollable container */
+.scrollable-container {
+    height: 300px; /* Set the desired height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    /* border: 1px solid #ccc;  */
+    padding: 10px; /* Optional: Add padding for styling */
+}

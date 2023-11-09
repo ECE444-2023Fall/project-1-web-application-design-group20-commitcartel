@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from database import insert_one, get_data_one
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
+from datetime import datetime
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
@@ -25,20 +26,50 @@ class ClubForm(FlaskForm):
 def clubs(club_id):
     event_list = []
     club_id   = ObjectId(club_id)
-    club_find = get_data_one('Clubs',{'_id': club_id})
-    if(len(club_find)> 0):
-        club_info = club_find[1]
-        club_name = club_info['club_name']
-        club_description = club_info['club_description']
-        email = club_info['email']
-        events = club_info['events'] #this is a list of event ids
+    success, club_find = get_data_one('Clubs', {'_id': club_id})
+    if(success):
+        club_name = club_find['club_name']
+        club_description = club_find['club_description']
+        email = club_find['email']
+        events = club_find['events'] #this is a list of event ids
         for eventID in events:
-            event_find = get_data_one('Events',{'_id': eventID})
-            event_info = event_find[0]
-            event_name = event_info['name']
-            event_list.append(event_name)     #create a list of event names from event IDs
+            success, event_find = get_data_one('Events',{'_id': eventID})
+            event_list.append(event_find['name'])     #create a list of event names from event IDs
 
     return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email)
+
+
+@club_pg.route('/clubs/<string:club_id>/<string:event_id>')
+def club_event_view(club_id, event_id):
+    
+    success_1, club = get_data_one('Clubs', {'_id': ObjectId(club_id)})
+    success_2, event = get_data_one('Events', {'_id': ObjectId(event_id)})
+
+    if not success_1 or not success_2:
+        return "<h1> Error </h1>"
+    
+    # determine if a event has already passed
+    current_time = datetime.utcnow()
+    timestamp = datetime.fromtimestamp(event['time'].time)
+    event_completed = timestamp <= current_time
+    
+    data = {}
+    # event data
+    data['event_name'] = event['name']
+    data['event_description'] = event['description']
+    data['attendees'] = event['attendees']
+    data['num_attending'] = len(event['attendees'])
+    data['date'] = timestamp.strftime("%B %d, %Y")
+    data['time'] = timestamp.strftime("%I:%M %p")
+    data['location'] = event['location']
+    # Club data
+    # TODO add imgs
+
+    if event_completed:
+        data['event_rating'] = event['event_rating_avg']
+        data['event_comments'] = event['event_comments']
+    
+    return render_template('club_event.html', data=data)
 
 @club_pg.route('/create_club', methods=['GET', 'POST'])
 def create_club():

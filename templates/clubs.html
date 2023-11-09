@@ -9,6 +9,12 @@
 </div>
 <p><b>About the club: </b>{{ club_description }}</p>
 <p><b>Contact us: </b>{{ email }}</p>
-<p><b>Our Events: </b>{{ events }}</p>
+<p><b>Our Events: </b>
+    <ul>
+        {% for event_name in events %}
+            <li>{{ event_name }}</li>
+        {% endfor %}
+    </ul>
+</p>
 
 {% endblock %}

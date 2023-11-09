@@ -37,6 +37,12 @@ class NameForm(FlaskForm):
     email       = StringField( 'Enter your Email Address', validators = [DataRequired(), validateEmail()] )
     submit      = SubmitField( 'Submit' )
 
+# @app.route('/clubs/<club_id>/<event_id>', method=["GET"])
+# def clubs(club_id, event_id):
+#     # determine if event has happened
+
+#     return  render_template('clubs.html')
+
 @app.route('/')
 def index():
     return render_template("homepage.html")
@@ -50,4 +56,4 @@ def explore():
     return render_template('explore.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
