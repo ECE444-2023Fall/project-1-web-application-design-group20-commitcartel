@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FileField, TextAreaField
+from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from database import insert_one, get_data_one
 from bson.objectid import ObjectId
@@ -11,13 +11,13 @@ club_pg = Blueprint('club_pg', __name__)
 
 
 class ClubForm(FlaskForm):
-    club_name        = StringField('What is the Club Name?', validators=[DataRequired()])
-    email            = StringField('What is the Club Email Address?', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
-    password         = StringField( 'Please Create a Password', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
-    password_conf    = StringField( 'Please Confirm the Password', validators = [DataRequired()] )
-    club_icon        = FileField('Please Attach Club Logo:', validators= [DataRequired()] )
-    club_description = TextAreaField('Please Write a Short description About the Club:', validators=[DataRequired()])
-    submit           = SubmitField('Submit') 
+    club_name        = StringField('Club Name:', validators=[DataRequired()])
+    email            = StringField('Club Email Address:', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
+    password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
+    password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
+    club_description = TextAreaField('Short description About the Club:', validators=[DataRequired()])
+    club_icon        = FileField('Attach Club Logo:', validators= [DataRequired()] )
+    submit           = SubmitField('Create Account') 
 
 
 
