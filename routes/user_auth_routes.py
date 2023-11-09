@@ -10,7 +10,7 @@ user_auth = Blueprint('user_auth', __name__)
 class LoginForm(FlaskForm):
     email            = StringField('Email Address:', validators=[DataRequired()])
     password         = PasswordField('Password:', validators = [DataRequired()])
-    Submit           = SubmitField('Login')
+    submit           = SubmitField('Login')
 
 
 @user_auth.route('/login', methods=['GET', 'POST'])
