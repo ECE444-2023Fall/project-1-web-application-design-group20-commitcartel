@@ -77,3 +77,21 @@ def register_for_event():
 
     else:
         return jsonify({'error': result}), 500
+
+@event_feed.route('/event_attendees/<event_id>', methods=['GET'])
+def get_event_attendees(event_id):
+    # Get the list of the event's registered user IDs
+    success, data = get_data_one('Events', {'_id': ObjectId(event_id)}, {'attendees': 1})
+    data = [item for item in data['attendees']]
+
+    if not success:
+        return jsonify({'error': str(data)}), 500
+
+    # Get the list of users from the user IDs
+    success, results = get_data('Users', {'_id': {'$in': data}})
+
+    if success:
+        return json.loads(json_util.dumps(results))
+    
+    else:
+        return jsonify({'error': str(results)}), 500
