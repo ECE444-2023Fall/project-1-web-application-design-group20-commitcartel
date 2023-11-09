@@ -8,8 +8,8 @@ from werkzeug.security import generate_password_hash
 user_auth = Blueprint('user_auth', __name__)
 
 class LoginForm(FlaskForm):
-    email            = StringField('UofT Email Address:', validators=[DataRequired()])
-    password         = PasswordField('Create a Password:', validators = [DataRequired()])
+    email            = StringField('Email Address:', validators=[DataRequired()])
+    password         = PasswordField('Password:', validators = [DataRequired()])
     Submit           = SubmitField('Login')
 
 
@@ -31,10 +31,7 @@ def login():
                 session['user_id'] = user_data['_id']
                 # Redirect to where needed
                 return redirect('/explore')
-            else:
-                #put invalid pass message
-                return render_template('login.html')
-        
+
         success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
         if success:
@@ -43,8 +40,7 @@ def login():
                 session['club_id'] = club_data['_id']
                 club_id = str(session['club_id'])
                 return redirect(f'/clubs/{club_id}')              
-            else:
-                # put invalid pass messasge
-                return render_template('login.html')
+
+        return redirect('/login')
     
-    return render_template('login.html')
+    return render_template('login.html', form=form)
