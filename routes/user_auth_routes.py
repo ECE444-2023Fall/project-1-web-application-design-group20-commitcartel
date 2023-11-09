@@ -7,18 +7,8 @@ from werkzeug.security import generate_password_hash
 
 user_auth = Blueprint('user_auth', __name__)
 
-class UofTEmail(object):
-    def __init__(self, message=None):
-        if not message:
-            message = "Please enter a valid UofT email address"
-        self.message = message
-
-    def __call__(self, form, field):
-        if "utoronto" not in field.data:
-            raise ValidationError(self.message)
-
 class LoginForm(FlaskForm):
-    email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
+    email            = StringField('UofT Email Address:', validators=[DataRequired()])
     password         = PasswordField('Create a Password:', validators = [DataRequired()])
     Submit           = SubmitField('Login')
 
