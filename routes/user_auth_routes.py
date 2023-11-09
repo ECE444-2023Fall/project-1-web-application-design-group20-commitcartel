@@ -39,7 +39,7 @@ def login():
                 session['is_user'] = False
                 session['club_id'] = str(club_data['_id'])
                 club_id = session['club_id']
-                return redirect(url_for('/clubs/{club_id}'))              
+                return redirect(url_for(f'/clubs/{club_id}'))              
 
         return redirect(url_for('/login'))
     
