@@ -1,82 +1,60 @@
-from flask import Blueprint, request, jsonify
-import bcrypt
+from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
 from database import insert_one, get_data_one
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, SubmitField
+from wtforms.validators import DataRequired, ValidationError, Email
+from werkzeug.security import generate_password_hash
 
 user_auth = Blueprint('user_auth', __name__)
 
-@user_auth.route('/register', methods=['POST'])
-def register_user():
-    data = request.json
+class UofTEmail(object):
+    def __init__(self, message=None):
+        if not message:
+            message = "Please enter a valid UofT email address"
+        self.message = message
 
-    # Validate input data
-    required_fields = ["email", "password", "name", "is_user"]
-    for field in required_fields:
-        if field not in data:
-            return jsonify({"error": f"Missing '{field}' in request data"}), 400
+    def __call__(self, form, field):
+        if "utoronto" not in field.data:
+            raise ValidationError(self.message)
 
-    # Check if UofT Email
-    if "utoronto" not in data["email"]:
-        return jsonify({"error": "Email not a UofT email"}), 400
+class LoginForm(FlaskForm):
+    email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
+    password         = PasswordField('Create a Password:', validators = [DataRequired()])
+    Submit           = SubmitField('Login')
 
-    # Check if the user already exists based on email (you might want to use a unique index in MongoDB)
-    _, existing_user = get_data_one("Users", {"email": data["email"]})
-    if existing_user:
-        return jsonify({"error": "Email is already registered"}), 400
 
-    # Hash the user's password
-    hashed_password = bcrypt.hashpw(data["password"].encode('utf-8'), bcrypt.gensalt())
-
-    # Convert "is_user" to a boolean
-    is_user = data["is_user"].lower() == "true" if isinstance(data["is_user"], str) else bool(data["is_user"])
-
-    # Create a user document
-    user = {
-        "email": data["email"],
-        "password": hashed_password,
-        "name": data["name"],
-        "is_user": is_user,
-        "registered_events": [],
-        "following_clubs": [],
-        "filters_events": [],
-        "filters_clubs": [],
-        "program": data.get("program", ""),
-        "year": data.get("year", "")
-    }
-
-    # Insert the user document into MongoDB
-    inserted_user = insert_one("Users", user)
-    if inserted_user is False:
-        return jsonify({"error": "Failed to register user"}), 400
-
-    return jsonify({"message": "User registered successfully"}), 201
-
-@user_auth.route('/login', methods=['POST'])
+@user_auth.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.json
+    # Declare Form
+    form = LoginForm()
 
-    # Validate input dataa
-    required_fields = ["email", "password"]
-    for field in required_fields:
-        if field not in data:
-            return jsonify({"error": f"Missing '{field}' in request data"}), 400
+    if form.validate_on_submit():
+        email = str(form.email.data)
+        password = generate_password_hash(str(form.password.data))
 
-    # Check if the user exists based on email
-    success, user_data = get_data_one("Users", {"email": data["email"]}, {'_id': 1, 'email': 1, 'password': 1, "is_user": 1, 'name': 1})
+        # Check if the user exists based on email
+        success, user_data = get_data_one("Users", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
-    if not success or not user_data:
-        return jsonify({"error": "Invalid email or password"}), 401
+        if success:
+            if password == user_data['password']:
+                session['is_user'] = True
+                session['user_id'] = user_data['_id']
+                # Redirect to where needed
+                return redirect('/explore')
+            else:
+                #put invalid pass message
+                return render_template('login.html')
+        
+        success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
+
+        if success:
+            if password == club_data['password']:
+                session['is_user'] = False
+                session['club_id'] = club_data['_id']
+                club_id = str(session['club_id'])
+                return redirect(f'/clubs/{club_id}')              
+            else:
+                # put invalid pass messasge
+                return render_template('login.html')
     
-    # Compare the hashed password
-    stored_password = user_data["password"]
-    if bcrypt.checkpw(data["password"].encode('utf-8'), stored_password):
-        # Passwords match; user is authenticated
-        response_data = {
-            "message": "Login successful",
-            "user_id": str(user_data["_id"]),
-            "email": user_data["email"],
-            "is_user": user_data.get("is_user", ""),
-            "name": user_data.get("name", "")
-        }
-        return jsonify(response_data), 200
-    else:
-        return jsonify({"error": "Invalid email or password"}), 401
+    return render_template('login.html')
