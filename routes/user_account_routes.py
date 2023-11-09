@@ -23,8 +23,10 @@ class UofTEmail(object):
 class UserAccountForm(FlaskForm):
     name             = StringField('Full Name:', validators = [DataRequired()])
     email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
-    password         = PasswordField('Create a Password', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match')])
-    password_conf    = PasswordField('Confirm Password', validators = [DataRequired()])
+    program          = StringField('Program:', validators = [DataRequired()])
+    year             = StringField('Year:', validators = [DataRequired()])
+    password         = PasswordField('Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match')])
+    password_conf    = PasswordField('Confirm Password:', validators = [DataRequired()])
     submit           = SubmitField('Create Account') 
 
 @user_account.route('/create_user_account', methods=['GET', 'POST'])
@@ -33,6 +35,8 @@ def create_user_account():
     if form.validate_on_submit():
         session['name']             = str(form.name.data)
         session['email']            = str(form.email.data)
+        session['program']          = str(form.program.data)
+        session['year']             = str(form.year.data)
         session['password']         = generate_password_hash(str(form.password.data))
 
         user_object = {
@@ -43,8 +47,8 @@ def create_user_account():
             'filtered_clubs': '',
             'filtered_events': '',
             'password': session.get('password'), 
-            'program': '', 
-            'year': '', 
+            'program': session.get('program'), 
+            'year': session.get('year'), 
         }
 
         success, user_id = insert_one('Users', user_object)      
@@ -59,3 +63,4 @@ def create_user_account():
         return redirect(url_for('user_account.create_user_account'))
 
     return render_template('create_user_account.html', form=form, email=session.get('email'))
+

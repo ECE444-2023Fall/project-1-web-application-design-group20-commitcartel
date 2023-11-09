@@ -18,4 +18,6 @@
     <center><p>Fill out form to create a user account</p></center>
 </div>
 <center><label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label></center>
+<br>
+<center><p>Already have an account? <u><a href="{{ url_for('explore') }}" style="color:#f6f4f3;">Log in</a></u></p></center>
 {% endblock %}
