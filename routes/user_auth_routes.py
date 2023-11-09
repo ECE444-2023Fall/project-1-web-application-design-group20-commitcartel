@@ -28,19 +28,19 @@ def login():
         if success:
             if check_password_hash(user_data['password'], password):
                 session['is_user'] = True
-                session['user_id'] = user_data['_id']
+                session['user_id'] = str(user_data['_id'])
                 # Redirect to where needed
-                return redirect('/explore')
+                return redirect(url_for('/explore'))
 
         success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
         if success:
             if check_password_hash(club_data['password'], password):
                 session['is_user'] = False
-                session['club_id'] = club_data['_id']
-                club_id = str(session['club_id'])
+                session['club_id'] = str(club_data['_id'])
+                club_id = session['club_id']
                 return redirect(f'/clubs/{club_id}')              
 
-        return redirect('/login')
+        return redirect(url_for('/login'))
     
     return render_template('login.html', form=form)
