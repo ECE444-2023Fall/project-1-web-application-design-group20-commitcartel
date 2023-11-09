@@ -18,7 +18,9 @@ app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(club_pg)
 app.register_blueprint(query)
+app.register_blueprint(user_auth)
 app.register_blueprint(user_account)
+
 
 bootstrap = Bootstrap(app)
 moment  = Moment(app)
