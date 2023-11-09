@@ -13,7 +13,7 @@ user_account = Blueprint('user_account', __name__)
 class UofTEmail(object):
     def __init__(self, message=None):
         if not message:
-            message = "Email must contain 'utoronto'"
+            message = "Please enter a valid UofT email address"
         self.message = message
 
     def __call__(self, form, field):
@@ -21,11 +21,11 @@ class UofTEmail(object):
             raise ValidationError(self.message)
 
 class UserAccountForm(FlaskForm):
-    name             = StringField('What is your full name?', validators = [DataRequired()])
-    email            = StringField('What is your UofT Email address?', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
-    password         = PasswordField('Please Create a Password', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match')])
-    password_conf    = PasswordField('Please Confirm the Password', validators = [DataRequired()])
-    submit           = SubmitField('Submit') 
+    name             = StringField('Full Name:', validators = [DataRequired()])
+    email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
+    password         = PasswordField('Create a Password', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match')])
+    password_conf    = PasswordField('Confirm Password', validators = [DataRequired()])
+    submit           = SubmitField('Create Account') 
 
 @user_account.route('/create_user_account', methods=['GET', 'POST'])
 def create_user_account():
