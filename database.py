@@ -75,15 +75,17 @@ def delete_one(collection_name, query):
         print(f"Database error: {str(e)}")
         return (False, str(e))
 
-    
-def insert_one(collection_name, query):
+
+def insert_one(collection_name, data):
     try:
         collection = db_client[collection_name]
-        result = collection.insert_one(query)
-        result_id = result.inserted_id
-        return (True, result_id)
-    
+        result = collection.insert_one(data)
+
+        if result.inserted_id:
+            return (True, result.inserted_id)
+        else:
+            return (False, "Failed to insert document")
+
     except PyMongoError as e:
         print(f"Database error: {str(e)}")
         return (False, e)
-
