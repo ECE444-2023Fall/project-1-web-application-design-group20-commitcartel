@@ -1,10 +1,73 @@
 # Import the necessary libraries
-from flask import Blueprint, request, jsonify, json
+from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
 from database import get_data, get_data_one, update_one, insert_one, delete_one
-from bson import ObjectId, json_util
-
+from bson import ObjectId, json_util, Timestamp
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, SubmitField, TextAreaField, DateField, TimeField, SelectField, SelectMultipleField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from datetime import datetime
 # Create a Blueprint
 posting = Blueprint('posting', __name__)
+
+class CreateEventForm(FlaskForm):
+    event_name      = StringField('Event Name')
+    event_date      = DateField('Event Date')
+    event_start_time = TimeField('Event Start Time')
+    location        = StringField('Location')
+    event_category = SelectField('Event Category', choices=[
+        ('', "Select an Event Category"),
+        ('academic', 'Academic'),
+        ('arts', 'Arts'),
+        ('athletics_recreation', 'Athletics and Recreation'),
+        ('community_service', 'Community Service'),
+        ('culture_identities', 'Culture and Identities'),
+        ('environment_sustainability', 'Environment and Sustainability'),
+        ('global_interests', 'Global Interests'),
+        ('hobby_leisure', 'Hobby and Leisure'),
+        ('leadership', 'Leadership'),
+        ('media', 'Media'),
+        ('politics', 'Politics'),
+        ('social', 'Social'),
+        ('social_justice_advocacy', 'Social Justice and Advocacy'),
+        ('spirituality_faith_communities', 'Spirituality and Faith Communities'),
+        ('student_governments_councils_unions', 'Student Governments, Councils, and Unions'),
+        ('work_career_development', 'Work and Career Development')
+    ], 
+    default='')
+    description     = TextAreaField('Description')
+    submit          = SubmitField('Create Event')
+
+
+@posting.route('/create_event', methods=['GET', 'POST'])
+def create_event():
+    form = CreateEventForm()
+    print(form.validate_on_submit(), request.method)
+    
+    # if not session.get('club_id'):
+    #     print("ERROR no club")
+
+    if form.validate_on_submit():
+        datetime_str = f"{form.event_date.data} {form.event_start_time.data}"
+        timestamp = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S").timestamp()
+        
+        event_object = {
+            'name': form.event_name.data,
+            'time': Timestamp(int(timestamp), 0),
+            'attendees': [],
+            'category': form.event_category.data,
+            'club_id': ObjectId("654456e2dfd8c6673e217e8f"), # should be session.get('club_id') when login is merged
+            'description': form.description.data,
+            'location': form.location.data,
+            'event_ratings': [],
+            'event_rating_avg': 0
+        }
+
+        success, id = insert_one('Events', event_object)
+        if success:
+            return redirect(url_for('club_pg.club_event_view', club_id="654456e2dfd8c6673e217e8f", event_id=str(id))) # club_id should be session['club_id']
+        
+        return redirect(url_for('posting.create_event'))
+    return render_template('create_event.html', form=form)
 
 # Route to create a new post (POST request)
 @posting.route('/event_post', methods=['POST'])
