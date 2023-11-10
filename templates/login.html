@@ -1,0 +1,40 @@
+{% extends "base2.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}CampusConnect: Login{% endblock %}
+
+{% block page_content %}
+
+<style>
+    body {background-color: #315887;}
+    h1   {color: #f6f4f3;}
+    h2   {
+        color: #f6f4f3;
+        font-size: 20px;
+        }
+    h3   {
+        color: #f6f4f3;
+        font-size: 18px;
+        }                  
+    p    {
+        color: #f6f4f3;
+    }
+</style>
+
+<div class="page-header">
+    <h1><strong><center>CampusConnect</center></strong></h1>
+    <center><h3>Explore. Engage. Connect.</h3></center>
+</div>
+
+<img class="alignright" src= "{{url_for('static', filename='/UofTStudents.jpeg')}}" width="650" >
+<br>
+<h2>Log in using either a club or user account</h2>
+<br>
+<label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label>
+<br>
+<br>
+<h3>Don't have an account? </h3>
+<button class="button-1" role="button"><a href="/create_club"><p>Create Club Account</p></a></button> <button class="button-1" role="button"><a href="/create_user_account"><p>Create User Account</p></a></button>
+
+{% endblock %}
+
