@@ -54,4 +54,4 @@ def explore():
     return render_template('explore.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
