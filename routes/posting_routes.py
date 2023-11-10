@@ -1,4 +1,7 @@
-from flask import Blueprint, request, jsonify
+# Import the necessary libraries
+from flask import Blueprint, request, jsonify, json
+from database import get_data, get_data_one, update_one, get_mongo_database, insert_one, delete_one
+from bson import ObjectId, json_util
 
 # Create a Blueprint
 posting = Blueprint('posting', __name__)
@@ -9,29 +12,71 @@ def create_post():
     # Get data from the request
     data = request.json  # Assuming the data is sent as JSON
 
-    # Process and store the post data (e.g., save it in a database)
-    # Example: You can save the post data to a database
-    # Replace this with your database interaction code
-    # db.save_post(data)
+    # Insert the post data into the database
+    success, post_id = insert_post(data)
 
-    # Return a response
-    return jsonify({"message": "Post created successfully"})
+    if success:
+        return jsonify({"message": "Post created successfully", "post_id": str(post_id)})
+    else:
+        return jsonify({"error": "Failed to create the post"}, 500)
 
-# Route to get/delete a post (DELETE request)
+# Function to validate data against the schema
+def validate_data(data):
+    required_keys = [
+        "name",
+        "time",
+        "category",
+        "club_id",
+    ]
+
+    # Check if all required keys are present
+    for key in required_keys:
+        if key not in data:
+            return False, f"Missing key: {key}"
+
+    # Initialize the attendees and event_rating fields if they don't exist
+    if "attendees" not in data:
+        data["attendees"] = []
+
+    if "event_rating" not in data:
+        data["event_rating"] = []
+
+    # Initialize the event_rating_avg field if it doesn't exist
+    if "event_rating_avg" not in data:
+        data["event_rating_avg"] = -1
+
+    # Additional validation checks can be added here
+
+    return True, "Data is consistent with the schema"
+
+# Function to insert a post into the database with initialized fields
+def insert_post(data):
+    # Validate the data
+    is_valid, validation_message = validate_data(data)
+    if not is_valid:
+        return False, validation_message
+
+    result = insert_one("Events", data)
+    return True, result.inserted_id
+
+
+# Route to get/delete a post (GET or DELETE request)
 @posting.route('/event_post/<post_id>', methods=['GET', 'DELETE'])
 def get_or_delete_post(post_id):
-    # Retrieve the post with the specified ID from the database
-    # Example: You can fetch the post from a database
-    # Replace this with your database interaction code
-    # post_id = db.get_post(post_id)
+    # Find the post with the specified ID in the database
+    post = get_data_one('Events', {"_id": ObjectId(post_id)})
 
-    # Check if the post exists
-    if post_id is None:
+    if post is None:
         return jsonify({"error": "Post not found"}, 404)
 
     if request.method == "GET":
         # Return the post data as JSON
-        return jsonify(post_id)
+        return json.loads(json_util.dumps(post))
     
     elif request.method == "DELETE":
-        return ""
+        # Delete the post from the database
+        success, message = delete_one('Events', {"_id": ObjectId(post_id)})
+        if success:
+            return jsonify({"message": "Post deleted successfully"})
+        else:
+            return jsonify({"error": message}, 500)
