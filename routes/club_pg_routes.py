@@ -56,20 +56,55 @@ def club_event_view(club_id, event_id):
     event_completed = timestamp <= current_time
     
     data = {}
-    # event data
+
+    # get name of attendees
+    attendees = []
+
+    for user_id in event['attendees']:
+        success, user_data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'name': 1, 'email': 1, 'year': 1, 'program': 1})
+
+        if success:
+            attendee = {
+                'name': user_data.get('name', "N/A"),
+                'email': user_data.get('email', "N/A"),
+                'year': user_data.get('year', "N/A"),
+                'program': user_data.get('program', "N/A")
+            }
+
+            attendees.append(attendee)
+    # Event data
     data['event_name'] = event['name']
     data['event_description'] = event['description']
-    data['attendees'] = event['attendees']
+    data['attendees'] = attendees
     data['num_attending'] = len(event['attendees'])
     data['date'] = timestamp.strftime("%B %d, %Y")
     data['time'] = timestamp.strftime("%I:%M %p")
     data['location'] = event['location']
+    data['completed'] = event_completed
+    
     # Club data
     # TODO add imgs
+    data['club_name'] = club['club_name']
 
     if event_completed:
-        data['event_rating'] = event['event_rating_avg']
-        data['event_comments'] = event['event_comments']
+        # get all reviews of event
+        reviews = []
+        for review in event['event_ratings']:
+            success, user_data = get_data_one('Users', {'_id': ObjectId(review['user_id'])}, {'name': 1})
+
+            if success:
+                review_obj = {
+                    'name': user_data.get('name', "N/A"),
+                    'rating': int(review['rating']),
+                    'comment': review['comments']
+                }
+
+                reviews.append(review_obj)        
+        
+        # get event rating average
+        data['event_rating_avg'] = int(event['event_rating_avg'])
+        data['reviews'] = reviews
+        
     
     return render_template('club_event.html', data=data)
 

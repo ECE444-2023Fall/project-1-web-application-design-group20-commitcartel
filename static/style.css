@@ -136,6 +136,13 @@ CLUB PAGE EVENT CSS
     flex: 1; /* This column will be half as wide as the others */
     text-align: center; /* Align text to the left */
     background-color: #B2C3D0;
+    max-height: 600px;
+}
+
+#column4 {
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
 }
 
 /* Constrain the image size */
@@ -152,8 +159,40 @@ CLUB PAGE EVENT CSS
 
 /* Style for the scrollable container */
 .scrollable-container {
-    height: 300px; /* Set the desired height */
+    max-height: 500px; /* Set the desired height */
     overflow-y: auto; /* Enable vertical scrolling */
     /* border: 1px solid #ccc;  */
     padding: 10px; /* Optional: Add padding for styling */
+
+
+}
+
+/* Style for the attendee box */
+.attendee-box {
+    background-color: #F1F1F1; /* Choose a background color that pairs nicely */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px; /* Optional: Add rounded corners for a softer look */
+}
+
+/* Left-justify text inside the attendee box */
+.attendee-box p {
+    text-align: left;
+    margin: 5px 0; /* Add some vertical margin between paragraphs */
+    font-family: Verdana, sans-serif;
+    font-size: small;
+}
+
+.checked {
+    color: #E6A572;
+    border: #CF954B;
+}
+
+.unchecked {
+    color: #1b1717;
+    border: #CF954B;
+}
+
+.final-rating {
+    font-size: 150px;
 }
