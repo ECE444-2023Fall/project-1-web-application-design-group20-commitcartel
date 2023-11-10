@@ -234,10 +234,10 @@ html{
     .overlay_text {
       font-size: 20px;
     }
-  }
+}
   
   /* Adjust font size for even smaller screens */
-  @media screen and (max-width: 480px) {
+@media screen and (max-width: 480px) {
     .overlay_text {
       font-size: 12px;
     }
