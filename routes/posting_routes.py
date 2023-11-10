@@ -69,7 +69,7 @@ def get_or_delete_post(post_id):
     if post is None:
         return jsonify({"error": "Post not found"}, 404)
 
-    if request.method == "GET":
+    if request.method == 'GET':
         # Return the post data as JSON
         return json.loads(json_util.dumps(post))
     

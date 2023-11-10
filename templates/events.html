@@ -9,16 +9,23 @@
             <div class="btn-group-container">
                 <div class="btn-container">
                     {% if type == "following" %}
-                        <a href="clubs?type=following" class="btn btn-primary btn-lg active" disabled>Following</a>
+                        <a href="events?type=following" class="btn btn-primary btn-lg active" disabled>Following</a>
                     {% else %}
-                        <a href="clubs?type=following" class="btn btn-primary btn-lg">Following</a>
+                        <a href="events?type=following" class="btn btn-primary btn-lg">Following</a>
                     {% endif %}
                 </div>
                 <div class="btn-container">
                     {% if type == "explore" %}
-                        <a href="clubs?type=explore" class="btn btn-primary btn-lg active" disabled>Explore</a>
+                        <a href="events?type=explore" class="btn btn-primary btn-lg active" disabled>Explore</a>
                     {% else %}
-                        <a href="clubs?type=explore" class="btn btn-primary btn-lg">Explore</a>
+                        <a href="events?type=explore" class="btn btn-primary btn-lg">Explore</a>
+                    {% endif %}
+                </div>
+                <div class="btn-container">
+                    {% if type == "registered" %}
+                        <a href="events?type=registered" class="btn btn-primary btn-lg active" disabled>Registered</a>
+                    {% else %}
+                        <a href="events?type=registered" class="btn btn-primary btn-lg">Registered</a>
                     {% endif %}
                 </div>
             </div>
@@ -33,7 +40,7 @@
         </div>
     </div>
     
-    {{list_create.club_list(clubs)}}
+    {{list_create.event_list(events)}}
     
 {% endblock %}
 

@@ -1,6 +1,6 @@
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, ValidationError
 
 from flask_bootstrap import Bootstrap
@@ -8,7 +8,7 @@ from flask_moment import Moment
 
 # import API routes
 from routes.user_auth_routes import user_auth
-from routes.event_feed_routes import event_feed
+from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed
 from routes.club_pg_routes import club_pg
 from routes.query_routes import query
 from routes.user_account_routes import user_account
@@ -40,22 +40,79 @@ class validateEmail(object):
 
             raise ValidationError("Please include a valid UofT email address. '" + str(email) + "' is not a UofT email address.")
         
-class NameForm(FlaskForm):
-    password    = StringField( 'Enter your Password', validators = [DataRequired()] )
-    email       = StringField( 'Enter your Email Address', validators = [DataRequired(), validateEmail()] )
-    submit      = SubmitField( 'Submit' )
+class MultiCheckboxField(SelectMultipleField):
+    """
+    A multiple-select, except displays a list of checkboxes.
+
+    Iterating the field will produce subfields, allowing custom rendering of
+    the enclosed checkbox fields.
+    """
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class ClubFilterForm(FlaskForm):
+    search = StringField('Enter search query', validators = [DataRequired()])
+    category = MultiCheckboxField('Category', choices= ['AI', 'World', 'Tech', 'Design Team'])
+    submit      = SubmitField('Submit')
+class EventFilterForm(FlaskForm):
+    search = StringField('Enter search query', validators = [DataRequired()])
+    category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put'])
+    submit      = SubmitField('Submit')
 
 @app.route('/')
 def index():
     return render_template("homepage.html")
 
-@app.route('/following')
+@app.route('/clubs', methods=['GET', 'POST'])
 def following():
-    return render_template('following.html')
+    form = ClubFilterForm()
 
-@app.route('/explore')
-def explore():
-    return render_template('explore.html')
+    if form.validate_on_submit():
+        session['query'] = form.search
+
+        return redirect(url_for('following'))
+
+    type = request.args.get('type')
+
+    if type == 'following':
+        events = get_following_feed("65409591870327a571edea4a")
+
+    elif type == 'explore':
+        events = get_explore_feed()
+
+    else:
+        return "Error"
+
+    session['query'] = {}
+
+    return render_template('clubs.html', form=form, clubs=events, type=type)
+
+@app.route('/events', methods=['GET', 'POST'])
+def events():
+    form = EventFilterForm()
+
+    if form.validate_on_submit():
+        session['query'] = form.search
+    
+        return redirect(url_for('following'))
+
+    type = request.args.get('type')
+
+    if type == 'following':
+        events = get_following_feed("65409591870327a571edea4a")
+
+    elif type == 'explore':
+        events = get_explore_feed()
+
+    elif type == 'registered':
+        events = get_registered_feed("65409591870327a571edea4a")
+
+    else:
+        return "Error"
+
+    session['query'] = {}
+
+    return render_template('events.html', form=form, events=events, type=type)
 
 if __name__ == '__main__':
     app.run()
