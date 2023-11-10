@@ -1,6 +1,6 @@
 # Import the necessary libraries
 from flask import Blueprint, request, jsonify, json
-from database import get_data, get_data_one, update_one, get_mongo_database, insert_one, delete_one
+from database import get_data, get_data_one, update_one, insert_one, delete_one
 from bson import ObjectId, json_util
 
 # Create a Blueprint
