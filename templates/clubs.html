@@ -1,20 +1,39 @@
-<!-- This is a temporary file to be updated to match UI designs later -->
+{% import 'list.html' as list_create %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
 
-{% extends "base2.html" %}
-
-{% block title %}Flasky{% endblock %}
-{% block page_content %}
-<div class="page-header">
-    <h1><strong>{{ club_name }}</strong></h1>
-</div>
-<p><b>About the club: </b>{{ club_description }}</p>
-<p><b>Contact us: </b>{{ email }}</p>
-<p><b>Our Events: </b>
-    <ul>
-        {% for event_name in events %}
-            <li>{{ event_name }}</li>
-        {% endfor %}
-    </ul>
-</p>
-
+{% block content %}
+    <div style="padding-left: 40px;">
+        <div class="list-top-bar">
+            <!-- Navigation Links for List Types -->
+            <div class="btn-group-container">
+                <div class="btn-container">
+                    {% if type == "following" %}
+                        <a href="clubs?type=following" class="btn btn-primary btn-lg active" disabled>Following</a>
+                    {% else %}
+                        <a href="clubs?type=following" class="btn btn-primary btn-lg">Following</a>
+                    {% endif %}
+                </div>
+                <div class="btn-container">
+                    {% if type == "explore" %}
+                        <a href="clubs?type=explore" class="btn btn-primary btn-lg active" disabled>Explore</a>
+                    {% else %}
+                        <a href="clubs?type=explore" class="btn btn-primary btn-lg">Explore</a>
+                    {% endif %}
+                </div>
+            </div>
+            <form class="form form-horizontal" method="post" role="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+              
+                {{ wtf.form_field(form.search) }}
+                {{ wtf.form_field(form.category) }}
+                {{ wtf.form_field(form.submit, style="margin-bottom: 1rem;") }}
+            </form>
+        </div>
+    </div>
+    
+    {{list_create.club_list(clubs)}}
+    
 {% endblock %}
+

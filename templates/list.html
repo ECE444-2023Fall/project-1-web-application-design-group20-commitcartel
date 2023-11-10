@@ -1,4 +1,25 @@
+<!-- Event List -->
 {% macro event_list(events) %}
+    <ul class="event-list">
+        {% for event in events %}
+            <li class="event-container">
+                <div class="event">
+                    <div style="display: flex;">
+                        <h3>{{ event.name }}</h3>
+                        <div style="margin-left: 50px;">
+                            <p>Time: {{ event.datetime }}</p>
+                            <p>Location: {{ event.location }}</p>
+                        </div>
+                    </div>
+                    <p>Description: {{ event.description }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+<!-- Club List -->
+{% macro club_list(events) %}
     <ul class="event-list">
         {% for event in events %}
             <li class="event-container">

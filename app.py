@@ -85,7 +85,7 @@ def following():
 
     session['query'] = {}
 
-    return render_template('events.html', form=form, events=events, type=type)
+    return render_template('clubs.html', form=form, clubs=events, type=type)
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
