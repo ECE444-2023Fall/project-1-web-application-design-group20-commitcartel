@@ -1,0 +1,95 @@
+/*
+CLUB PAGE EVENT CSS
+*/
+
+/* Define a container to hold the columns */
+/* Set up the flex container */
+.container {
+    display: flex;
+    flex-direction: row; /* Set the direction to row */
+    margin: 20px;
+}
+
+/* Style the individual columns */
+.column {
+    flex: 1; /* This makes all columns have an equal width */
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    text-align: center;
+    margin: 10px; /* Add some spacing and style */
+}
+
+/* Adjust the width of specific columns */
+#column1 {
+    flex: 1; /* This column will be twice as wide as the others */
+}
+
+#column2 {
+    flex: 2; /* This column will be half as wide as the others */
+    text-align: left; /* Align text to the left */
+}
+
+#column3 {
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
+    max-height: 600px;
+}
+
+#column4 {
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
+}
+
+/* Constrain the image size */
+.club_event_logo {
+    min-width: 400px;
+    min-height: 400px;
+    object-fit: contain; /* You can use 'cover', 'fill', 'contain', etc. based on your preference */
+}
+
+.club_event_name {
+    font-family: Verdana, sans-serif;
+    color: #103B56;
+}
+
+/* Style for the scrollable container */
+.scrollable-container {
+    max-height: 500px; /* Set the desired height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    /* border: 1px solid #ccc;  */
+    padding: 10px; /* Optional: Add padding for styling */
+
+
+}
+
+/* Style for the attendee box */
+.attendee-box {
+    background-color: #F1F1F1; /* Choose a background color that pairs nicely */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px; /* Optional: Add rounded corners for a softer look */
+}
+
+/* Left-justify text inside the attendee box */
+.attendee-box p {
+    text-align: left;
+    margin: 5px 0; /* Add some vertical margin between paragraphs */
+    font-family: Verdana, sans-serif;
+    font-size: small;
+}
+
+.checked {
+    color: #E6A572;
+    border: #CF954B;
+}
+
+.unchecked {
+    color: #1b1717;
+    border: #CF954B;
+}
+
+.final-rating {
+    font-size: 150px;
+}
