@@ -51,11 +51,6 @@ def get_registered_feed(user_id, filter=None):
     else:
         return jsonify({'error': str(results)}), 500
 
-@event_feed.route('/favourite_event', methods=['POST'])
-def update_favourite_event(event_id):
-    #TODO
-    return "append the event to the favourite list of user"
-
 @event_feed.route('/register_event', methods=['PATCH'])
 def register_for_event():
     data = request.form
@@ -65,13 +60,15 @@ def register_for_event():
 
     # Add user to the list of registered attendees for the given event
     success, result = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'attendees': ObjectId(user_id)}})
+    _,result = get_data_one('Events', {'_id': ObjectId(event_id)})
 
     if not success:
-        return jsonify({'error': str(result)})
+        return jsonify({'error': str(result)}), 400
 
     # Add the event to the list of registered events for the user
     success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(event_id)}})
 
+    #print(result['registered_events'])
     if success:
         return jsonify({'message': "registered successfully"})
 
@@ -151,10 +148,12 @@ def view_event_user(event_id):
     data['completed'] = event_completed
     data['is_user'] = session['is_user']
     data['event_id'] = str(event['_id'])
-
+    data['user_id'] = str(session['user_id'])
+    
     # Club data
     # TODO add imgs
     data['club_name'] = club['club_name']
+    data['club_id'] = str(club['_id'])
 
     if event_completed:
         # get all reviews of event

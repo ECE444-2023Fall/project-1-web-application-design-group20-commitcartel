@@ -1,3 +1,9 @@
+#view-event-column-2 {
+    flex: 3; /* This column will be half as wide as the others */
+    text-align: left; /* Align text to the left */
+    min-width: 70%;
+}
+
 .submit-review-button {
     display: inline-block;
     padding: 10px 20px;
@@ -11,4 +17,18 @@
 
 .submit-review-button:hover {
     background-color: #0056b3;
+}
+
+.event-header {
+    display: flex;
+    align-items: center; /* Vertically align content */
+}
+
+.icon-link {
+    margin-left: 30px; /* Adjust the spacing between the header and the icon */
+}
+
+.register-event-button {
+    width: 50px; /* Set the desired width */
+    height: auto; /* Let the height adjust automatically */
 }
