@@ -279,3 +279,64 @@ background-color: #19345d;
       font-size: 12px;
     }
 }
+
+.filter-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.list-top-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-container {
+    margin: 10px;
+    flex: 1;
+}
+
+.btn.active {
+    background-color: #ffc107 !important; /* Yellow background for the active button */
+    border: 2px solid #ffc107 !important; /* Yellow border for the active button */
+    pointer-events: none; /* Disable pointer events on the disabled button */
+}
+
+.btn-group-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#content {
+    margin: 50px;
+}
+
+.form-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.event-container {
+    height: 200px;
+    overflow: hidden;
+}
+
+.event {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-right: 20px;
+}
+
+.event-list {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
