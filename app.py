@@ -13,11 +13,15 @@ from routes.club_pg_routes import club_pg
 from routes.query_routes import query
 from routes.user_account_routes import user_account
 
+from routes.posting_routes import posting
+
 app = Flask(__name__, static_folder='static')
+
 app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(club_pg)
 app.register_blueprint(query)
+app.register_blueprint(posting)
 app.register_blueprint(user_auth)
 app.register_blueprint(user_account)
 
