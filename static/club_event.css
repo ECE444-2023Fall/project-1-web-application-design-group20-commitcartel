@@ -27,6 +27,7 @@ CLUB PAGE EVENT CSS
 #column2 {
     flex: 2; /* This column will be half as wide as the others */
     text-align: left; /* Align text to the left */
+    max-width: 50%;
 }
 
 #column3 {
@@ -52,6 +53,11 @@ CLUB PAGE EVENT CSS
 .club_event_name {
     font-family: Verdana, sans-serif;
     color: #103B56;
+}
+
+/* CSS style for the pre element */
+.event-description {
+    white-space: pre-wrap; /* Preserve line breaks and wrap long lines */
 }
 
 /* Style for the scrollable container */

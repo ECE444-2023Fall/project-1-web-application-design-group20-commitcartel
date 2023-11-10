@@ -1,7 +1,8 @@
-from flask import request, Blueprint, jsonify, json
+from flask import request, Blueprint, jsonify, json, render_template, session
 from database import get_data, get_data_one, update_one
 from bson.objectid import ObjectId
 from bson import json_util
+from datetime import datetime
 
 event_feed = Blueprint('event_feed', __name__)
 
@@ -122,3 +123,56 @@ def get_following_clubs(user_id, filter=None):
         return json.loads(json_util.dumps(results))
     else:
         return jsonify({'error': str(results)}), 500
+
+@event_feed.route('/events/<event_id>', methods=['GET', 'POST'])
+def view_event_user(event_id):
+
+    success_1, event = get_data_one('Events', {'_id': ObjectId(event_id)})
+    if not success_1:
+        return "<h1> Error </h1>"
+    
+    success_2, club = get_data_one('Clubs', {'_id': ObjectId(event['club_id'])})
+    if not success_2:
+        return "Error"
+
+    # determine if a event has already passed
+    current_time = datetime.utcnow()
+    timestamp = datetime.fromtimestamp(event['time'].time)
+    event_completed = timestamp <= current_time
+    
+    data = {}
+    # Event data
+    data['event_name'] = event['name']
+    data['event_description'] = event['description']
+    data['num_attending'] = len(event['attendees'])
+    data['date'] = timestamp.strftime("%B %d, %Y")
+    data['time'] = timestamp.strftime("%I:%M %p")
+    data['location'] = event['location']
+    data['completed'] = event_completed
+    data['is_user'] = session['is_user']
+    data['event_id'] = str(event['_id'])
+
+    # Club data
+    # TODO add imgs
+    data['club_name'] = club['club_name']
+
+    if event_completed:
+        # get all reviews of event
+        reviews = []
+        for review in event['event_ratings']:
+            success, user_data = get_data_one('Users', {'_id': ObjectId(review['user_id'])}, {'name': 1})
+
+            if success:
+                review_obj = {
+                    'name': user_data.get('name', "N/A"),
+                    'rating': int(review['rating']),
+                    'comment': review['comments']
+                }
+
+                reviews.append(review_obj)        
+        
+        # get event rating average
+        data['event_rating_avg'] = int(event['event_rating_avg'])
+        data['reviews'] = reviews
+    
+    return render_template('view_event_user.html', data=data)
