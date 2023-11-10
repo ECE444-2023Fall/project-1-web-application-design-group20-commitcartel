@@ -1,0 +1,25 @@
+{% extends "base2.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block page_content %}
+
+<style>
+    body {background-color: #315887;}
+    h1   {color: #f6f4f3;}
+    p    {color: #f6f4f3;}
+    .help-block {color: #ffffff !important;}
+    .control-label {color: #ffffff !important;}
+</style>
+
+<div class="page-header">
+    <h1><strong><center>CampusConnect</center></strong></h1>
+    <center><p>Fill out form to create a club account</p></center>
+</div>
+
+<center><label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label></center>
+<br>
+<center><p>Already have an account? <u><a href="/login" style="color:#f6f4f3;"> Log in</a></u></p></center>
+
+{% endblock %}
