@@ -1,4 +1,4 @@
-<!-- Event List -->
+<!-- Event List 
 {% macro event_list(events) %}
     <ul class="event-list">
         {% for event in events %}
@@ -16,8 +16,34 @@
             </li>
         {% endfor %}
     </ul>
+{% endmacro %} -->
+
+<!-- Event Card -->
+{% macro event_card(event) %}
+    <div class="event-card">
+        <div class="logo-container">
+            <img src="/static/ewb_logo.jpg" alt="{{ event.club_name }} Logo">
+        </div>
+        <div class="event-info">
+            <h3>{{ event.name }}</h3>
+            <p>Club: {{ event.club_name}}</p>
+            <p>Description: {{ event.description }}</p>
+            <p>Date & Time: {{ event.date_formatted }} @ {{ event.time_formatted }}</p>
+            <p>Location: {{ event.location }}</p>
+            <a href="#" class="read-more-btn">View Event</a>
+        </div>
+    </div>
 {% endmacro %}
 
+{% macro event_list(events) %}
+    <ul class="event-list">
+        {% for event in events %}
+            <li class="event-container">
+                {{ event_card(event) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
 <!-- Club List -->
 {% macro club_list(clubs) %}
     <ul class="event-list">

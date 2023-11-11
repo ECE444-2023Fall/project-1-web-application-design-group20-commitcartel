@@ -8,7 +8,7 @@ from flask_moment import Moment
 
 # import API routes
 from routes.user_auth_routes import user_auth
-from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, get_following_clubs
+from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, get_following_clubs, fix_events_format
 from routes.club_pg_routes import club_pg
 from routes.query_routes import query
 from routes.event_feedback_routes import event_feedback
@@ -110,7 +110,10 @@ def events():
 
     else:
         return "Error"
-
+    
+    events = fix_events_format(events)
+    
+    print(events)
     session['query'] = {}
 
     return render_template('events.html', form=form, events=events, type=type)
