@@ -8,6 +8,7 @@ CLUB PAGE EVENT CSS
     display: flex;
     flex-direction: row; /* Set the direction to row */
     margin: 20px;
+    min-width: 100%;
 }
 
 /* Style the individual columns */

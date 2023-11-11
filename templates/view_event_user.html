@@ -17,8 +17,7 @@
     </div>
     {% else %}
     <div class="column" id="view-event-column-2">
-        <!-- <a href="/register"> register for event </a> -->
-        {{event_details.event_details(data)}}
+        {{event_details.event_details(data, form)}}
     </div>
     {% endif %}
 </div>

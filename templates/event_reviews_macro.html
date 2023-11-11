@@ -17,7 +17,7 @@
     </div>
     {% endfor %}
 </div>
-{% if data['is_user'] %}
+{% if data['completed'] and data['is_user'] and data['is_registered']%}
 <a href="/leave_event_feedback/{{data['event_id']}}" class="submit-review-button">Submit a Review</a>
 {% endif %}
 <div>

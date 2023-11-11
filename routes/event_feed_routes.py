@@ -1,12 +1,19 @@
-from flask import request, Blueprint, jsonify, json, render_template, session
+from flask import request, Blueprint, jsonify, json, render_template, session, redirect, url_for, flash
 from database import get_data, get_data_one, update_one
+from flask_wtf import FlaskForm
+from wtforms import SubmitField
 from bson.objectid import ObjectId
 from bson import json_util
 from datetime import datetime
 
 event_feed = Blueprint('event_feed', __name__)
 
-# Events
+
+class RegisterForEvent(FlaskForm):
+    register           = SubmitField('Register')
+
+class UnRegisterForEvent(FlaskForm):
+    unregister         = SubmitField('Unregister')
 
 def get_explore_feed(filter=None):
     # get most recent events
@@ -51,11 +58,24 @@ def get_registered_feed(user_id, filter=None):
     else:
         return jsonify({'error': str(results)}), 500
 
-@event_feed.route('/register_event', methods=['PATCH'])
-def register_for_event():
-    data = request.form
-    event_id = data['event_id']
-    user_id = data['user_id']
+def unregister_from_event(user_id, event_id):
+    print(f"Unregistering user {user_id} from event {event_id}")
+
+    # Remove user from the list of registered attendees for the given event
+    success, result = update_one('Events', {'_id': ObjectId(event_id)}, {'$pull': {'attendees': ObjectId(user_id)}})
+
+    if not success:
+        return False, result
+
+    # Remove the event from the list of registered events for the user
+    success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$pull': {'registered_events': ObjectId(event_id)}})
+
+    if success:
+        return True, result
+    else:
+        return False, result
+
+def register_for_event(user_id, event_id):
     print(f"Registering user {user_id} to event {event_id}")
 
     # Add user to the list of registered attendees for the given event
@@ -63,18 +83,25 @@ def register_for_event():
     _,result = get_data_one('Events', {'_id': ObjectId(event_id)})
 
     if not success:
-        return jsonify({'error': str(result)}), 400
+        return False, result
 
     # Add the event to the list of registered events for the user
     success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(event_id)}})
 
     #print(result['registered_events'])
     if success:
-        return jsonify({'message': "registered successfully"})
+        return True, result
 
     else:
-        return jsonify({'error': result}), 500
+        return False, result
 
+def is_user_registered(user_id, event_id):
+    # determine if user is registered for this event
+    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'registered_events': 1})
+    if success:
+        return ObjectId(event_id) in data['registered_events']
+    
+    return False
 @event_feed.route('/event_attendees/<event_id>', methods=['GET'])
 def get_event_attendees(event_id):
     # Get the list of the event's registered user IDs
@@ -123,6 +150,8 @@ def get_following_clubs(user_id, filter=None):
 
 @event_feed.route('/events/<event_id>', methods=['GET', 'POST'])
 def view_event_user(event_id):
+    register_form = RegisterForEvent()
+    unregister_form = UnRegisterForEvent()
 
     success_1, event = get_data_one('Events', {'_id': ObjectId(event_id)})
     if not success_1:
@@ -137,6 +166,7 @@ def view_event_user(event_id):
     timestamp = datetime.fromtimestamp(event['time'].time)
     event_completed = timestamp <= current_time
     
+    is_registered = is_user_registered(session['user_id'], str(event['_id']))
     data = {}
     # Event data
     data['event_name'] = event['name']
@@ -149,10 +179,11 @@ def view_event_user(event_id):
     data['is_user'] = session['is_user']
     data['event_id'] = str(event['_id'])
     data['user_id'] = str(session['user_id'])
-    
+    data['is_registered'] = is_registered
+
     # Club data
     # TODO add imgs
-    data['club_name'] = club['club_name']
+    data['club_name'] = club['name']
     data['club_id'] = str(club['_id'])
 
     if event_completed:
@@ -174,4 +205,19 @@ def view_event_user(event_id):
         data['event_rating_avg'] = int(event['event_rating_avg'])
         data['reviews'] = reviews
     
-    return render_template('view_event_user.html', data=data)
+    if request.method == 'POST':
+        if is_registered:
+            success,_ = unregister_from_event(str(session['user_id']), str(event['_id']))
+            if success:
+                flash("You have successfully unregistered for the event", "success")
+                return redirect(url_for('event_feed.view_event_user', event_id=data['event_id'])) 
+        else:
+            success,_ = register_for_event(str(session['user_id']), str(event['_id']))
+            if success:
+                flash("You have successfully registered for the event", "success")
+                return redirect(url_for('event_feed.view_event_user', event_id=data['event_id']))  
+
+    if is_registered:
+        return render_template('view_event_user.html', data=data, form=unregister_form)
+    else:
+        return render_template('view_event_user.html', data=data, form=register_form)
