@@ -14,11 +14,11 @@ club_pg = Blueprint('club_pg', __name__)
 
 
 class ClubForm(FlaskForm):
-    club_name        = StringField('Club Name:', validators=[DataRequired()])
+    name             = StringField('Club Name:', validators=[DataRequired()])
     email            = StringField('Club Email Address:', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
-    club_description = TextAreaField('Short description About the Club:', validators=[DataRequired()])
+    description      = TextAreaField('Short description About the Club:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:', validators= [DataRequired()] )
     submit           = SubmitField('Create Account') 
 
@@ -30,15 +30,15 @@ def clubs(club_id):
     club_id   = ObjectId(club_id)
     success, club_find = get_data_one('Clubs', {'_id': club_id})
     if(success):
-        club_name = club_find['club_name']
-        club_description = club_find['club_description']
+        name = club_find['name']
+        description = club_find['description']
         email = club_find['email']
         events = club_find['events'] #this is a list of event ids
         for eventID in events:
             success, event_find = get_data_one('Events',{'_id': eventID})
             event_list.append(event_find['name'])     #create a list of event names from event IDs
 
-    return render_template("clubs.html", club_name=club_name, club_description=club_description, events=event_list, email=email)
+    return render_template("clubs.html", name=name, description=description, events=event_list, email=email)
 
 
 @club_pg.route('/clubs/<string:club_id>/<string:event_id>')
@@ -84,7 +84,7 @@ def club_event_view(club_id, event_id):
     
     # Club data
     # TODO add imgs
-    data['club_name'] = club['club_name']
+    data['name'] = club['name']
 
     if event_completed:
         # get all reviews of event
@@ -112,17 +112,17 @@ def club_event_view(club_id, event_id):
 def create_club():
     form = ClubForm()    
     if form.validate_on_submit():
-        session['club_name']        = str(form.club_name.data)   
+        session['name']        = str(form.name.data)   
         session['email']            = str(form.email.data)
-        session['club_description'] = str(form.club_description.data) 
+        session['description'] = str(form.description.data) 
         session['password']         = generate_password_hash(str(form.password.data))
 
         club_object = {
-            'club_description': session.get('club_description'),
-            'club_name': session.get('club_name'),
+            'description': session.get('description'),
+            'name': session.get('name'),
             'email': session.get('email'),
             'password': session.get('password'), 
-            'club_rating_avg': '', 
+            'avg_rating': '', 
             'events': '', 
             'followers': '', 
             'photo': ''
@@ -141,4 +141,4 @@ def create_club():
 
         return redirect(url_for('club_pg.create_club'))
 
-    return render_template('create_club.html', form=form, club_icon=session.get('club_icon'), club_description=session.get('club_description'), club_name=session.get('club_name'), email=session.get('email'))
+    return render_template('create_club.html', form=form, club_icon=session.get('club_icon'), description=session.get('description'), name=session.get('name'), email=session.get('email'))

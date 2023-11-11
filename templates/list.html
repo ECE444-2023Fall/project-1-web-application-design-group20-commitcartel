@@ -19,19 +19,17 @@
 {% endmacro %}
 
 <!-- Club List -->
-{% macro club_list(events) %}
+{% macro club_list(clubs) %}
     <ul class="event-list">
-        {% for event in events %}
+        {% for club in clubs %}
             <li class="event-container">
                 <div class="event">
                     <div style="display: flex;">
-                        <h3>{{ event.name }}</h3>
+                        <h3>{{ club.name }}</h3>
                         <div style="margin-left: 50px;">
-                            <p>Time: {{ event.datetime }}</p>
-                            <p>Location: {{ event.location }}</p>
                         </div>
                     </div>
-                    <p>Description: {{ event.description }}</p>
+                    <p>Description: {{ club.description }}</p>
                 </div>
             </li>
         {% endfor %}
