@@ -18,7 +18,7 @@
     {% endfor %}
 </div>
 {% if data['completed'] and data['is_user'] and data['is_registered']%}
-<a href="/leave_event_feedback/{{data['event_id']}}" class="submit-review-button">Submit a Review</a>
+<a href="{{ url_for('event_feedback.leave_event_feedback', event_id=data['event_id']) }}" class="submit-review-button">Submit a Review</a>
 {% endif %}
 <div>
     <h2 style="color: #3A2C25; font-family: Verdana, sans-serif;">RATING</h2>
