@@ -30,6 +30,13 @@ app.register_blueprint(user_account)
 bootstrap = Bootstrap(app)
 moment  = Moment(app)
 
+@app.route('/arafat_setup_user')
+def arafat_setup_user():
+    session.pop('club_id', default=None)
+    session['is_user'] = True
+    session['user_id'] = "654c3f87b695173c8bf14c1c"
+    return session['user_id']
+
 #Helper functions
 class validateEmail(object):
     def __call__(self, form, field):

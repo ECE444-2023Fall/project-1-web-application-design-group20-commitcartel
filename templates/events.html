@@ -30,18 +30,18 @@
                 </div>
             </div>
         </div>
-        <div>
-            <form class="form form-horizontal" method="post" role="form">
-                {{ form.hidden_tag() }}
-                {{ wtf.form_errors(form, hiddens="only") }}
-                
-                {{ wtf.form_field(form.search) }}
-                {{ wtf.form_field(form.category) }}
-                {{ wtf.form_field(form.submit, style="margin-bottom: 1rem;") }}
-            </form>
-        </div>
-    </div>
 
+    </div>
+    <div style="padding-left: 40px;">
+        <form class="form form-vertical" method="post" role="form">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+            
+            {{ wtf.form_field(form.search) }}
+            {{ wtf.form_field(form.category) }}
+            {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
     {{list_create.event_list(events)}}
     
 {% endblock %}
