@@ -26,7 +26,7 @@ def get_following_feed(user_id, filter=None):
         return jsonify({'error': str(clubs)}), 500
 
     # get events from all the club ids
-    success, results = get_data('Events', {'club_id': {'$in': clubs}}, sort=[{"time", -1}])
+    success, results = get_data('Events', {'club_id': {'$in': clubs}}, {'event_rating': 1}, sort=[{"time", -1}])
 
     if success:
         return json.loads(json_util.dumps(results))
@@ -42,7 +42,7 @@ def get_registered_feed(user_id, filter=None):
         return jsonify({'error': str(data)}), 500
     
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', {'_id': {'$in': data}})
+    success, results = get_data('Events', {'_id': {'$in': data}}, {'event_rating': 1})
     
     if success:
         return json.loads(json_util.dumps(results))
