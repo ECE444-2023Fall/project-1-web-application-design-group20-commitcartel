@@ -30,7 +30,7 @@
             <p>Description: {{ event.description }}</p>
             <p>Date & Time: {{ event.date_formatted }} @ {{ event.time_formatted }}</p>
             <p>Location: {{ event.location }}</p>
-            <a href="#" class="read-more-btn">View Event</a>
+            <a href="/events/{{ event.id }}" class="read-more-btn">View Event</a>
         </div>
     </div>
 {% endmacro %}
