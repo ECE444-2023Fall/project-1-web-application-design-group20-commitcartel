@@ -1,10 +1,9 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField, FileField, TextAreaField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms import StringField, IntegerField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, NumberRange
 from database import insert_one, get_data_one
 from bson.objectid import ObjectId
-from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 
 # Create a Blueprint
@@ -22,10 +21,10 @@ class UofTEmail(object):
 
 class UserAccountForm(FlaskForm):
     name             = StringField('Full Name:', validators = [DataRequired()])
-    email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message="Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
+    email            = StringField('UofT Email Address:', validators=[DataRequired(), Email(message = "Please include an '@' in the email address. Email address is missing an '@' "), UofTEmail()])
     program          = StringField('Program:', validators = [DataRequired()])
-    year             = StringField('Year:', validators = [DataRequired()])
-    password         = PasswordField('Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match')])
+    year             = IntegerField('Graduating Year:', validators = [DataRequired(), NumberRange(min=1950, max=2050, message = "Please enter a valid year (example: 2026)")])
+    password         = PasswordField('Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = "Password and confirm password do not match")])
     password_conf    = PasswordField('Confirm Password:', validators = [DataRequired()])
     submit           = SubmitField('Create Account') 
 
@@ -57,10 +56,9 @@ def create_user_account():
             return jsonify({'error'}), 500
 
         if request.method == 'POST':
-            # Once the create user account form is sucessfully completed, user gets redirected to explore page
-            return redirect(url_for('explore'))
+            # Once the create user account form is sucessfully completed, user gets redirected to home page
+            return render_template('homepage.html')
 
         return redirect(url_for('user_account.create_user_account'))
 
-    return render_template('create_user_account.html', form=form, email=session.get('email'))
-
+    return render_template('create_user_account.html', form=form)
