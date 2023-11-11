@@ -80,7 +80,6 @@ def register_for_event(user_id, event_id):
 
     # Add user to the list of registered attendees for the given event
     success, result = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'attendees': ObjectId(user_id)}})
-    _,result = get_data_one('Events', {'_id': ObjectId(event_id)})
 
     if not success:
         return False, result
@@ -88,7 +87,6 @@ def register_for_event(user_id, event_id):
     # Add the event to the list of registered events for the user
     success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'registered_events': ObjectId(event_id)}})
 
-    #print(result['registered_events'])
     if success:
         return True, result
 

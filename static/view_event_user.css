@@ -30,11 +30,6 @@
     text-align: left; /* Center the content horizontally within each item */
 }
 
-/* .form-container {
-    flex: 2;
-    flex-direction: column;
-    align-items: flex-end; 
-} */
 .event-header-flex-item:nth-child(2) {
     padding: 20px;
     align-self: flex-end;

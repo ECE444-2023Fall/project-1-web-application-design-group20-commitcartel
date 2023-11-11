@@ -60,20 +60,6 @@ class EventFilterForm(FlaskForm):
     category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put'])
     submit      = SubmitField('Submit')
 
-@app.route('/arafat_setup_user')
-def arafat_setup_user():
-    session.pop('club_id', default=None)
-    session['is_user'] = True
-    session['user_id'] = "654c3f87b695173c8bf14c1c"
-    return session['user_id']
-
-@app.route('/arafat_setup_club')
-def arafat_setup_club():
-    session.pop('user_id', default=None)
-    session['is_user'] = False
-    session['club_id'] = "654456e2dfd8c6673e217e8f"
-    return session['club_id']
-
 @app.route('/')
 def index():
     return render_template("homepage.html")
