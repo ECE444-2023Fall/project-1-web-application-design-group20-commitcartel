@@ -5,16 +5,22 @@ from bson import ObjectId, json_util, Timestamp
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, SubmitField, TextAreaField, DateField, TimeField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms import widgets
 from datetime import datetime
 # Create a Blueprint
 posting = Blueprint('posting', __name__)
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(html_tag='ul', prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class CreateEventForm(FlaskForm):
     event_name      = StringField('Event Name')
     event_date      = DateField('Event Date')
     event_start_time = TimeField('Event Start Time')
     location        = StringField('Location')
-    event_category = SelectField('Event Category', choices=[
+    event_category = MultiCheckboxField('Event Category', choices=[
         ('', "Select an Event Category"),
         ('academic', 'Academic'),
         ('arts', 'Arts'),
