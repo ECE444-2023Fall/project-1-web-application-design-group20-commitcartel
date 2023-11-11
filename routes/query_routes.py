@@ -22,7 +22,7 @@ def search_events():
 def search_clubs():
     data = request.args  # [adrian] TODO: change implementation when front end is developed
     query_string = data.get('query')
-    query = {"club_name": {"$regex": query_string, "$options": "i"}}
+    query = {"name": {"$regex": query_string, "$options": "i"}}
 
     # Search the clubs database
     success, result = get_data('Clubs', query)

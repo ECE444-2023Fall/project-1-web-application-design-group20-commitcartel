@@ -8,7 +8,7 @@ from flask_moment import Moment
 
 # import API routes
 from routes.user_auth_routes import user_auth
-from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed
+from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, get_following_clubs
 from routes.club_pg_routes import club_pg
 from routes.query_routes import query
 from routes.user_account_routes import user_account
@@ -75,17 +75,17 @@ def following():
     type = request.args.get('type')
 
     if type == 'following':
-        events = get_following_feed("65409591870327a571edea4a")
+        clubs = get_following_clubs("65409591870327a571edea4a")
 
     elif type == 'explore':
-        events = get_explore_feed()
+        clubs = get_clubs()
 
     else:
         return "Error"
 
     session['query'] = {}
 
-    return render_template('clubs.html', form=form, clubs=events, type=type)
+    return render_template('clubs.html', form=form, clubs=clubs, type=type)
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
@@ -115,4 +115,4 @@ def events():
     return render_template('events.html', form=form, events=events, type=type)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
