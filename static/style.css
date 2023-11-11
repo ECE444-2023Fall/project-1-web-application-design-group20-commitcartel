@@ -320,24 +320,3 @@ background-color: #19345d;
     flex-direction: row;
     align-items: flex-start;
 }
-
-.event-container {
-    height: 200px;
-    overflow: hidden;
-}
-
-.event {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group {
-    margin-right: 20px;
-}
-
-.event-list {
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-}

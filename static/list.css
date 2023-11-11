@@ -1,0 +1,38 @@
+.event-list {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.event-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+}
+
+.logo-container {
+    width: 100px; /* Adjust the width of the logo container as needed */
+    margin-right: 20px;
+}
+
+.logo-container img {
+    max-width: 100%; /* Ensure the logo doesn't exceed the container width */
+}
+
+.event-info {
+    flex: 1; /* Allow the event info to take the remaining space */
+}
+
+/* Additional styling for the event card */
+.event-card {
+    display: flex;
+}
+
+h3 {
+    margin-bottom: 10px;
+}
+
+.read-more-btn {
+    text-decoration: none;
+    color: #007bff; /* Change to your preferred link color */
+}
