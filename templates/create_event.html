@@ -17,6 +17,87 @@
     <h1><strong><center>CampusConnect</center></strong></h1>
     <center><p>Fill out form to create an event</p></center>
 </div>
-<center><label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label></center>
+<center>
+    <form class="form-group" method="POST" action="/create_event">
+        <div class="form-fields">
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.event_name.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.event_name() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.event_date.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.event_date() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.event_start_time.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.event_start_time() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.location.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.location() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.description.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.description() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.submit.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.submit() }}
+                </label>
+            </div>
+        </div>
+        <div class="form-fields">
+            <div class="form-field">
+                <div>
+                    <label>
+                        {{ form.event_category.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.event_category() }}
+                </label>
+            </div>
+        </div>
+    </form>
+    
+</center>
+
+
+
 <br>
 {% endblock %}
