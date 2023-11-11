@@ -15,19 +15,27 @@ class RegisterForEvent(FlaskForm):
 class UnRegisterForEvent(FlaskForm):
     unregister         = SubmitField('Unregister')
 
-def get_explore_feed(filter=None):
-    # get most recent events
-    success, result = get_data('Events', query={}, sort=[{"time", -1}])
+def get_explore_events(filter={}, search_string=None):
+    # Get most recent events
+    if search_string:
+        filter["name"] = {"$regex": search_string, "$options": "i"}
+
+    success, result = get_data('Events', filter=filter, sort=[{"time", -1}])
 
     if success:
         return json.loads(json_util.dumps(result))
     else:
         return jsonify({'error': str(result)}), 500
 
-def get_following_feed(user_id, filter=None):
 
+def get_following_events(user_id, filter={}, search_string=None):
     # Get clubs user follows
-    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'following_clubs': 1})
+    filter['_id'] = ObjectId(user_id)
+
+    if search_string:
+        filter["name"] = {"$regex": search_string, "$options": "i"}
+    
+    success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
     clubs = [item for item in data['following_clubs']]
 
     if not success:
@@ -41,9 +49,15 @@ def get_following_feed(user_id, filter=None):
     else:
         return jsonify({'error': str(results)}), 500
 
-def get_registered_feed(user_id, filter=None):
+
+def get_registered_events(user_id, filter={}, search_string=None):
     # Get the list of the user's registered event IDs
-    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'registered_events': 1})
+    filter['_id'] = ObjectId(user_id)
+
+    if search_string:
+        filter["name"] = {"$regex": search_string, "$options": "i"}
+
+    success, data = get_data_one('Users', filter=filter, projection={'registered_events': 1})
     data = [item for item in data['registered_events']]
 
     if not success:
@@ -100,6 +114,7 @@ def is_user_registered(user_id, event_id):
         return ObjectId(event_id) in data['registered_events']
     
     return False
+
 @event_feed.route('/event_attendees/<event_id>', methods=['GET'])
 def get_event_attendees(event_id):
     # Get the list of the event's registered user IDs
@@ -119,20 +134,27 @@ def get_event_attendees(event_id):
         return jsonify({'error': str(results)}), 500
     
 # Clubs
+def get_explore_clubs(filter={}, search_string=None):
+    # Get clubs
+    if search_string:
+        filter["name"] = {"$regex": search_string, "$options": "i"}
 
-def get_clubs(filter=None):
-    # get most recent events
-    success, result = get_data('Clubs', query={})
+    success, result = get_data('Clubs', filter=filter)
 
     if success:
         return json.loads(json_util.dumps(result))
     else:
         return jsonify({'error': str(result)}), 500
 
-def get_following_clubs(user_id, filter=None):
 
+def get_following_clubs(user_id, filter={}, search_string=""):
     # Get club ids user follows
-    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'following_clubs': 1})
+    filter['_id'] = ObjectId(user_id)
+
+    if search_string:
+        filter["name"] = {"$regex": search_string, "$options": "i"}
+
+    success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
     clubs = [item for item in data['following_clubs']]
 
     if not success:

@@ -18,14 +18,10 @@ except ConfigurationError:
 # Add in other wrappers as we need them
 
 # Get multiple documents
-def get_data(collection_name, query=None, projection=None, sort=None):
+def get_data(collection_name, filter=None, projection=None, sort=None):
     try:
         collection = db_client[collection_name]
-        result = collection.find(query, projection)
-
-        # Apply sorting if provided
-        if sort is not None:
-            result = result.sort(sort)
+        result = collection.find(filter, projection, sort=sort)
 
         return (True, list(result))
 
@@ -34,10 +30,10 @@ def get_data(collection_name, query=None, projection=None, sort=None):
         return (False, e)
 
 # Get one document
-def get_data_one(collection_name, query=None, projection=None):
+def get_data_one(collection_name, filter=None, projection=None):
     try:
         collection = db_client[collection_name]
-        result = collection.find_one(query, projection)
+        result = collection.find_one(filter, projection)
 
         return (True, result)
 
@@ -46,10 +42,10 @@ def get_data_one(collection_name, query=None, projection=None):
         return (False, e)
 
 # Update one document
-def update_one(collection_name, query, update):
+def update_one(collection_name, filter, update):
     try:
         collection = db_client[collection_name]
-        result = collection.update_one(query, update)
+        result = collection.update_one(filter, update)
 
         if result.modified_count > 0:
             return (True, "Update Successful")
@@ -61,10 +57,10 @@ def update_one(collection_name, query, update):
         return (False, e)
 
 
-def delete_one(collection_name, query):
+def delete_one(collection_name, filter):
     try:
         collection = db_client[collection_name]
-        result = collection.delete_one(query)
+        result = collection.delete_one(filter)
 
         if result.deleted_count > 0:
             return (True, "Delete Successful")
