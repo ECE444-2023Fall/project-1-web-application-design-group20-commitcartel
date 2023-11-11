@@ -7,12 +7,32 @@ from wtforms import PasswordField, StringField, SubmitField, TextAreaField, Date
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from wtforms import widgets
 from datetime import datetime
+from markupsafe import Markup
 # Create a Blueprint
 posting = Blueprint('posting', __name__)
 
 
+class BootstrapListWidget(widgets.ListWidget):
+     
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault("id", field.id)
+        html = [f"<{self.html_tag} {widgets.html_params(**kwargs)}>"]
+        for subfield in field:
+            if self.prefix_label:
+                html.append(f"<li class='list-group-item'>{subfield.label} {subfield(class_='form-check-input ms-1')}</li>")
+            else:
+                html.append(f"<li class='list-group-item'>{subfield(class_='form-check-input me-1')} {subfield.label}</li>")
+        html.append("</%s>" % self.html_tag)
+        return Markup("".join(html))
+
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(html_tag='ul', prefix_label=False)
+    """
+    A multiple-select, except displays a list of checkboxes.
+ 
+    Iterating the field will produce subfields, allowing custom rendering of
+    the enclosed checkbox fields.
+    """
+    widget = BootstrapListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 class CreateEventForm(FlaskForm):
@@ -21,7 +41,6 @@ class CreateEventForm(FlaskForm):
     event_start_time = TimeField('Event Start Time')
     location        = StringField('Location')
     event_category = MultiCheckboxField('Event Category', choices=[
-        ('', "Select an Event Category"),
         ('academic', 'Academic'),
         ('arts', 'Arts'),
         ('athletics_recreation', 'Athletics and Recreation'),
@@ -38,8 +57,7 @@ class CreateEventForm(FlaskForm):
         ('spirituality_faith_communities', 'Spirituality and Faith Communities'),
         ('student_governments_councils_unions', 'Student Governments, Councils, and Unions'),
         ('work_career_development', 'Work and Career Development')
-    ], 
-    default='')
+    ])
     description     = TextAreaField('Description')
     submit          = SubmitField('Create Event')
 
