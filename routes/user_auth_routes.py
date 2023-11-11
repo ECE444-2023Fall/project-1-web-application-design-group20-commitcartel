@@ -30,7 +30,7 @@ def login():
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
                 # Redirect to where needed
-                return redirect(url_for('explore'))
+                return redirect(url_for('index'))
 
         success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
