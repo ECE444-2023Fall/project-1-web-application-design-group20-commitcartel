@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, session, redirec
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from database import insert_one, get_data_one
+from database import insert_one, get_data_one, get_data
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -26,19 +26,67 @@ class ClubForm(FlaskForm):
 
 @club_pg.route('/clubs/<string:club_id>')
 def clubs(club_id):
-    event_list = []
-    club_id   = ObjectId(club_id)
-    success, club_find = get_data_one('Clubs', {'_id': club_id})
-    if(success):
-        name = club_find['name']
-        description = club_find['description']
-        email = club_find['email']
-        events = club_find['events'] #this is a list of event ids
-        for eventID in events:
-            success, event_find = get_data_one('Events',{'_id': eventID})
-            event_list.append(event_find['name'])     #create a list of event names from event IDs
+    success, club = get_data_one('Clubs', {'_id': ObjectId(club_id)})
 
-    return render_template("clubs.html", name=name, description=description, events=event_list, email=email)
+    #for test purposes
+    session['is_user'] = False
+    is_user = session['is_user']
+
+    if not success:
+        return "<h1> Error </h1>"
+
+    # Get all events for the club
+    success_events, events = get_data('Events', {'club_id': ObjectId(club_id)})
+
+    if not success_events:
+        events = []
+
+    current_time = datetime.utcnow()
+
+    # Prepare data for the template
+    data = {'club_name': club['name'], 'club_description': club['description'], 'events': []}
+
+    for event in events:
+        timestamp = datetime.fromtimestamp(event['time'].time)
+        event_completed = timestamp <= current_time
+
+        # Get attendees for each event
+        success_attendees, attendees = get_data('Users', {'_id': {'$in': event['attendees']}})
+        num_attending = len(attendees) if success_attendees else 0
+
+        # Get reviews for each event (if completed)
+        reviews = []
+        if event_completed:
+            for review in event['event_ratings']:
+                success_review_user, user_data = get_data_one('Users', {'_id': ObjectId(review['user_id'])}, {'name': 1})
+
+                if success_review_user:
+                    review_obj = {
+                        'name': user_data.get('name', "N/A"),
+                        'rating': int(review['rating']),
+                        'comment': review['comments']
+                    }
+
+                    reviews.append(review_obj)
+
+        # Prepare event data
+        event_data = {
+            'event_id': str(event['_id']),
+            'event_name': event['name'],
+            'event_description': event['description'],
+            'attendees': attendees,
+            'num_attending': num_attending,
+            'date': timestamp.strftime("%B %d, %Y"),
+            'time': timestamp.strftime("%I:%M %p"),
+            'location': event['location'],
+            'completed': event_completed,
+            'reviews': reviews if event_completed else [],
+            'num_reviews': len(reviews),
+            'event_rating_avg': int(event['event_rating_avg']) if 'event_rating_avg' in event else 0
+        }
+
+        data['events'].append(event_data)
+    return render_template('club.html', data=data, is_user=is_user)
 
 
 @club_pg.route('/clubs/<string:club_id>/<string:event_id>')

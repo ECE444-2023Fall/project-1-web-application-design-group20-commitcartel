@@ -1,11 +1,20 @@
 :root {
     --radius: 0.2rem;
     --color-primary: #00204E;
+    --color-nav-hover:#3b87df;
+    --color-event-background: #B2C3D0;
+    --color-webpage: #F2F4F7;
+    --color-new-event: #0280FA;
 }
 html{
     font-family: "Verdana",sans-serif;
-    background-color: #F2F4F7;
+    background-color: var(--color-webpage);
 }
+
+body{
+    background-color: var(--color-webpage);
+}
+
 /* Nav bar */
 .nav_links {
     padding: 1rem;
@@ -31,7 +40,7 @@ html{
 }
 
 .nav_item a:hover {
-    color: #3b87df;
+    color: var(--color-nav-hover);
 }
 
 .nav_item_left{
@@ -95,7 +104,7 @@ html{
 }
 
 .dropdown-content a:hover {
-    color: #3b87df;
+    color: var(--color-nav-hover);
 }
 
 /* Show the dropdown when hovering over the image */
@@ -183,11 +192,11 @@ background-color: #19345d;
 
 .overlay_text:nth-child(3){
     animation: slideText 1s 3s forwards;
-    color:#3b87df;
+    color: var(--color-nav-hover);
 }
 
 .blue{
-    color:#3b87df;
+    color: var(--color-nav-hover);
 }
 
 .home_bottom_container{
@@ -342,9 +351,114 @@ background-color: #19345d;
     gap: 50px;
 }
 
-.form-group {
+/* Club Page Template */
+.club_upper_block{
+    display:flex;
+    justify-content: space-between;
+    padding-bottom:20px;
+    
+}
+
+.club_upper_block_title{
+    color: var(--color-primary);
+}
+
+.club_bottom_block{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* Club events on club.html */
+.club_image_column{
+    padding: 20px;
+    text-align: center;
+    margin: 10px; /* Add some spacing and style */
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: left; /* Align text to the left */
+}
+
+.club_past_events{
+    padding: 20px;
+    margin: 10px; /* Add some spacing and style */
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
+    max-height: 1200px;
+}
+
+.club_current_events{
+    padding: 20px;
+    margin: 10px; /* Add some spacing and style */
+    flex: 1; /* This column will be half as wide as the others */
+    text-align: center; /* Align text to the left */
+    background-color: #B2C3D0;
+    max-height: 1200px;
+
+}
+
+.club_event_info{
+    background-color: #F1F1F1; /* Choose a background color that pairs nicely */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px; /* Optional: Add rounded corners for a softer look */
+}
+
+.event_upper{
+    display:flex;
+    justify-content: space-between;
+}
+
+.event_middle{
+    padding-top:15px;
+}
+
+.event_bottom{
     display: flex;
     justify-content: space-between;
+}
+
+.register_button{
+    border-radius: 3px;
+    height:40px;
+    width:150px;
+    display: block;
+    margin-left:auto;
+    color:white;
+
+    background: linear-gradient(to right, white 50%, var(--color-new-event) 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all .3s ease-out;
+}
+
+.register_button:hover {
+    background-position: left bottom;
+    color: var(--color-new-event);
+  }
+
+.new_event{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.new_event_button{
+    margin-top:15px;
+    background-color: var(--color-new-event);
+    color: white;
+    height:50px;
+    width:250px;
+    border-radius:360px;
+    cursor:pointer;
+    margin-left:15px;
+    border: none;
+}
+
+.new_event_button:hover{
+    color:var(--color-new-event);
+    background-color: white;
+    transition:0.3s ease-in;
 }
 
 .form-fields {
