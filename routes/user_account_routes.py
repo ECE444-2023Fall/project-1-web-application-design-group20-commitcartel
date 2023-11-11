@@ -58,7 +58,7 @@ def create_user_account():
 
         if request.method == 'POST':
             # Once the create user account form is sucessfully completed, user gets redirected to home page
-            return render_template('homepage.html')
+            return redirect(url_for('index'))
 
         return redirect(url_for('user_account.create_user_account'))
 
