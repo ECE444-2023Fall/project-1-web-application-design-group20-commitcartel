@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 
 event_feedback = Blueprint('event_feedback', __name__)
 
+# Check to ensure email entered is valid CampusConnect user email
 class CheckValidCampusConnectEmail(object):
     def __init__(self, response=None):
         if not response:
@@ -38,9 +39,9 @@ def leave_event_feedback(event_id):
             session['rating']           = str(form.rating.data)
             session['comments']         = str(form.comments.data)
 
-            feedback_id = ObjectId()
+            feedback_id = ObjectId()  # Create new event feedback ID
             email_query = {'email': session.get('email')}
-            success_user, user = get_data_one('Users', email_query)
+            success_user, user = get_data_one('Users', email_query)  # Get corresponding user_id for entered CampusConnect email
 
             event_object = {
                 'event_feedback_id': str(feedback_id),
@@ -49,6 +50,7 @@ def leave_event_feedback(event_id):
                 'comments': session.get('comments'),
             }
 
+            # Update Events database with corresponding event rating and comments for given event
             success_events, result_events = update_one('Events', {'_id': ObjectId(event_id)}, {'$addToSet': {'event_ratings': event_object}})
 
             if success_events:
@@ -56,14 +58,17 @@ def leave_event_feedback(event_id):
             
                 if success1 and event1:
                     event_ratings = [int(rating['rating']) for rating in event1['event_ratings']]
-                    
+
+                    # Computer average rating of all event's ratings (including given rating just added)
                     if event_ratings:
                         avg_rating = sum(event_ratings)/len(event_ratings)
                     else:
                         avg_rating = 0
 
+                    # Update Events database with corresponding event average rating for given event
                     success_avg_rating, result_avg_rating = update_one('Events', {'_id': ObjectId(event_id)}, {'$set': {'event_rating_avg': avg_rating}})
 
+                    # Once form properly submitted, user redirected back to event page
                     if success_avg_rating:
                         return redirect(url_for('event_feed.view_event_user', event_id=event_id))
                     else:
