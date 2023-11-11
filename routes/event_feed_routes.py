@@ -209,12 +209,10 @@ def view_event_user(event_id):
         if is_registered:
             success,_ = unregister_from_event(str(session['user_id']), str(event['_id']))
             if success:
-                flash("You have successfully unregistered for the event", "success")
                 return redirect(url_for('event_feed.view_event_user', event_id=data['event_id'])) 
         else:
             success,_ = register_for_event(str(session['user_id']), str(event['_id']))
             if success:
-                flash("You have successfully registered for the event", "success")
                 return redirect(url_for('event_feed.view_event_user', event_id=data['event_id']))  
 
     if is_registered:
