@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import 'event_details_macro.html' as event_details%}
+{% import 'event_reviews_macro.html' as event_reviews%}
+{% block title %}Flasky{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="column" id="column1">
+        <img class="club_event_logo" src="/static/ewb_logo.jpg">
+    </div>
+    {% if data['completed'] %}
+    <div class="column" id="column2">
+        {{event_details.event_details(data)}}
+    </div>
+    <div class="column" id="column4">
+        {{event_reviews.event_reviews(data)}}    
+    </div>
+    {% else %}
+    <div class="column" id="view-event-column-2">
+        {{event_details.event_details(data, form)}}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

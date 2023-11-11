@@ -41,11 +41,11 @@ def create_user_account():
 
         user_object = {
             'name': session.get('name'),
-            'registered_events': '',
-            'following_clubs': '',       
+            'registered_events': [],
+            'following_clubs': [],       
             'email': session.get('email'),
-            'filtered_clubs': '',
-            'filtered_events': '',
+            'filtered_clubs': [],
+            'filtered_events': [],
             'password': session.get('password'), 
             'program': session.get('program'), 
             'year': session.get('year'), 

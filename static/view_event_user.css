@@ -1,0 +1,70 @@
+#view-event-column-2 {
+    flex: 3; /* This column will be half as wide as the others */
+    text-align: left; /* Align text to the left */
+    min-width: 70%;
+}
+
+.submit-review-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-review-button:hover {
+    background-color: #0056b3;
+}
+
+.event-header {
+    display: flex;
+    align-items: center; /* Vertically align content */
+}
+
+.event-header-flex-item {
+ /* Allow the items to grow and take up equal space within the flex container */
+    padding: 0px; /* Add padding around the items */
+    text-align: left; /* Center the content horizontally within each item */
+}
+
+.event-header-flex-item:nth-child(2) {
+    padding: 20px;
+    align-self: flex-end;
+}
+
+/* Style for the Unregister button */
+form input#unregister[type="submit"] {
+    background-color: #E74C3C; /* Red color for unregistering */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+form input#unregister[type="submit"]:hover {
+    background-color: #C0392B; /* Darker red on hover */
+}
+
+
+/* Style for the Register button */
+form input#register[type="submit"] {
+    background-color: #3498db; /* Blue color for registering */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+form input#register[type="submit"]:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
