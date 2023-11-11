@@ -50,6 +50,7 @@ def create_user_account():
             'year': session.get('year'), 
         }
 
+        # Insert new user profile into Users database once form successfully submitted
         success, user_id = insert_one('Users', user_object)      
 
         if success == False:
