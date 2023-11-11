@@ -17,6 +17,7 @@ class UnRegisterForEvent(FlaskForm):
 # Events
 def fix_events_format(events):
     for event in events:
+        event['id'] = event['_id']['$oid']
         if "time" not in event:
             continue
         timestamp = datetime.fromtimestamp(event['time']['$timestamp']['t'])
