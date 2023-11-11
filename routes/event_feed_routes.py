@@ -8,13 +8,13 @@ from datetime import datetime
 
 event_feed = Blueprint('event_feed', __name__)
 
-
 class RegisterForEvent(FlaskForm):
     register           = SubmitField('Register')
 
 class UnRegisterForEvent(FlaskForm):
     unregister         = SubmitField('Unregister')
 
+# Events
 def get_explore_events(filter={}, search_string=None):
     # Get most recent events
     if search_string:
@@ -167,6 +167,7 @@ def get_following_clubs(user_id, filter={}, search_string=""):
         return json.loads(json_util.dumps(results))
     else:
         return jsonify({'error': str(results)}), 500
+
 
 @event_feed.route('/events/<event_id>', methods=['GET', 'POST'])
 def view_event_user(event_id):
