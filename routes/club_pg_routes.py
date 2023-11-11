@@ -84,7 +84,8 @@ def club_event_view(club_id, event_id):
     
     # Club data
     # TODO add imgs
-    data['name'] = club['name']
+    data['club_name'] = club['name']
+    data['club_id'] = str(club['_id'])
 
     if event_completed:
         # get all reviews of event
