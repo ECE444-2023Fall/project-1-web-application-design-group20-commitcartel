@@ -341,3 +341,48 @@ background-color: #19345d;
     flex-direction: column;
     gap: 50px;
 }
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-fields {
+    flex:1;
+    flex-direction: column;
+}
+
+.form-field {
+    margin-bottom: 10px; /* Adjust the margin as needed */
+}
+
+.form-field label {
+    font-size: 16px; /* Adjust the font size to your preference */
+    font-weight: bold; /* Optional: Adjust font weight as needed */
+    margin-bottom: 5px; /* Optional: Add spacing between label and input */
+}
+
+.form-label {
+    color: #F2F4F7;
+}
+
+.form-input-label {
+    min-width: 40%;
+}
+
+.form-input-label input {
+    width: 100%;
+}
+
+.form-input-label textarea {
+    width: 100%;
+}
+
+ul#event_category {
+    padding-left: 0; /* Remove the default padding on the left */
+    list-style-type: none; /* Remove the default list bullet points */
+}
+
+ul#event_category li {
+    text-align: left; /* Align the text to the left within list items */
+}

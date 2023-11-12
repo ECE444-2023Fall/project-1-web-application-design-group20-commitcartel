@@ -1,0 +1,99 @@
+{% extends "base2.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}CampusConnect{% endblock %}
+
+{% block page_content %}
+
+<style>
+    body {background-color: #315887;}
+    h1   {color: #f6f4f3;}
+    p    {color: #f6f4f3;}
+    .help-block {color: #ffffff !important;} 
+    .control-label {color: #ffffff !important;} 
+</style>
+
+<div class="page-header">
+    <h1><strong><center>CampusConnect</center></strong></h1>
+    <center><p>Fill out form to create an event</p></center>
+</div>
+<center>
+    <form class="form-group" method="POST" action="/create_event">
+        {{ form.csrf_token }}
+        <div class="form-fields">
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.event_name.label }}
+                    </label>
+                </div>
+                <label class = "form-input-label">
+                    {{ form.event_name() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.event_date.label }}
+                    </label>
+                </div>
+                <label class = "form-input-label">
+                    {{ form.event_date() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.event_start_time.label }}
+                    </label>
+                </div>
+                <label class = "form-input-label">
+                    {{ form.event_start_time() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.location.label }}
+                    </label>
+                </div>
+                <label class = "form-input-label">
+                    {{ form.location() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.description.label }}
+                    </label>
+                </div>
+                <label class = "form-input-label">
+                    {{ form.description() }}
+                </label>
+            </div>
+            <div class="form-field">
+                <label>
+                    {{ form.submit() }}
+                </label>
+            </div>
+        </div>
+        <div class="form-fields">
+            <div class="form-field">
+                <div>
+                    <label class="form-label">
+                        {{ form.event_category.label }}
+                    </label>
+                </div>
+                <label>
+                    {{ form.event_category() }}
+                </label>
+            </div>
+        </div>
+    </form>
+    
+</center>
+
+
+
+<br>
+{% endblock %}

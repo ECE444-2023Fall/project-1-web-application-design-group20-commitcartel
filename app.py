@@ -28,6 +28,8 @@ app.register_blueprint(user_account)
 bootstrap = Bootstrap(app)
 moment  = Moment(app)
 
+
+
 #Helper functions
 class validateEmail(object):
     def __call__(self, form, field):
