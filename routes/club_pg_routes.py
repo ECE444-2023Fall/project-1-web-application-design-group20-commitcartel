@@ -7,7 +7,15 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+import cloudinary
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
+cloudinary.config( 
+  cloud_name = "da0xh1cht",
+  api_key = "271152383133998",
+  api_secret = "jeaUxjpB__T2H3yEDZg6I_mOje8"
+)
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
@@ -94,6 +102,9 @@ def clubs(club_id):
     # Prepare data for the template
     data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': []}
 
+    if club['photo'] != '':
+        data['club_img'] = club['photo']
+
     for event in events:
         timestamp = datetime.fromtimestamp(event['time'].time)
         event_completed = timestamp <= current_time
@@ -153,8 +164,8 @@ def clubs(club_id):
             return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
         else:
             return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
-    
     # Club View
+    print(session['is_user'])
     return render_template('club.html', data=data, is_user=session['is_user'])
 
 
@@ -198,11 +209,15 @@ def club_event_view(club_id, event_id):
     data['time'] = timestamp.strftime("%I:%M %p")
     data['location'] = event['location']
     data['completed'] = event_completed
-    
+
     # Club data
     # TODO add imgs
     data['club_name'] = club['name']
     data['club_id'] = str(club['_id'])
+    print(club['photo'])
+    if club['photo'] != '':
+        
+        data['club_img'] = club['photo']
 
     if event_completed:
         # get all reviews of event
@@ -245,6 +260,14 @@ def create_club():
             'followers': [], 
             'photo': ''
         }
+
+        club_icon_file = form.club_icon.data
+        if club_icon_file:
+            result = upload(club_icon_file)
+            cloudinary_url = result['secure_url']
+
+            # Save the Cloudinary URL to the club object
+            club_object['photo'] = cloudinary_url
 
         success, club_id = insert_one('Clubs', club_object)      
 
