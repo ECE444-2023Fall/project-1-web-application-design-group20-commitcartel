@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>{{ page_title if page_title else "CampusConnect" }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='club_event.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='view_event_user.css') }}">
@@ -23,8 +23,8 @@
                 </a>
             </li>
             <li class="nav_item"><a href="/">Home</a></li>
-            <li class="nav_item"><a href="events?type=following">Events</a></li>
-            <li class="nav_item"><a href="clubs?type=following">Clubs</a></li>
+            <li class="nav_item"><a href="/events?type=following">Events</a></li>
+            <li class="nav_item"><a href="/clubs?type=following">Clubs</a></li>
             <div class="image-container">
 
                 <img class="user_icon" src="/static/user_icon_white.png" alt="user_icon">

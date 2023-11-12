@@ -1,20 +1,112 @@
 <!-- This is a temporary file to be updated to match UI designs later -->
 
-{% extends "base2.html" %}
+{% extends "base.html" %}
 
-{% block title %}Flasky{% endblock %}
-{% block page_content %}
-<div class="page-header">
-    <h1><strong>{{ name }}</strong></h1>
+{% block title %}CampusConnect: {{ name }}{% endblock %}
+{% block content %}
+<div class="club_upper_block">
+    <div class="club_upper_block_title_wrapper">
+        <h1>
+            <strong class="club_upper_block_title">{{ data['club_name'] }}</strong>
+        </h1>
+    </div>
+
+    <!--Display "Follow" Button if logged in as a user-->
+    {% if is_user == True %}
+    <div class="form-container">
+        {% if form and form.follow %}
+            <form method="POST" action="/clubs/{{ data['club_id'] }}">
+                {{ form.hidden_tag() }}
+                {{ form.follow() }}
+            </form>
+        {% elif form and form.unfollow %}
+            <form method="POST" action="/clubs/{{ data['club_id'] }}">
+                {{ form.hidden_tag() }}
+                {{ form.unfollow() }}
+            </form>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
-<p><b>About the club: </b>{{ description }}</p>
-<p><b>Contact us: </b>{{ email }}</p>
-<p><b>Our Events: </b>
-    <ul>
-        {% for event_name in events %}
-            <li>{{ event_name }}</li>
+
+<div class="club_bottom_block">
+    <div class="club_image_column">
+        <img src="/static/ewb_logo.jpg">
+        <p>{{ data['club_description'] }}</p>
+    </div>
+    <div class="club_past_events">
+        <h2>Past Events</h2>
+        <div class="scrollable-container">
+        {% for event in data['events'] %}
+            {% if event['completed'] %}
+                <div class="club_event_info">
+                    <div class="event_upper">
+                        <h3>{{ event['event_name'] }}</h3>
+                        <a href="/events/{{ event['event_id'] }}">
+                            <button class="register_button">View Event</button>
+                        </a>
+                    </div>
+                    <div class="event_middle">
+                        <p>{{ event['event_description'] [:200]}}...Read More</p>
+                        <p>Date: {{ event['date'] }}</p>
+                        <p>Time: {{ event['time'] }}</p>
+                        <p>Location: {{ event['location'] }}</p>
+                    </div>
+                    <div class="event_bottom">
+                        <div class="average-rating-container">
+                            <p>
+                                {{ event['event_rating_avg'] }}
+                                {% for i in range(1, 6) %}
+                                    {% if i <= event['event_rating_avg'] %}
+                                        <span style="font-size: 15px;" class="fa fa-star checked final-rating"></span>
+                                    {% else %}
+                                        <span style="font-size: 15px;" class="fa fa-star unchecked final-rating"></span>
+                                    {% endif %}
+                                {% endfor %}
+                                ({{ event['num_reviews'] }} Reviews)
+                            </p>
+                        </div>
+                        <p>{{ event['num_attending'] }} Attendees</p>
+                    </div>
+                </div>
+            {% endif %}
         {% endfor %}
-    </ul>
-</p>
+        </div>
+    </div>
+    
+    <div class="club_current_events">
+        <h2>Upcoming Events</h2>
+        <div class="scrollable-container">
+        {% for event in data['events'] %}
+            {% if not event['completed'] %}
+                <div class="club_event_info">
+                    <div class="event_upper">
+                        <h3>{{ event['event_name'] }}</h3>
+                        <a href="/events/{{ event['event_id'] }}">
+                            <button class="register_button">View Event</button>
+                        </a>
+                    </div>
+                    <div class="event_middle">
+                        <p>{{ event['event_description'] [:200]}}...Read More</p>
+                        <p>Date: {{ event['date'] }}</p>
+                        <p>Time: {{ event['time'] }}</p>
+                        <p>Location: {{ event['location'] }}</p>
+                    </div>
+                    <div class="event_bottom">
+                        <p></p>
+                        <p>{{ event['num_attending'] }} Attendees</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+        <div class="new_event">
+            {% if is_user == False %}
+            <a href="/create_event">
+                <button class="new_event_button">Create New Event</button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock %}
