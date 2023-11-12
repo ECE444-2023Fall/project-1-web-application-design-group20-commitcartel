@@ -132,9 +132,9 @@ body{
     height: 40px;
     line-height: 20px;
     list-style: none;
-    margin: 0;
     outline: none;
     padding: 10px 16px;
+    margin-right: 16px;
     position: relative;
     text-align: center;
     text-decoration: none;
