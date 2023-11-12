@@ -17,40 +17,48 @@
             </div>
         </div>
         <div class="home_bottom_container">
-            <div class="description_explore_wrapper">
-                <div class="description">
-                    <p>
-                        Welcome to UofT's <span class="blue">CampusConnect</span> page! A centralized platform designed to
-                        exclusively for the University of Toronto Community. Explore our page to learn about the latest events,
-                        different teams and clubs you can join, and seamlessly connect with other students, alumni, and staff!
-                    </p>
-                    <p>
-                        Welcome to UofT's <span class="blue">CampusConnect</span> page! A centralized platform designed to
-                        exclusively for the University of Toronto Community. Explore our page to learn about the latest events,
-                        different teams and clubs you can join, and seamlessly connect with other students, alumni, and staff!
-                    </p>
-                    <p>
-                        Welcome to UofT's <span class="blue">CampusConnect</span> page! A centralized platform designed to
-                        exclusively for the University of Toronto Community. Explore our page to learn about the latest events,
-                        different teams and clubs you can join, and seamlessly connect with other students, alumni, and staff!
-                    </p>
-                    <p>
-                        Welcome to UofT's <span class="blue">CampusConnect</span> page! A centralized platform designed to
-                        exclusively for the University of Toronto Community. Explore our page to learn about the latest events,
-                        different teams and clubs you can join, and seamlessly connect with other students, alumni, and staff!
-                    </p>
+        <div class="description">
+            <p class="welcome">
+                Welcome to <span class="blue">CampusConnect.</span>
+            </p>
+            <p class="welcome_description">A centralized platform designed to
+                exclusively for the University of Toronto Community. Explore our page to learn about the latest events,
+                different teams and clubs you can join, and seamlessly connect with other students, alumni, and staff!</p>
+        </div>
+        <div class="background_container">
+            <div class="category_flex"> 
+                <div class="category_header">
+                    <p>Discover Vibrant Events</p>
                 </div>
-                <button class="explore_button" onclick="location.href = '/explore'">EXPLORE</button>
+                <div class="event_wrapper">
+                    <img class="featured_event" src="static/event3.png" alt="main image">
+                    <div class="featured_event_description">
+                        <div class="featured_description">
+                            <p> 
+                                Discover a dynamic array of UofT events, from lectures to performances, fostering unity among students, alumni, and staff. CampusConnect, our central hub, invites you to explore, connect, and build lasting relationships in the vibrant tapestry of UofT life. Join us in celebrating shared passions!
+                            </p> 
+                        </div>
+                        <button class="explore_button" onclick="location.href = '/events?type=following'">VIEW EVENTS</button>
+                    </div>
+                </div>
             </div>
-            <div class="event_wrapper">
-                <img class="featured_event" src="static/event1.png" alt="main image">
+            <div class="category_flex">
+                <div class="category_header">
+                    <p>Explore Teams and Clubs</p>
+                </div>
+                <div class="event_wrapper">
+                    <img class="featured_event" src="static/event1.png" alt="main image">
+                    <div class="featured_event_description">
+                        <div class="featured_description">
+                           <p> 
+                            Embark on a diverse journey with CampusConnect at the University of Toronto. Discover student-led organizations, from academics to culture. Immerse yourself in vibrant UofT community life, where clubs provide platforms for collaboration and shared passions. Explore dynamic events for learning, connecting, and making memories. CampusConnect: your gateway to a thriving UofT community!
+                           </p> 
+                        </div>
+                        <button class="explore_button" onclick="location.href = '/clubs?type=following'">VIEW CLUBS</button>
+                    </div>
+                </div>
             </div>
-            <div class="event_wrapper">
-                <img class="featured_event" src="static/event2.png" alt="main image">
-            </div>
-            <div class="event_wrapper">
-                <img class="featured_event" src="static/event3.png" alt="main image">
-            </div>
+        </div>
         </div>
     </div>
 {% endblock %}
