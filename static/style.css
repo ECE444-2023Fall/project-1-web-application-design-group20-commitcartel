@@ -271,9 +271,13 @@ background-color: #19345d;
     padding:10px;
     flex-direction: column;
     border: 1px solid black;
-    margin:10px auto;
+    margin:25px auto;
     max-width:1700px;
     background-color:#f9f9f9;
+}
+
+.category_flex:nth-child(1){
+    margin-top:100px;
 }
 
 .category_header{
@@ -300,6 +304,11 @@ background-color: #19345d;
 
 .event_wrapper{
     display: flex;
+}
+
+.featured_description{
+    margin:15px;
+    font-size: 20px;
 }
 
 /* Animations */
