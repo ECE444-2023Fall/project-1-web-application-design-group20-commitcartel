@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
+from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
@@ -19,7 +19,6 @@ cloudinary.config(
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
-
 
 class ClubForm(FlaskForm):
     name             = StringField('Club Name:', validators=[DataRequired()])
@@ -256,11 +255,23 @@ def create_club():
 
         club_icon_file = form.club_icon.data
         if club_icon_file:
-            result = upload(club_icon_file)
-            cloudinary_url = result['secure_url']
+            allowed_extensions = {'jpg', 'jpeg', 'png'}
+            filename = secure_filename(club_icon_file.filename)
+            file_extension = filename.rsplit('.', 1)[1].lower() if '.' in filename else None
+            content_type = club_icon_file.content_type
 
-            # Save the Cloudinary URL to the club object
-            club_object['photo'] = cloudinary_url
+            if file_extension in allowed_extensions or content_type.startswith('image/'):
+                result = upload(club_icon_file)
+                cloudinary_url = result['secure_url']
+
+                # Save the Cloudinary URL to the club object
+                club_object['photo'] = cloudinary_url
+            else:
+                # Handle the case where the uploaded file is not an image
+                # You can display an error message to the user or take other appropriate action
+                flash("Invalid file format. Please upload an image file.")
+                return redirect(url_for('club_pg.create_club'))          
+
         else:
             club_object['photo'] = '/static/Utoronto_logo.png'
 

@@ -24,8 +24,7 @@ def fix_events_format(events):
         event['time_formatted'] = timestamp.strftime("%I:%M %p")
         res,club_info = get_data_one('Clubs', {'_id': ObjectId(event['club_id']['$oid'])}, {'name': 1, 'photo': 1})
         if(res):
-            event['club_name'] = club_info['name']   
-            # print(club_info)
+            event['club_name'] = club_info['name']
             event['club_img'] = club_info['photo']
         if('description' in event and len(event['description'])>300):
             event['description'] = event['description'][:300] + "..."
