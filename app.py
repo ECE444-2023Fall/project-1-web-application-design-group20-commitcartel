@@ -10,7 +10,7 @@ from markupsafe import Markup
 from routes.user_auth_routes import user_auth
 
 #get_explore_feed, get_following_feed, get_registered_feed, get_clubs,
-from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, fix_events_format
+from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, fix_events_format
 
 from routes.club_pg_routes import club_pg
 from routes.event_feedback_routes import event_feedback
