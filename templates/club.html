@@ -10,8 +10,25 @@
             <strong class="club_upper_block_title">{{ data['club_name'] }}</strong>
         </h1>
     </div>
-    <!--Display Create New Event Button if logged in as a club-->
+
+    <!--Display "Follow" Button if logged in as a user-->
+    {% if is_user == True %}
+    <div class="form-container">
+        {% if form and form.follow %}
+            <form method="POST" action="/clubs/{{ data['club_id'] }}">
+                {{ form.hidden_tag() }}
+                {{ form.follow() }}
+            </form>
+        {% elif form and form.unfollow %}
+            <form method="POST" action="/clubs/{{ data['club_id'] }}">
+                {{ form.hidden_tag() }}
+                {{ form.unfollow() }}
+            </form>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
+
 <div class="club_bottom_block">
     <div class="club_image_column">
         <img src="/static/ewb_logo.jpg">

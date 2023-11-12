@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, session, redirec
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from database import insert_one, get_data_one, get_data
+from database import insert_one, get_data_one, get_data, update_one
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -22,15 +22,63 @@ class ClubForm(FlaskForm):
     club_icon        = FileField('Attach Club Logo:')
     submit           = SubmitField('Create Account') 
 
+class FollowClub(FlaskForm):
+    follow = SubmitField('Follow')
+
+class UnfollowClub(FlaskForm):
+    unfollow = SubmitField('Unfollow')
 
 
-@club_pg.route('/clubs/<string:club_id>')
+def user_follow_club(user_id, club_id):
+
+    # Add the user to the Club's followers array
+    success, result = update_one('Clubs', {'_id': ObjectId(club_id)}, {'$addToSet': {'followers': ObjectId(user_id)}})
+
+    if not success:
+        return False, result
+    
+    # Add the club to the user's following array
+    success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$addToSet': {'following_clubs': ObjectId(club_id)}})
+    
+    if success:
+        return True, result
+
+    else:
+        return False, result
+
+
+def user_unfollow_club(user_id, club_id):
+
+    # Remove the user from the Club's followers array
+    success, result = update_one('Clubs', {'_id': ObjectId(club_id)}, {'$pull': {'followers': ObjectId(user_id)}})
+
+    if not success:
+        return False, result
+
+    # Remove the club from the user's following array
+    success, result = update_one('Users', {'_id': ObjectId(user_id)}, {'$pull': {'following_clubs': ObjectId(club_id)}})
+
+    if success:
+        return True, result
+    else:
+        return False, result
+    
+
+def is_user_following_club(user_id, club_id):
+    # determine if user is following a given club
+    success, data = get_data_one('Users', {'_id': ObjectId(user_id)}, {'following_clubs': 1})
+    if success:
+        return ObjectId(club_id) in data['following_clubs']
+
+    return False
+
+
+@club_pg.route('/clubs/<string:club_id>', methods=['GET', 'POST'])
 def clubs(club_id):
-    success, club = get_data_one('Clubs', {'_id': ObjectId(club_id)})
+    follow_club = FollowClub()
+    unfollow_club = UnfollowClub()
 
-    #for test purposes
-    session['is_user'] = False
-    is_user = session['is_user']
+    success, club = get_data_one('Clubs', {'_id': ObjectId(club_id)})
 
     if not success:
         return "<h1> Error </h1>"
@@ -44,7 +92,7 @@ def clubs(club_id):
     current_time = datetime.utcnow()
 
     # Prepare data for the template
-    data = {'club_name': club['name'], 'club_description': club['description'], 'events': []}
+    data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': []}
 
     for event in events:
         timestamp = datetime.fromtimestamp(event['time'].time)
@@ -86,7 +134,23 @@ def clubs(club_id):
         }
 
         data['events'].append(event_data)
-    return render_template('club.html', data=data, is_user=is_user)
+
+    is_following = is_user_following_club(session['user_id'], club_id)
+
+    if request.method == 'POST':
+        if is_following:
+            success,_ = user_unfollow_club(str(session['user_id']), str(club_id))
+            if success:
+                return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+        else:
+            success,_ = user_follow_club(str(session['user_id']), str(club_id))
+            if success:
+                return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+            
+    if is_following:
+        return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
+    else:
+        return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
 
 
 @club_pg.route('/clubs/<string:club_id>/<string:event_id>')

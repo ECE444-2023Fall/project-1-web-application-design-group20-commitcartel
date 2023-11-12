@@ -354,11 +354,12 @@ background-color: #19345d;
 /* Club Page Template */
 .club_upper_block{
     display:flex;
-    justify-content: space-between;
     padding-bottom:20px;
     
 }
-
+.club_upper_block_title_wrapper{
+    margin-left:30px;
+}
 .club_upper_block_title{
     color: var(--color-primary);
 }
@@ -459,6 +460,40 @@ background-color: #19345d;
     color:var(--color-new-event);
     background-color: white;
     transition:0.3s ease-in;
+}
+
+/* Style for the Unfollow button */
+form input#unfollow[type="submit"] {
+    background-color: #E74C3C; 
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    margin-left: 15px;
+}
+
+form input#unfollow[type="submit"]:hover {
+    background-color: white;
+    color: #E74C3C; 
+}
+
+/* Style for the Follow button */
+form input#follow[type="submit"] {
+    background-color: var(--color-new-event);
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    margin-left: 15px;
+}
+
+form input#follow[type="submit"]:hover {
+    background-color: white;
+    color: var(--color-new-event);
 }
 
 .form-fields {
