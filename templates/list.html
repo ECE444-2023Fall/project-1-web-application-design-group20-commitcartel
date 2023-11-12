@@ -2,7 +2,7 @@
 {% macro event_card(event) %}
     <div class="event-card">
         <div class="logo-container">
-            <img src="/static/ewb_logo.jpg" alt="{{ event.club_name }} Logo">
+            <img src="{{event.club_img}}" alt="{{ event.club_name }} Logo">
         </div>
         <div class="event-info">
             <h3>{{ event.name }}</h3>

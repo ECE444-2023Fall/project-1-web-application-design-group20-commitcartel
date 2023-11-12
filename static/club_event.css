@@ -46,9 +46,10 @@ CLUB PAGE EVENT CSS
 
 /* Constrain the image size */
 .club_event_logo {
-    min-width: 400px;
-    min-height: 400px;
-    object-fit: contain; /* You can use 'cover', 'fill', 'contain', etc. based on your preference */
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .club_event_name {

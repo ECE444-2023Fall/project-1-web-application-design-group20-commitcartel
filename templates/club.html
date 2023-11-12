@@ -31,11 +31,7 @@
 
 <div class="club_bottom_block">
     <div class="club_image_column">
-        {%if 'club_img' in data%}
-            <img class="club_event_logo" src="{{data['club_img']}}">
-        {% else %}
-            <img class="club_event_logo" src="/static/ewb_logo.jpg">
-        {%endif%}
+        <img class="club_event_logo" src="{{data['club_img']}}">
         <p>{{ data['club_description'] }}</p>
     </div>
     <div class="club_past_events">

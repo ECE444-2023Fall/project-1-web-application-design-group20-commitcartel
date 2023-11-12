@@ -100,10 +100,7 @@ def clubs(club_id):
     current_time = datetime.utcnow()
 
     # Prepare data for the template
-    data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': []}
-
-    if club['photo'] != '':
-        data['club_img'] = club['photo']
+    data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': [], 'club_img': club['photo']}
 
     for event in events:
         timestamp = datetime.fromtimestamp(event['time'].time)
@@ -165,7 +162,6 @@ def clubs(club_id):
         else:
             return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
     # Club View
-    print(session['is_user'])
     return render_template('club.html', data=data, is_user=session['is_user'])
 
 
@@ -214,10 +210,7 @@ def club_event_view(club_id, event_id):
     # TODO add imgs
     data['club_name'] = club['name']
     data['club_id'] = str(club['_id'])
-    print(club['photo'])
-    if club['photo'] != '':
-        
-        data['club_img'] = club['photo']
+    data['club_img'] = club['photo']
 
     if event_completed:
         # get all reviews of event
@@ -268,6 +261,8 @@ def create_club():
 
             # Save the Cloudinary URL to the club object
             club_object['photo'] = cloudinary_url
+        else:
+            club_object['photo'] = '/static/Utoronto_logo.png'
 
         success, club_id = insert_one('Clubs', club_object)      
 

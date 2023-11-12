@@ -6,11 +6,7 @@
 
 <div class="container">
     <div class="column" id="column1">
-        {%if 'club_img' in data%}
-            <img class="club_event_logo" src="{{data['club_img']}}">
-        {% else %}
-            <img class="club_event_logo" src="/static/ewb_logo.jpg">
-        {%endif%}
+        <img class="club_event_logo" src="{{data['club_img']}}">
     </div>
     <div class="column" id="column2">
         {{event_details.event_details(data)}}
