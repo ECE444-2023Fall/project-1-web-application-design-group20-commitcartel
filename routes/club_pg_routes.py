@@ -134,23 +134,28 @@ def clubs(club_id):
         }
 
         data['events'].append(event_data)
+        
+    # User View
+    if session['is_user']:
+        is_following = is_user_following_club(session['user_id'], club_id)
 
-    is_following = is_user_following_club(session['user_id'], club_id)
-
-    if request.method == 'POST':
-        if is_following:
-            success,_ = user_unfollow_club(str(session['user_id']), str(club_id))
-            if success:
-                return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
-        else:
-            success,_ = user_follow_club(str(session['user_id']), str(club_id))
-            if success:
-                return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+        if request.method == 'POST':
+            if is_following:
+                success,_ = user_unfollow_club(str(session['user_id']), str(club_id))
+                if success:
+                    return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+            else:
+                success,_ = user_follow_club(str(session['user_id']), str(club_id))
+                if success:
+                    return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
             
-    if is_following:
-        return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
-    else:
-        return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
+        if is_following:
+            return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
+        else:
+            return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
+    
+    # Club View
+    return render_template('club.html', data=data, is_user=session['is_user'])
 
 
 @club_pg.route('/clubs/<string:club_id>/<string:event_id>')
