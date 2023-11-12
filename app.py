@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, widgets, DateField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, Optional
 
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -45,7 +45,13 @@ class validateEmail(object):
         elif '@' in email and "utoronto" not in email:
 
             raise ValidationError("Please include a valid UofT email address. '" + str(email) + "' is not a UofT email address.")
-        
+
+class validateRange(object):
+    def __call__(self, form, field):
+        if form.start_date.data is not None and field.data is not None and field.data < form.start_date.data:
+            print("reaise")
+            raise ValidationError("End date must not be earlier than start date.") 
+              
 class BootstrapListWidget(widgets.ListWidget):
 
     def __call__(self, field, **kwargs):
@@ -72,12 +78,12 @@ class MultiCheckboxField(SelectMultipleField):
 class ClubFilterForm(FlaskForm):
     search = StringField('Enter search query')
     category = MultiCheckboxField('Category', choices= ['AI', 'World', 'Tech', 'Design Team'])
-    date = DateField('Date',format='%Y-%m-%d')
     submit      = SubmitField('Submit')
 class EventFilterForm(FlaskForm):
     search = StringField('Enter search query')
-    category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put'])
-    date = DateField('Date',format='%Y-%m-%d')
+    category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put', 'dummy', 'Fundraising', 'Kickoff', 'Fun', 'Idk what else to put', 'dummy'])
+    start_date = DateField('Start Date', validators=[Optional()])
+    end_date = DateField('End Date',validators=[validateRange(), Optional()])
     submit      = SubmitField('Submit')
 
 @app.route('/')
@@ -134,14 +140,14 @@ def following():
 @app.route('/events', methods=['GET', 'POST'])
 def events():
     form = EventFilterForm()
-
+    type = request.args.get('type')
     if form.validate_on_submit():
+        print(form.errors)
         session['search'] = form.search
         session['category'] = form.category
+        
     
-        return redirect(url_for('following'))
-
-    type = request.args.get('type')
+        return redirect(url_for('events',type=type))
 
     if type == 'following':
         events = get_following_events("65409591870327a571edea4a")
