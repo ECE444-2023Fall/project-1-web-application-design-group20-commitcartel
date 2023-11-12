@@ -36,10 +36,10 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 class CreateEventForm(FlaskForm):
-    event_name      = StringField('Event Name')
-    event_date      = DateField('Event Date')
-    event_start_time = TimeField('Event Start Time')
-    location        = StringField('Location')
+    event_name      = StringField('Event Name', validators=[DataRequired()])
+    event_date      = DateField('Event Date', validators = [DataRequired()])
+    event_start_time = TimeField('Event Start Time', validators = [DataRequired()])
+    location        = StringField('Location', validators = [DataRequired()])
     event_category = MultiCheckboxField('Event Category', choices=[
         ('academic', 'Academic'),
         ('arts', 'Arts'),
@@ -58,7 +58,7 @@ class CreateEventForm(FlaskForm):
         ('student_governments_councils_unions', 'Student Governments, Councils, and Unions'),
         ('work_career_development', 'Work and Career Development')
     ])
-    description     = TextAreaField('Description')
+    description     = TextAreaField('Description', validators = [DataRequired()])
     submit          = SubmitField('Create Event')
 
 
