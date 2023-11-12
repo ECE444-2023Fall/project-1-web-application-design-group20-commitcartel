@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, ValidationError
 
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
-
+from markupsafe import Markup
 # import API routes
 from routes.user_auth_routes import user_auth
 from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, get_following_clubs, fix_events_format
@@ -30,13 +30,6 @@ app.register_blueprint(user_account)
 bootstrap = Bootstrap(app)
 moment  = Moment(app)
 
-@app.route('/arafat_setup_user')
-def arafat_setup_user():
-    session.pop('club_id', default=None)
-    session['is_user'] = True
-    session['user_id'] = "654c3f87b695173c8bf14c1c"
-    return session['user_id']
-
 #Helper functions
 class validateEmail(object):
     def __call__(self, form, field):
@@ -48,14 +41,27 @@ class validateEmail(object):
 
             raise ValidationError("Please include a valid UofT email address. '" + str(email) + "' is not a UofT email address.")
         
+class BootstrapListWidget(widgets.ListWidget):
+
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault("id", field.id)
+        html = [f"<{self.html_tag} {widgets.html_params(**kwargs)}>"]
+        for subfield in field:
+            if self.prefix_label:
+                html.append(f"<li class='list-group-item'>{subfield.label} {subfield(class_='form-check-input ms-1')}</li>")
+            else:
+                html.append(f"<li class='list-group-item'>{subfield(class_='form-check-input me-1')} {subfield.label}</li>")
+        html.append("</%s>" % self.html_tag)
+        return Markup("".join(html))
+
 class MultiCheckboxField(SelectMultipleField):
     """
     A multiple-select, except displays a list of checkboxes.
-
+ 
     Iterating the field will produce subfields, allowing custom rendering of
     the enclosed checkbox fields.
     """
-    widget = widgets.ListWidget(prefix_label=False)
+    widget = BootstrapListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 class ClubFilterForm(FlaskForm):
@@ -63,7 +69,7 @@ class ClubFilterForm(FlaskForm):
     category = MultiCheckboxField('Category', choices= ['AI', 'World', 'Tech', 'Design Team'])
     submit      = SubmitField('Submit')
 class EventFilterForm(FlaskForm):
-    search = StringField('Enter search query', validators = [DataRequired()])
+    search = StringField('Enter search query', validators = [])
     category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put'])
     submit      = SubmitField('Submit')
 
@@ -120,7 +126,6 @@ def events():
     
     events = fix_events_format(events)
     
-    print(events)
     session['query'] = {}
 
     return render_template('events.html', form=form, events=events, type=type)

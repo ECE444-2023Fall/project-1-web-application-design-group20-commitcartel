@@ -1,0 +1,38 @@
+/* Overall wrapper for the feed */
+.feed_wrapper {
+    display: flex;
+    padding: 20px; /* Adjust the padding as needed */
+}
+
+/* Left side panel for the form */
+.form_panel {
+    flex: 0 0 auto; /* Don't allow the left panel to grow or shrink */
+    padding-right: 20px; /* Adjust the padding as needed */
+}
+
+/* Form styling */
+.form {
+    /* Add any form styling as needed */
+}
+
+/* Right side scrollable box for events */
+.events_panel {
+    flex: 1; /* Allow the right panel to take the remaining space */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+}
+
+/* Additional styling for the event list */
+.event-list {
+    /* Add any styling for the event list as needed */
+}
+
+.event-container {
+    /* Add any styling for each event container as needed */
+}
+.list-group-override{
+    
+}
+.list-group-override li {
+    border: none; /* Remove borders for all child li elements */
+    /* Any other styles you want for the li elements */
+}

@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="padding-left: 40px;">
+    <div style="display: flex;justify-content: center;">
         <div class="list-top-bar">
             <!-- Navigation Links for List Types -->
             <div class="btn-group-container">
@@ -32,17 +32,34 @@
         </div>
 
     </div>
-    <div style="padding-left: 40px;">
-        <form class="form form-vertical" method="post" role="form">
-            {{ form.hidden_tag() }}
-            {{ wtf.form_errors(form, hiddens="only") }}
-            
-            {{ wtf.form_field(form.search) }}
-            {{ wtf.form_field(form.category) }}
-            {{ wtf.form_field(form.submit) }}
-        </form>
+    <div class="feed_wrapper">
+        <div class="form_panel" style="padding-left: 40px;">
+            <form class="form" method="post" role="form">
+
+                <div>
+                     {{ form.search.label() }}
+                </div>
+                <div>
+                    {{ form.search() }}
+                </div>
+                <br>
+                <div>
+                    {{form.category.label()}}
+                </div>
+                <div>
+                    {{(form.category(class_="list-group-override"))}}
+                </div>
+                
+                <div>
+                    {{form.submit() }}
+                </div>
+                
+                
+            </form>
+        </div>
+        <div class="events_panel">
+            {{ list_create.event_list(events) }}
+        </div>
     </div>
-    {{list_create.event_list(events)}}
-    
 {% endblock %}
 
