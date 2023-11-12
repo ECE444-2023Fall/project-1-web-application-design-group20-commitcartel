@@ -48,6 +48,6 @@ def login():
                 club_id = session['club_id']
                 return redirect(url_for('club_pg.clubs', club_id = club_id))              
 
-        return redirect(url_for('/login'))
+        return redirect(url_for('login'))
     
     return render_template('login.html', form=form)
