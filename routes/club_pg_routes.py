@@ -123,9 +123,9 @@ def create_club():
             'name': session.get('name'),
             'email': session.get('email'),
             'password': session.get('password'), 
-            'avg_rating': '', 
-            'events': '', 
-            'followers': '', 
+            'avg_rating': 0, 
+            'events': [], 
+            'followers': [], 
             'photo': ''
         }
 
