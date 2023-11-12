@@ -123,7 +123,7 @@ def create_club():
             'name': session.get('name'),
             'email': session.get('email'),
             'password': session.get('password'), 
-            'avg_rating': 0, 
+            'avg_rating': 0.0, 
             'events': [], 
             'followers': [], 
             'photo': ''
