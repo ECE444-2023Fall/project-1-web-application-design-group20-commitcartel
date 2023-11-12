@@ -90,11 +90,19 @@ def create_event():
             return redirect(url_for('posting.create_event'))
         
         # append events array for club
+<<<<<<< HEAD
         success, count = update_one('Clubs', {'_id': ObjectId(club_id)}, {'$addToSet': {'events': ObjectId(id)}}) # club_id should be session['club_id']
         if not success:
             return redirect(url_for('posting.create_event'))
     
         return redirect(url_for('club_pg.club_event_view', club_id=str(club_id), event_id=str(id))) # club_id should be session['club_id']
+=======
+        success, count = update_one('Clubs', {'_id': ObjectId("654456e2dfd8c6673e217e8f")}, {'$addToSet': {'events': ObjectId(id)}}) # club_id should be session['club_id']
+        if not success:
+            return redirect(url_for('posting.create_event'))
+    
+        return redirect(url_for('club_pg.club_event_view', club_id="654456e2dfd8c6673e217e8f", event_id=str(id))) # club_id should be session['club_id']
+>>>>>>> 4bf4498ffb96b77ba36e1a6686122ade9f858226
     return render_template('create_event.html', form=form)
 
 # Route to create a new post (POST request)
