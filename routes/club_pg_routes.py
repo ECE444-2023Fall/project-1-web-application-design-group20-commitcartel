@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request
+from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
@@ -7,11 +7,18 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+import cloudinary
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
+cloudinary.config( 
+  cloud_name = "da0xh1cht",
+  api_key = "271152383133998",
+  api_secret = "jeaUxjpB__T2H3yEDZg6I_mOje8"
+)
 
 # Create a Blueprint
 club_pg = Blueprint('club_pg', __name__)
-
 
 class ClubForm(FlaskForm):
     name             = StringField('Club Name:', validators=[DataRequired()])
@@ -92,7 +99,7 @@ def clubs(club_id):
     current_time = datetime.utcnow()
 
     # Prepare data for the template
-    data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': []}
+    data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': [], 'club_img': club['photo']}
 
     for event in events:
         timestamp = datetime.fromtimestamp(event['time'].time)
@@ -153,7 +160,6 @@ def clubs(club_id):
             return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
         else:
             return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
-    
     # Club View
     return render_template('club.html', data=data, is_user=session['is_user'])
 
@@ -198,11 +204,12 @@ def club_event_view(club_id, event_id):
     data['time'] = timestamp.strftime("%I:%M %p")
     data['location'] = event['location']
     data['completed'] = event_completed
-    
+
     # Club data
     # TODO add imgs
     data['club_name'] = club['name']
     data['club_id'] = str(club['_id'])
+    data['club_img'] = club['photo']
 
     if event_completed:
         # get all reviews of event
@@ -245,6 +252,28 @@ def create_club():
             'followers': [], 
             'photo': ''
         }
+
+        club_icon_file = form.club_icon.data
+        if club_icon_file:
+            allowed_extensions = {'jpg', 'jpeg', 'png'}
+            filename = secure_filename(club_icon_file.filename)
+            file_extension = filename.rsplit('.', 1)[1].lower() if '.' in filename else None
+            content_type = club_icon_file.content_type
+
+            if file_extension in allowed_extensions or content_type.startswith('image/'):
+                result = upload(club_icon_file)
+                cloudinary_url = result['secure_url']
+
+                # Save the Cloudinary URL to the club object
+                club_object['photo'] = cloudinary_url
+            else:
+                # Handle the case where the uploaded file is not an image
+                # You can display an error message to the user or take other appropriate action
+                flash("Invalid file format. Please upload an image file.")
+                return redirect(url_for('club_pg.create_club'))          
+
+        else:
+            club_object['photo'] = '/static/Utoronto_logo.png'
 
         success, club_id = insert_one('Clubs', club_object)      
 

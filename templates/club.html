@@ -31,7 +31,7 @@
 
 <div class="club_bottom_block">
     <div class="club_image_column">
-        <img src="/static/ewb_logo.jpg">
+        <img class="club_event_logo" src="{{data['club_img']}}">
         <p>{{ data['club_description'] }}</p>
     </div>
     <div class="club_past_events">
@@ -42,9 +42,15 @@
                 <div class="club_event_info">
                     <div class="event_upper">
                         <h3>{{ event['event_name'] }}</h3>
+                        {%if is_user == False %}
+                        <a href="/clubs/{{ data['club_id'] }}/{{ event['event_id'] }}">
+                            <button class="register_button">View Event</button>
+                        </a>
+                        {% else %}
                         <a href="/events/{{ event['event_id'] }}">
                             <button class="register_button">View Event</button>
                         </a>
+                        {% endif %}
                     </div>
                     <div class="event_middle">
                         <p>{{ event['event_description'] [:200]}}...Read More</p>
@@ -82,9 +88,15 @@
                 <div class="club_event_info">
                     <div class="event_upper">
                         <h3>{{ event['event_name'] }}</h3>
+                        {%if is_user == False %}
+                        <a href="/clubs/{{ data['club_id'] }}/{{ event['event_id'] }}">
+                            <button class="register_button">View Event</button>
+                        </a>
+                        {% else %}
                         <a href="/events/{{ event['event_id'] }}">
                             <button class="register_button">View Event</button>
                         </a>
+                        {% endif %}
                     </div>
                     <div class="event_middle">
                         <p>{{ event['event_description'] [:200]}}...Read More</p>

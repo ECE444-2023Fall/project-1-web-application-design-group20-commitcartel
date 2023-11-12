@@ -22,9 +22,10 @@ def fix_events_format(events):
         timestamp = datetime.fromtimestamp(event['time']['$timestamp']['t'])
         event['date_formatted'] = timestamp.strftime("%B %d, %Y")
         event['time_formatted'] = timestamp.strftime("%I:%M %p")
-        res,club_info = get_data_one('Clubs', {'_id': ObjectId(event['club_id']['$oid'])}, {'name': 1})
+        res,club_info = get_data_one('Clubs', {'_id': ObjectId(event['club_id']['$oid'])}, {'name': 1, 'photo': 1})
         if(res):
-            event['club_name'] = club_info['name']   
+            event['club_name'] = club_info['name']
+            event['club_img'] = club_info['photo']
         if('description' in event and len(event['description'])>300):
             event['description'] = event['description'][:300] + "..."
     return events
@@ -221,7 +222,7 @@ def view_event_user(event_id):
     # TODO add imgs
     data['club_name'] = club['name']
     data['club_id'] = str(club['_id'])
-
+    data['club_img'] = club['photo']
     if event_completed:
         # get all reviews of event
         reviews = []
