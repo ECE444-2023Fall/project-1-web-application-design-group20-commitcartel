@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, flash, request
+from flask import Flask, render_template, session, redirect, url_for, flash, request, g
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, widgets, DateField
 from wtforms.validators import DataRequired, ValidationError
@@ -6,6 +6,8 @@ from wtforms.validators import DataRequired, ValidationError
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from markupsafe import Markup
+from database import get_data_one
+from bson.objectid import ObjectId
 # import API routes
 from routes.user_auth_routes import user_auth
 
@@ -80,6 +82,35 @@ class EventFilterForm(FlaskForm):
     date = DateField('Date',format='%Y-%m-%d')
     submit      = SubmitField('Submit')
 
+
+def fetch_user_name(user_id):
+    success, user_data = get_data_one("Users", {"_id": ObjectId(user_id)}, {'name': 1})
+
+    if success and user_data:
+        return user_data.get('name', 'Unknown User')
+    return 'Unknown User'
+
+
+def fetch_club_name(club_id):
+    success, club_data = get_data_one("Clubs", {"_id": ObjectId(club_id)}, {'name': 1})
+
+    if success and club_data:
+        return club_data.get('name', 'Unknown Club')
+    return 'Unknown Club'
+
+
+def get_user_or_club_name():
+    if 'is_user' in session and session['is_user']:
+        # Fetch user name for user
+        user_name = fetch_user_name(session['user_id'])
+        return user_name
+    elif 'is_user' in session and not session['is_user']:
+        # Fetch club name for club
+        club_name = fetch_club_name(session['club_id'])
+        return club_name
+    else:
+        return None
+
 @app.route('/')
 def index():
     return render_template("homepage.html")
@@ -94,6 +125,10 @@ def check_session():
                 user_type = 'club'
             elif session.get('user_id') is not None:
                 user_type = 'user'
+            # Fetch user or club name based on the session
+            user_or_club_name = get_user_or_club_name()
+            # Make it available globally to all templates
+            g.user_or_club_name = user_or_club_name
 
         # Check if the requested endpoint is allowed for the user type
         if request.endpoint not in ALLOWED_ROUTES[user_type]:
