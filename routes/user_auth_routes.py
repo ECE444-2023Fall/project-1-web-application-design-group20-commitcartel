@@ -36,7 +36,7 @@ def login():
             if check_password_hash(str(user_data['password']), password):
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
-                # Redirect to where needed
+                
                 return redirect(url_for('index'))
 
         success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
@@ -46,8 +46,9 @@ def login():
                 session['is_user'] = False
                 session['club_id'] = str(club_data['_id'])
                 club_id = session['club_id']
-                return redirect(url_for('club_pg.clubs', club_id = club_id))              
 
-        return redirect(url_for('login'))
+                return redirect(url_for('club_pg.clubs', club_id = club_id))
+                          
+        return redirect(url_for('user_auth.login'))
     
     return render_template('login.html', form=form)
