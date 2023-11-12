@@ -35,7 +35,11 @@
     <div class="feed_wrapper">
         <div class="form_panel" style="padding-left: 0px;">
             <form class="form" method="post" role="form">
-
+                {{ form.csrf_token }}
+               
+                <div></div>
+                
+                
                 <div>
                     <b>{{ form.search.label() }}</b>
                 </div>
@@ -50,10 +54,21 @@
                     {{(form.category(class_="list-group-override"))}}
                 </div>
                 <div>
-                    <b><label>Date</label></b>
+                {% for error in form.end_date.errors %}
+                <span style="color: red;">{{ error }}</span>
+                {% endfor %}
                 </div>
                 <div>
-                    {{form.date()}}
+                    <b><label>Start Date</label></b>
+                </div>
+                <div>
+                    <label>{{form.start_date()}}</label>
+                </div>
+                <div>
+                    <b><label>End Date</label></b>
+                </div>
+                <div>
+                    {{form.end_date()}}
                 </div>
                 <br>
                 <div>

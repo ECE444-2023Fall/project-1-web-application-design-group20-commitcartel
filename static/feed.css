@@ -9,6 +9,7 @@
     flex: 0 0 auto; /* Don't allow the left panel to grow or shrink */
     padding-right: 20px; /* Adjust the padding as needed */
     padding-left: 0px;
+    width: 250px;
 }
 
 
@@ -18,7 +19,12 @@
     overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
 }
 
-  
+.list-group-override{
+    max-height: 200px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    border: 1px solid #ccc; /* Optional: Add a border for clarity */
+    padding-left: 30px; /* Optional: Add padding for better styling */
+}
 
 .list-group-override li {
     border: none; /* Remove borders for all child li elements */
