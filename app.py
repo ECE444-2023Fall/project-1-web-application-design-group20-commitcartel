@@ -139,12 +139,5 @@ def events():
 
     return render_template('events.html', form=form, events=events, type=type)
 
-@app.route('/arafat_setup_user')
-def arafat_setup_user():
-    session.pop('club_id', default=None)
-    session['is_user'] = True
-    session['user_id'] = "654c3f87b695173c8bf14c1c"
-    return session['user_id']
-
 if __name__ == '__main__':
     app.run(debug=True)
