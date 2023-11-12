@@ -1,35 +1,41 @@
-<!-- Event List -->
+<!-- Event Card -->
+{% macro event_card(event) %}
+    <div class="event-card">
+        <div class="logo-container">
+            <img src="/static/ewb_logo.jpg" alt="{{ event.club_name }} Logo">
+        </div>
+        <div class="event-info">
+            <h3>{{ event.name }}</h3>
+            <p><b>Club</b>: {{ event.club_name}}</p>
+            <p><b>Description</b>: {{ event.description }}</p>
+            <p><b>Date & Time</b>: {{ event.date_formatted }} @ {{ event.time_formatted }}</p>
+            <p><b>Location</b>: {{ event.location }}</p>
+            <a href="/events/{{ event.id }}" class="read-more-btn">View Event</a>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro event_list(events) %}
     <ul class="event-list">
         {% for event in events %}
-            <li class="event-container">
-                <div class="event">
-                    <div style="display: flex;">
-                        <h3>{{ event.name }}</h3>
-                        <div style="margin-left: 50px;">
-                            <p>Time: {{ event.datetime }}</p>
-                            <p>Location: {{ event.location }}</p>
-                        </div>
-                    </div>
-                    <p>Description: {{ event.description }}</p>
-                </div>
+            <li class="event-container1">
+                {{ event_card(event) }}
             </li>
         {% endfor %}
     </ul>
 {% endmacro %}
-
 <!-- Club List -->
 {% macro club_list(clubs) %}
     <ul class="event-list">
         {% for club in clubs %}
-            <li class="event-container">
+            <li class="event-container1">
                 <div class="event">
                     <div style="display: flex;">
-                        <h3>{{ club.name }}</h3>
+                        <h3 style = "margin-bottom: 10px;">{{ club.name }}</h3>
                         <div style="margin-left: 50px;">
                         </div>
                     </div>
-                    <p>Description: {{ club.description }}</p>
+                    <p><b>Description:</b> {{ club.description }}</p>
                 </div>
             </li>
         {% endfor %}

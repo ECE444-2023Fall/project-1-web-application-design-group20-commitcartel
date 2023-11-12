@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="padding-left: 40px;">
+    <div style="display: flex;justify-content: center;">
         <div class="list-top-bar">
             <!-- Navigation Links for List Types -->
             <div class="btn-group-container">
@@ -29,18 +29,43 @@
                     {% endif %}
                 </div>
             </div>
-            <form class="form form-horizontal" method="post" role="form">
-                {{ form.hidden_tag() }}
-                {{ wtf.form_errors(form, hiddens="only") }}
-              
-                {{ wtf.form_field(form.search) }}
-                {{ wtf.form_field(form.category) }}
-                {{ wtf.form_field(form.submit, style="margin-bottom: 1rem;") }}
+        </div>
+
+    </div>
+    <div class="feed_wrapper">
+        <div class="form_panel" style="padding-left: 0px;">
+            <form class="form" method="post" role="form">
+
+                <div>
+                    <b>{{ form.search.label() }}</b>
+                </div>
+                <div>
+                    {{ form.search() }}
+                </div>
+                <br>
+                <div>
+                    <b>{{form.category.label()}}</b>
+                </div>
+                <div>
+                    {{(form.category(class_="list-group-override"))}}
+                </div>
+                <div>
+                    <b><label>Date</label></b>
+                </div>
+                <div>
+                    {{form.date()}}
+                </div>
+                <br>
+                <div>
+                    {{form.submit() }}
+                </div>
+                
+                
             </form>
         </div>
+        <div class="events_panel">
+            {{ list_create.event_list(events) }}
+        </div>
     </div>
-    
-    {{list_create.event_list(events)}}
-    
 {% endblock %}
 

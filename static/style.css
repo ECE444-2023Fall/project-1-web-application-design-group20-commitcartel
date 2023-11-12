@@ -321,6 +321,7 @@ background-color: #19345d;
     align-items: flex-start;
 }
 
+
 .event-container {
     height: 200px;
     overflow: hidden;
@@ -386,3 +387,4 @@ ul#event_category {
 ul#event_category li {
     text-align: left; /* Align the text to the left within list items */
 }
+

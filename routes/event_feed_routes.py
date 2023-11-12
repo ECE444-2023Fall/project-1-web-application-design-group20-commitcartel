@@ -13,6 +13,21 @@ class RegisterForEvent(FlaskForm):
 
 class UnRegisterForEvent(FlaskForm):
     unregister         = SubmitField('Unregister')
+# Events
+def fix_events_format(events):
+    for event in events:
+        event['id'] = event['_id']['$oid']
+        if "time" not in event:
+            continue
+        timestamp = datetime.fromtimestamp(event['time']['$timestamp']['t'])
+        event['date_formatted'] = timestamp.strftime("%B %d, %Y")
+        event['time_formatted'] = timestamp.strftime("%I:%M %p")
+        res,club_info = get_data_one('Clubs', {'_id': ObjectId(event['club_id']['$oid'])}, {'name': 1})
+        if(res):
+            event['club_name'] = club_info['name']   
+        if('description' in event and len(event['description'])>300):
+            event['description'] = event['description'][:300] + "..."
+    return events
 
 # Events
 def get_explore_events(filter={}, search_string=None):
