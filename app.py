@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, widgets
+from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, widgets, DateField
 from wtforms.validators import DataRequired, ValidationError
 
 from flask_bootstrap import Bootstrap
@@ -9,8 +9,8 @@ from markupsafe import Markup
 # import API routes
 from routes.user_auth_routes import user_auth
 
-
-from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, fix_events_format
+#get_explore_feed, get_following_feed, get_registered_feed, get_clubs,
+from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, fix_events_format
 
 from routes.club_pg_routes import club_pg
 from routes.event_feedback_routes import event_feedback
@@ -70,12 +70,14 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 class ClubFilterForm(FlaskForm):
-    search = StringField('Enter search query', validators = [DataRequired()])
+    search = StringField('Enter search query')
     category = MultiCheckboxField('Category', choices= ['AI', 'World', 'Tech', 'Design Team'])
+    date = DateField('Date',format='%Y-%m-%d')
     submit      = SubmitField('Submit')
 class EventFilterForm(FlaskForm):
-    search = StringField('Enter search query', validators = [])
+    search = StringField('Enter search query')
     category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put'])
+    date = DateField('Date',format='%Y-%m-%d')
     submit      = SubmitField('Submit')
 
 @app.route('/')

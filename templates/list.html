@@ -18,7 +18,7 @@
 {% macro event_list(events) %}
     <ul class="event-list">
         {% for event in events %}
-            <li class="event-container">
+            <li class="event-container1">
                 {{ event_card(event) }}
             </li>
         {% endfor %}
@@ -28,7 +28,7 @@
 {% macro club_list(clubs) %}
     <ul class="event-list">
         {% for club in clubs %}
-            <li class="event-container">
+            <li class="event-container1">
                 <div class="event">
                     <div style="display: flex;">
                         <h3 style = "margin-bottom: 10px;">{{ club.name }}</h3>

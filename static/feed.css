@@ -8,6 +8,7 @@
 .form_panel {
     flex: 0 0 auto; /* Don't allow the left panel to grow or shrink */
     padding-right: 20px; /* Adjust the padding as needed */
+    padding-left: 0px;
 }
 
 /* Form styling */
@@ -35,4 +36,5 @@
 .list-group-override li {
     border: none; /* Remove borders for all child li elements */
     /* Any other styles you want for the li elements */
+    padding-left: 0;
 }

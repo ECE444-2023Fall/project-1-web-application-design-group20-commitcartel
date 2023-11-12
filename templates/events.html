@@ -33,23 +33,29 @@
 
     </div>
     <div class="feed_wrapper">
-        <div class="form_panel" style="padding-left: 40px;">
+        <div class="form_panel" style="padding-left: 0px;">
             <form class="form" method="post" role="form">
 
                 <div>
-                     {{ form.search.label() }}
+                    <b>{{ form.search.label() }}</b>
                 </div>
                 <div>
                     {{ form.search() }}
                 </div>
                 <br>
                 <div>
-                    {{form.category.label()}}
+                    <b>{{form.category.label()}}</b>
                 </div>
                 <div>
                     {{(form.category(class_="list-group-override"))}}
                 </div>
-                
+                <div>
+                    <b><label>Date</label></b>
+                </div>
+                <div>
+                    {{form.date()}}
+                </div>
+                <br>
                 <div>
                     {{form.submit() }}
                 </div>
