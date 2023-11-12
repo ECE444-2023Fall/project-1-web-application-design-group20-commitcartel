@@ -19,7 +19,7 @@ class ClubForm(FlaskForm):
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
     description      = TextAreaField('Short description About the Club:', validators=[DataRequired()])
-    club_icon        = FileField('Attach Club Logo:', validators= [DataRequired()] )
+    club_icon        = FileField('Attach Club Logo:')
     submit           = SubmitField('Create Account') 
 
 
@@ -131,15 +131,10 @@ def create_club():
 
         success, club_id = insert_one('Clubs', club_object)      
 
-        if success == False:
-            return jsonify({'error'}), 500
-
-
-        if request.method == 'POST':
+        if not success:
             #Once the create club form is sucessfully completed, user gets redirected to club page
-            return redirect(url_for('club_pg.clubs', club_id=club_id)) 
+            return redirect(url_for('club_pg.create_club'))
 
-
-        return redirect(url_for('club_pg.create_club'))
+        return redirect(url_for('user_auth.login', club_id=club_id))
 
     return render_template('create_club.html', form=form, club_icon=session.get('club_icon'), description=session.get('description'), name=session.get('name'), email=session.get('email'))

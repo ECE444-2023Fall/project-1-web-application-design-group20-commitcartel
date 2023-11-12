@@ -13,6 +13,13 @@ class LoginForm(FlaskForm):
     submit           = SubmitField('Login')
 
 
+@user_auth.route('/logout')
+def logout():
+    # Clear the session data
+    session.clear()
+    # Redirect the user to the login page or any other page
+    return redirect(url_for('user_auth.login'))
+
 @user_auth.route('/login', methods=['GET', 'POST'])
 def login():
     # Declare Form
@@ -25,21 +32,21 @@ def login():
         # Check if the user exists based on email
         success, user_data = get_data_one("Users", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
-        if success:
-            if check_password_hash(user_data['password'], password):
+        if success and user_data:
+            if check_password_hash(str(user_data['password']), password):
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
                 # Redirect to where needed
-                return redirect(url_for('explore'))
+                return redirect(url_for('index'))
 
         success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
 
-        if success:
-            if check_password_hash(club_data['password'], password):
+        if success and club_data:
+            if check_password_hash(str(club_data['password']), password):
                 session['is_user'] = False
                 session['club_id'] = str(club_data['_id'])
                 club_id = session['club_id']
-                return redirect(url_for(f'/clubs/{club_id}'))              
+                return redirect(url_for('club_pg.clubs', club_id = club_id))              
 
         return redirect(url_for('/login'))
     

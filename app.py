@@ -8,20 +8,23 @@ from flask_moment import Moment
 from markupsafe import Markup
 # import API routes
 from routes.user_auth_routes import user_auth
-from routes.event_feed_routes import event_feed, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, get_following_clubs, fix_events_format
+
+
+from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, get_explore_feed, get_following_feed, get_registered_feed, get_clubs, fix_events_format
+
 from routes.club_pg_routes import club_pg
-from routes.query_routes import query
 from routes.event_feedback_routes import event_feedback
 from routes.user_account_routes import user_account
 
 from routes.posting_routes import posting
+
+from route_permissions import ALLOWED_ROUTES  # Import the ALLOWED_ROUTES object
 
 app = Flask(__name__, static_folder='static')
 
 app.config['SECRET_KEY'] = "hard to guess string"
 app.register_blueprint(event_feed)
 app.register_blueprint(club_pg)
-app.register_blueprint(query)
 app.register_blueprint(event_feedback)
 app.register_blueprint(posting)
 app.register_blueprint(user_auth)
@@ -29,6 +32,8 @@ app.register_blueprint(user_account)
 
 bootstrap = Bootstrap(app)
 moment  = Moment(app)
+
+
 
 #Helper functions
 class validateEmail(object):
@@ -77,12 +82,33 @@ class EventFilterForm(FlaskForm):
 def index():
     return render_template("homepage.html")
 
+@app.before_request
+def check_session():
+    if (request.endpoint is not 'static'):
+        # Get the user type from the session
+        user_type = 'anonymous'
+        if session.get('is_user') is not None:
+            if session.get('club_id') is not None and not session.get('is_user'):
+                user_type = 'club'
+            elif session.get('user_id') is not None:
+                user_type = 'user'
+
+        # Check if the requested endpoint is allowed for the user type
+        if request.endpoint not in ALLOWED_ROUTES[user_type]:
+            if user_type == 'anonymous':
+                return redirect(url_for('user_auth.login'))
+            elif user_type == 'club':
+                return redirect(url_for('club_pg.clubs', club_id = session['club_id']))
+            elif user_type == 'user':
+                return redirect(url_for('index'))
+
 @app.route('/clubs', methods=['GET', 'POST'])
 def following():
     form = ClubFilterForm()
 
     if form.validate_on_submit():
-        session['query'] = form.search
+        session['search'] = form.search
+        session['category'] = form.category
 
         return redirect(url_for('following'))
 
@@ -92,7 +118,7 @@ def following():
         clubs = get_following_clubs("65409591870327a571edea4a")
 
     elif type == 'explore':
-        clubs = get_clubs()
+        clubs = get_explore_clubs()
 
     else:
         return "Error"
@@ -106,20 +132,21 @@ def events():
     form = EventFilterForm()
 
     if form.validate_on_submit():
-        session['query'] = form.search
+        session['search'] = form.search
+        session['category'] = form.category
     
         return redirect(url_for('following'))
 
     type = request.args.get('type')
 
     if type == 'following':
-        events = get_following_feed("65409591870327a571edea4a")
+        events = get_following_events("65409591870327a571edea4a")
 
     elif type == 'explore':
-        events = get_explore_feed()
+        events = get_explore_events()
 
     elif type == 'registered':
-        events = get_registered_feed("65409591870327a571edea4a")
+        events = get_registered_events("65409591870327a571edea4a")
 
     else:
         return "Error"
