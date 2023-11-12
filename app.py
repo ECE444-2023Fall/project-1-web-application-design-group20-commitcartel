@@ -15,6 +15,8 @@ from routes.user_account_routes import user_account
 
 from routes.posting_routes import posting
 
+from route_permissions import ALLOWED_ROUTES  # Import the ALLOWED_ROUTES object
+
 app = Flask(__name__, static_folder='static')
 
 app.config['SECRET_KEY'] = "hard to guess string"
@@ -63,6 +65,26 @@ class EventFilterForm(FlaskForm):
 @app.route('/')
 def index():
     return render_template("homepage.html")
+
+@app.before_request
+def check_session():
+    if (request.endpoint is not 'static'):
+        # Get the user type from the session
+        user_type = 'anonymous'
+        if session.get('is_user') is not None:
+            if session.get('club_id') is not None and not session.get('is_user'):
+                user_type = 'club'
+            elif session.get('user_id') is not None:
+                user_type = 'user'
+
+        # Check if the requested endpoint is allowed for the user type
+        if request.endpoint not in ALLOWED_ROUTES[user_type]:
+            if user_type == 'anonymous':
+                return redirect(url_for('user_auth.login'))
+            elif user_type == 'club':
+                return redirect(url_for('club_pg.clubs', club_id = session['club_id']))
+            elif user_type == 'user':
+                return redirect(url_for('index'))
 
 @app.route('/clubs', methods=['GET', 'POST'])
 def following():
