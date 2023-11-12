@@ -65,25 +65,23 @@ class CreateEventForm(FlaskForm):
 @posting.route('/create_event', methods=['GET', 'POST'])
 def create_event():
     form = CreateEventForm()
-    print(form.validate_on_submit(), request.method)
-    
-    # if not session.get('club_id'):
-    #     print("ERROR no club")
+    if not session.get('club_id', False) or session.get('is_user', True):
+        return redirect(url_for('user_auth.login'))
 
     if form.validate_on_submit():
         datetime_str = f"{form.event_date.data} {form.event_start_time.data}"
         timestamp = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S").timestamp()
-        
+        club_id = session['club_id']
         event_object = {
             'name': form.event_name.data,
             'time': Timestamp(int(timestamp), 0),
             'attendees': [],
             'category': form.event_category.data,
-            'club_id': ObjectId("654456e2dfd8c6673e217e8f"), # should be session.get('club_id') when login is merged
+            'club_id': ObjectId(club_id), # should be session.get('club_id') when login is merged
             'description': form.description.data,
             'location': form.location.data,
             'event_ratings': [],
-            'event_rating_avg': 0
+            'event_rating_avg': 0.0
         }
 
         # add to events
