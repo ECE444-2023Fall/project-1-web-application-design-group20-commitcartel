@@ -44,7 +44,7 @@
 {% macro club_card(club) %}
     <div class="club-card" onclick="location.href='/clubs/{{ club.id }}';">
         <div class="club-image-container">
-            <img src="{{club.club_img}}" alt="{{ club.name }} Logo">
+            <img src="{{club.photo}}" alt="{{ club.name }} Logo">
         </div>
         <div class="club-info">
             <h3 style="font-size: 40px;">{{ club.name }}</h3>
