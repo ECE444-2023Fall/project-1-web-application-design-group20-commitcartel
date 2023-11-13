@@ -214,22 +214,17 @@ def club_event_view(club_id, event_id):
         # get all reviews of event
         reviews = []
         for review in event['event_ratings']:
-            success, user_data = get_data_one('Users', {'_id': ObjectId(review['user_id'])}, {'name': 1})
+            review_obj = {
+                'name': review.get('name', "Anonymous"),
+                'rating': int(review['rating']),
+                'comment': review['comments']
+            }
+            reviews.append(review_obj)        
 
-            if success:
-                review_obj = {
-                    'name': user_data.get('name', "N/A"),
-                    'rating': int(review['rating']),
-                    'comment': review['comments']
-                }
-
-                reviews.append(review_obj)        
-        
         # get event rating average
         data['event_rating_avg'] = int(event['event_rating_avg'])
         data['reviews'] = reviews
-        
-    
+
     return render_template('club_event.html', data=data, is_user=session['is_user'], name=session['name'])
 
 @club_pg.route('/create_club', methods=['GET', 'POST'])
