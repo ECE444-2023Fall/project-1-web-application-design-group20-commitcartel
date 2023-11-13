@@ -603,17 +603,19 @@ ul#event_category li {
 
 /* styles.css */
 /* Center the form container */
-.container {
+.container-registration {
     margin-top: 20px; /* Adjust the top margin as needed */
 }
 
 /* Style the form groups to have fixed dimensions */
-.form-group {
+.form-group-registration {
     margin-bottom: 15px; /* Add space between form groups */
     width: 100%; /* Set the width to 100% for consistency */
+    display: flex;
+    flex-direction: row;
 }
 
-.form-control-label {
+.form-control-label-registration {
     font-weight: bold; /* Make labels bold */
     width: 30%; /* Adjust the label width as needed */
     display: inline-block; /* Make labels inline with the input fields */
@@ -621,7 +623,7 @@ ul#event_category li {
     color: #F2F4F7;
 }
 
-.form-control {
+.form-control-registration {
     width: 70%; /* Adjust the input field width as needed */
     display: inline-block; /* Make input fields inline with labels */
 }
