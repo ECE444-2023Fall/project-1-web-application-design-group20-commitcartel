@@ -29,6 +29,14 @@ def fix_events_format(events):
             event['description'] = event['description'][:300] + "..."
     return events
 
+def fix_clubs_format(clubs):
+
+    for club in clubs:
+        club['id'] = club['_id']['$oid']
+        if('description' in club and len(club['description'])>300):
+            club['description'] = club['description'][:300] + "..."
+    return clubs
+
 # Events
 def get_explore_events(filter={}, search_string=None):
     # Get most recent events
@@ -57,8 +65,8 @@ def get_following_events(user_id, filter={}, search_string=None):
         return jsonify({'error': str(clubs)}), 500
 
     # get events from all the club ids
-    success, results = get_data('Events', {'club_id': {'$in': clubs}}, {'event_rating': 1}, sort=[{"time", -1}])
-
+    success, results = get_data('Events', filter ={'club_id': {'$in': clubs}}, sort=[{"time", -1}])
+   
     if success:
         return json.loads(json_util.dumps(results))
     else:
@@ -79,7 +87,7 @@ def get_registered_events(user_id, filter={}, search_string=None):
         return jsonify({'error': str(data)}), 500
     
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', {'_id': {'$in': data}}, {'event_rating': 1})
+    success, results = get_data('Events', filter = {'_id': {'$in': data}}, sort=[{"time", -1}])
     
     if success:
         return json.loads(json_util.dumps(results))
@@ -176,8 +184,8 @@ def get_following_clubs(user_id, filter={}, search_string=""):
         return jsonify({'error': str(data)}), 500
 
     # Get clubs from all the club ids
-    success, results = get_data('Clubs', {'club_id': {'$in': clubs}})
-
+    success, results = get_data('Clubs', {'_id': {'$in': clubs}})
+    
     if success:
         return json.loads(json_util.dumps(results))
     else:

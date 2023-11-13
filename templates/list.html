@@ -1,6 +1,6 @@
 <!-- Event Card -->
 {% macro event_card(event) %}
-    <div class="event-card">
+    <div class="event-card" onclick="location.href='/events/{{ event.id }}';">
         <div class="logo-container">
             <img src="/static/ewb_logo.jpg" alt="{{ event.club_name }} Logo">
         </div>
@@ -24,19 +24,29 @@
         {% endfor %}
     </ul>
 {% endmacro %}
+
+
+
+<!-- Club Card -->
+{% macro club_card(club) %}
+    <div class="club-card" onclick="location.href='/clubs/{{ club.id }}';">
+        <div class="club-image-container">
+            <img src="/static/ewb_logo.jpg" alt="{{ club.name }} Logo">
+        </div>
+        <div class="club-info">
+            <h3>{{ club.name }}</h3>
+            <p><b>Description</b>: {{ club.description }}</p>
+            <a href="/clubs/{{ club.id }}" class="read-more-btn">View Club</a>
+        </div>
+    </div>
+{% endmacro %}
+
 <!-- Club List -->
 {% macro club_list(clubs) %}
     <ul class="event-list">
         {% for club in clubs %}
             <li class="event-container1">
-                <div class="event">
-                    <div style="display: flex;">
-                        <h3 style = "margin-bottom: 10px;">{{ club.name }}</h3>
-                        <div style="margin-left: 50px;">
-                        </div>
-                    </div>
-                    <p><b>Description:</b> {{ club.description }}</p>
-                </div>
+                {{ club_card(club) }}
             </li>
         {% endfor %}
     </ul>

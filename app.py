@@ -12,7 +12,7 @@ from bson.objectid import ObjectId
 from routes.user_auth_routes import user_auth
 
 #get_explore_feed, get_following_feed, get_registered_feed, get_clubs,
-from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, fix_events_format
+from routes.event_feed_routes import event_feed, get_explore_events, get_following_events, get_registered_events, get_explore_clubs, get_following_clubs, fix_events_format, fix_clubs_format
 
 from routes.club_pg_routes import club_pg
 from routes.event_feedback_routes import event_feedback
@@ -78,11 +78,11 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 class ClubFilterForm(FlaskForm):
-    search = StringField('Enter search query')
+    search = StringField('Search Query')
     category = MultiCheckboxField('Category', choices= ['AI', 'World', 'Tech', 'Design Team'])
     submit      = SubmitField('Submit')
 class EventFilterForm(FlaskForm):
-    search = StringField('Enter search query')
+    search = StringField('Search Query')
     category = MultiCheckboxField('Category', choices= ['Fundraising', 'Kickoff', 'Fun', 'Idk what else to put', 'dummy', 'Fundraising', 'Kickoff', 'Fun', 'Idk what else to put', 'dummy'])
     start_date = DateField('Start Date', validators=[Optional()])
     end_date = DateField('End Date',validators=[validateRange(), Optional()])
@@ -160,7 +160,7 @@ def following():
     type = request.args.get('type')
 
     if type == 'following':
-        clubs = get_following_clubs("65409591870327a571edea4a")
+        clubs = get_following_clubs(session['user_id'])
 
     elif type == 'explore':
         clubs = get_explore_clubs()
@@ -169,6 +169,8 @@ def following():
         return "Error"
 
     session['query'] = {}
+
+    clubs = fix_clubs_format(clubs)
 
     return render_template('clubs.html', form=form, clubs=clubs, type=type)
 
@@ -185,13 +187,13 @@ def events():
         return redirect(url_for('events',type=type))
 
     if type == 'following':
-        events = get_following_events("65409591870327a571edea4a")
+        events = get_following_events(session['user_id'])
 
     elif type == 'explore':
         events = get_explore_events()
 
     elif type == 'registered':
-        events = get_registered_events("65409591870327a571edea4a")
+        events = get_registered_events(session['user_id'])
 
     else:
         return "Error"

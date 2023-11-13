@@ -1,8 +1,12 @@
 .event-list {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 20px;
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+    height: 100vh;
+    padding-top: 20px;
+    border-top: 2px solid;
 }
 
 .event-container1 {
@@ -25,10 +29,51 @@
 
 /* Additional styling for the event card */
 .event-card {
+    width: 98%;
     display: flex;
+    /* Add a subtle box-shadow for shading effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add cursor: pointer to indicate it's clickable */
+    cursor: pointer;
+    /* Add a transition for a smooth shading effect */
+    transition: box-shadow 0.3s ease-in-out;
+    padding: 10px;
 }
-
+.event-card:hover {
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+}
 .read-more-btn {
     text-decoration: none;
     color: #007bff; /* Change to your preferred link color */
+}
+
+/* Additional styling for the club card */
+.club-card {
+    width: 98%;
+    display: flex;
+    /* Add a subtle box-shadow for shading effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add cursor: pointer to indicate it's clickable */
+    cursor: pointer;
+    /* Add a transition for a smooth shading effect */
+    transition: box-shadow 0.3s ease-in-out;
+    padding: 10px;
+}
+
+.club-image-container {
+    width: 150px; /* Adjust the width of the image container as needed */
+    margin-right: 20px;
+}
+
+.club-image-container img {
+    max-width: 100%;
+    height: auto; /* Ensure the image maintains its aspect ratio */
+}
+
+.club-info {
+    flex: 1; /* Allow the club info to take the remaining space */
+}
+
+.club-card:hover {
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
 }

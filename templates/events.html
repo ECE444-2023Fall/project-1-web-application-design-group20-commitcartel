@@ -3,37 +3,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="display: flex;justify-content: center;">
-        <div class="list-top-bar">
-            <!-- Navigation Links for List Types -->
-            <div class="btn-group-container">
-                <div class="btn-container">
-                    {% if type == "following" %}
-                        <a href="events?type=following" class="btn btn-primary btn-lg active" disabled>Following</a>
-                    {% else %}
-                        <a href="events?type=following" class="btn btn-primary btn-lg">Following</a>
-                    {% endif %}
-                </div>
-                <div class="btn-container">
-                    {% if type == "explore" %}
-                        <a href="events?type=explore" class="btn btn-primary btn-lg active" disabled>Explore</a>
-                    {% else %}
-                        <a href="events?type=explore" class="btn btn-primary btn-lg">Explore</a>
-                    {% endif %}
-                </div>
-                <div class="btn-container">
-                    {% if type == "registered" %}
-                        <a href="events?type=registered" class="btn btn-primary btn-lg active" disabled>Registered</a>
-                    {% else %}
-                        <a href="events?type=registered" class="btn btn-primary btn-lg">Registered</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-    </div>
     <div class="feed_wrapper">
         <div class="form_panel" style="padding-left: 0px;">
+            <h3>Filters </h3>
             <form class="form" method="post" role="form">
                 {{ form.csrf_token }}
                
@@ -79,7 +51,50 @@
             </form>
         </div>
         <div class="events_panel">
-            {{ list_create.event_list(events) }}
+            <h3 style="padding-left: 32px; margin-bottom: 0px;">Events </h3>
+            <div style="display: flex;justify-content: center; padding-top: 0px; align-items: center;">
+        
+                <div class="list-top-bar">
+                    <!-- Navigation Links for List Types -->
+                    <div class="btn-group-container">
+                        <div class="btn-container">
+                            {% if type == "following" %}
+                                <a href="events?type=following" class="btn btn-primary btn-md active" disabled>Following</a>
+                            {% else %}
+                                <a href="events?type=following" class="btn btn-primary btn-md">Following</a>
+                            {% endif %}
+                        </div>
+                        <div class="btn-container">
+                            {% if type == "explore" %}
+                                <a href="events?type=explore" class="btn btn-primary btn-md active" disabled>Explore</a>
+                            {% else %}
+                                <a href="events?type=explore" class="btn btn-primary btn-md">Explore</a>
+                            {% endif %}
+                        </div>
+                        <div class="btn-container">
+                            {% if type == "registered" %}
+                                <a href="events?type=registered" class="btn btn-primary btn-md active" disabled>Registered</a>
+                            {% else %}
+                                <a href="events?type=registered" class="btn btn-primary btn-md">Registered</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+            {% if events|length == 0 %}
+                {% if type == "following" %}
+                <div class="no-events-message">
+                    <p>There are no events for clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a> or <a href="/events?type=explore">events</a>.</p>
+                </div>
+                {%elif type == "registered" %}
+                <div class="no-events-message">
+                    <p>There are no events you are registered for. Try exploring <a href="/events?type=explore">events</a>.</p>
+                </div>
+                {% endif %}
+            {% else %}
+                {{ list_create.event_list(events) }}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
