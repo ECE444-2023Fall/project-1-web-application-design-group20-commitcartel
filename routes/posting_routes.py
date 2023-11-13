@@ -41,24 +41,19 @@ class CreateEventForm(FlaskForm):
     event_start_time = TimeField('Event Start Time', validators = [DataRequired()])
     location        = StringField('Location', validators = [DataRequired()])
     event_category = MultiCheckboxField('Event Category', choices=[
-        ('academic', 'Academic'),
-        ('arts', 'Arts'),
-        ('athletics_recreation', 'Athletics and Recreation'),
-        ('community_service', 'Community Service'),
-        ('culture_identities', 'Culture and Identities'),
-        ('environment_sustainability', 'Environment and Sustainability'),
-        ('global_interests', 'Global Interests'),
-        ('hobby_leisure', 'Hobby and Leisure'),
-        ('leadership', 'Leadership'),
-        ('media', 'Media'),
-        ('politics', 'Politics'),
-        ('social', 'Social'),
-        ('social_justice_advocacy', 'Social Justice and Advocacy'),
-        ('spirituality_faith_communities', 'Spirituality and Faith Communities'),
-        ('student_governments_councils_unions', 'Student Governments, Councils, and Unions'),
-        ('work_career_development', 'Work and Career Development')
-    ])
-    description     = TextAreaField('Description', validators = [DataRequired()])
+                        ('sports', 'Sports'),
+                        ('community', 'Community'),
+                        ('fundraiser', 'Fundraiser'),
+                        ('networking', 'Networking'),
+                        ('information', 'Information'),
+                        ('educational', 'Educational'),
+                        ('competition', 'Competitions'),
+                        ('arts', 'The Arts'),
+                        ('culinary', 'Culinary'),
+                        ('festive', 'Festive'),
+                        ('other', 'Other'),
+                    ])
+    description     = TextAreaField('Description', validators = [DataRequired()], render_kw={"placeholder": "Enter your club description here..."})
     submit          = SubmitField('Create Event')
 
 
@@ -72,11 +67,15 @@ def create_event():
         datetime_str = f"{form.event_date.data} {form.event_start_time.data}"
         timestamp = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S").timestamp()
         club_id = session['club_id']
+        categories = form.event_category.data
+        if len(categories) == 0:
+            categories.append('other')
+
         event_object = {
             'name': form.event_name.data,
             'time': Timestamp(int(timestamp), 0),
             'attendees': [],
-            'category': form.event_category.data,
+            'categories': categories,
             'club_id': ObjectId(club_id), # should be session.get('club_id') when login is merged
             'description': form.description.data,
             'location': form.location.data,
@@ -90,11 +89,11 @@ def create_event():
             return redirect(url_for('posting.create_event'))
         
         # append events array for club
-        success, count = update_one('Clubs', {'_id': ObjectId(club_id)}, {'$addToSet': {'events': ObjectId(id)}}) # club_id should be session['club_id']
+        success, count = update_one('Clubs', {'_id': ObjectId(club_id)}, {'$addToSet': {'events': ObjectId(id)}})
         if not success:
             return redirect(url_for('posting.create_event'))
     
-        return redirect(url_for('club_pg.club_event_view', club_id=str(club_id), event_id=str(id))) # club_id should be session['club_id']
+        return redirect(url_for('club_pg.club_event_view', club_id=str(club_id), event_id=str(id)))
     return render_template('create_event.html', form=form)
 
 # Route to create a new post (POST request)

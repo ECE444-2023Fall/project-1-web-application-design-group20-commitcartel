@@ -396,9 +396,8 @@ background-color: #19345d;
 }
 
 .form-group {
-    margin-right: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: row;    
 }
 
 .event-list {
@@ -553,9 +552,13 @@ form input#follow[type="submit"]:hover {
     color: var(--color-new-event);
 }
 
-.form-fields {
+.form-fields-1 {
     flex:1;
     /* flex-direction: row; */
+}
+
+.form-fields-2 {
+    flex: 1;
 }
 
 .form-field-item {
@@ -573,15 +576,25 @@ form input#follow[type="submit"]:hover {
 }
 
 .form-input-label {
-    min-width: 40%;
+    width: 40%;
 }
 
 .form-input-label input {
     width: 100%;
 }
 
-.form-input-label textarea {
+
+.form-text-area-label {
+    width: 90%;
+}
+
+.form-text-area-label textarea{
     width: 100%;
+    height: 200px;
+}
+
+.event-category-label {
+    width: 40%;
 }
 
 ul#event_category {
