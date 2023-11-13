@@ -5,7 +5,7 @@ ALLOWED_ROUTES = {
         'user_account.create_user_account'
     ],
     'club': [
-        'club_pg.clubs',
+        'club_pg.club_view',
         'club_pg.club_event_view',
         'posting.create_event',
         'user_auth.logout'
@@ -14,10 +14,10 @@ ALLOWED_ROUTES = {
         'user_auth.logout',
         'event_feedback.leave_event_feedback',
         'index',
-        'following',
+        'clubs',
         'events',
         'event_feed.view_event_user',
-        'club_pg.clubs',
+        'club_pg.club_view',
         'event_feedback.leave_event_feedback'
     ]
 }

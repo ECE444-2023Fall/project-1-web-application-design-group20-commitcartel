@@ -6,7 +6,7 @@
     <div class="feed_wrapper">
         <div class="form_panel" style="padding-left: 0px;">
             <h3>Filters </h3>
-            <form class="form" method="post" role="form">
+            <form class="form" method="post" role="form" enctype="multipart/form-data">
                 {{ form.csrf_token }}
                
                 <div></div>
@@ -20,10 +20,10 @@
                 </div>
                 <br>
                 <div>
-                    <b>{{form.category.label()}}</b>
+                    <b>{{form.categories.label()}}</b>
                 </div>
                 <div>
-                    {{(form.category(class_="list-group-override"))}}
+                    {{(form.categories(class_="list-group-override"))}}
                 </div>
                 <div>
                 {% for error in form.end_date.errors %}
@@ -36,6 +36,7 @@
                 <div>
                     <label>{{form.start_date()}}</label>
                 </div>
+                <br>
                 <div>
                     <b><label>End Date</label></b>
                 </div>
@@ -85,13 +86,17 @@
             {% if events|length == 0 %}
                 {% if type == "following" %}
                 <div class="no-events-message">
-                    <div>There are no events for clubs you follow. Try exploring <a href="/clubs?type=explore"> clubs </a> or <a href="/events?type=explore"> events </a>.</div>
+                    <div>There are no events for clubs you follow. Try exploring <a href="/clubs?type=explore">clubs </a>or<a href="/events?type=explore"> events</a>.</div>
+                </div>
+                {% elif type == "explore" %}
+                <div class="no-events-message">
+                    <p>There are no events found. Try expanding your filters.</p>
                 </div>
                 {%elif type == "registered" %}
                 <div class="no-events-message">
-                    <div>There are no events you are registered for. Try exploring <a href="/events?type=explore">events</a>.</div>
+                    <p>There are no events you are registered for. Try exploring <a href="/events?type=explore">events</a> or expanding your filters.</p>
                 </div>
-                {% endif %}
+            {% endif %}
             {% else %}
                 {{ list_create.event_list(events) }}
             {% endif %}

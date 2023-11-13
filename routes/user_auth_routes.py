@@ -37,6 +37,11 @@ def login():
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
                 session['name'] = str(user_data['name'])
+                session['search'] = None
+                session['categories'] = None
+                session['start_date'] = None
+                session['end_date'] = None
+                session['filter'] = {}
                 
                 return redirect(url_for('index'))
 
@@ -49,7 +54,7 @@ def login():
                 session['name'] = str(club_data['name'])
                 club_id = session['club_id']
 
-                return redirect(url_for('club_pg.clubs', club_id = club_id))
+                return redirect(url_for('club_pg.club_view', club_id = club_id))
                           
         return redirect(url_for('user_auth.login'))
     
