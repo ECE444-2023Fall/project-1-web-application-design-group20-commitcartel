@@ -606,3 +606,39 @@ ul#event_category li {
     text-align: left; /* Align the text to the left within list items */
 }
 
+.register-club-form {
+    display: flex;
+    flex-direction: column; /* To stack the form and other elements vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+}
+
+
+/* styles.css */
+/* Center the form container */
+.container-registration {
+    margin-top: 20px; /* Adjust the top margin as needed */
+}
+
+/* Style the form groups to have fixed dimensions */
+.form-group-registration {
+    margin-bottom: 15px; /* Add space between form groups */
+    width: 100%; /* Set the width to 100% for consistency */
+    display: flex;
+    flex-direction: row;
+}
+
+.form-control-label-registration {
+    font-weight: bold; /* Make labels bold */
+    width: 30%; /* Adjust the label width as needed */
+    display: inline-block; /* Make labels inline with the input fields */
+    text-align: left; /* Left-align labels */
+    color: #F2F4F7;
+}
+
+.form-control-registration {
+    width: 70%; /* Adjust the input field width as needed */
+    display: inline-block; /* Make input fields inline with labels */
+}
+
+

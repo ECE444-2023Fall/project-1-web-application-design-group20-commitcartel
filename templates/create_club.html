@@ -18,23 +18,51 @@
     <h1><strong><center>CampusConnect</center></strong></h1>
     <center><p>Fill out form to create a club account</p></center>
 </div>
+<div class="container-registration">
+    <form method="POST" action="/create_club">
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group-registration">
+                    {{ form.name.label(class="form-control-label-registration") }}
+                    {{ form.name(class="form-control-registration") }}
+                </div>
+                <div class="form-group-registration">
+                    {{ form.email.label(class="form-control-label-registration") }}
+                    {{ form.email(class="form-control-registration") }}
+                </div>
+                <div class="form-group-registration">
+                    {{ form.password.label(class="form-control-label-registration") }}
+                    {{ form.password(class="form-control-registration") }}
+                </div>
+                <div class="form-group-registration">
+                    {{ form.password_conf.label(class="form-control-label-registration") }}
+                    {{ form.password_conf(class="form-control-registration") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group-registration">
+                    {{ form.category.label(class="form-control-label-registration") }}
+                    {{ form.category(class="form-control-registration") }}
+                </div>
+                <div class="form-group-registration">
+                    {{ form.description.label(class="form-control-label-registration") }}
+                    {{ form.description(class="form-control-registration") }}
+                </div>
+                <div class="form-group-registration">
+                    {{ form.club_icon.label(class="form-control-label-registration") }}
+                    {{ form.club_icon(class="form-control-registration") }}
+                </div>
+            </div>
+        </div>
+        <center>
+            <br>
+            <br>
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </center>
+    </form>
+</div>
 
-<center><label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label></center>
-<br>
-<center><p>Already have an account? <u><a href="/login" style="color:#f6f4f3;"> Log in</a></u></p></center>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 {% endblock %}

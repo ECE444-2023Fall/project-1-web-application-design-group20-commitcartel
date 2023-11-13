@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField
+from wtforms import StringField, SubmitField, FileField, TextAreaField, PasswordField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from database import insert_one, get_data_one, get_data, update_one
 from bson.objectid import ObjectId
@@ -25,9 +25,21 @@ class ClubForm(FlaskForm):
     email            = StringField('Club Email Address:', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
-    description      = TextAreaField('Short description About the Club:', validators=[DataRequired()])
+    category         = SelectField("Club Category:", choices=[
+        ('academic', 'Academic'),
+        ('arts_culture', 'Arts and Culture'),
+        ('sports_athletics', 'Sports and Athletics'),
+        ('community_service', 'Community Service'),
+        ('technology_innovation', 'Technology and Innovation'),
+        ('environment_sustainability', 'Environment and Sustainability'),
+        ('leadership', 'Student Government and Leadership'),
+        ('hobby_special_interest', 'Hobby and Special Interest'),
+        ('health_wellness', 'Health and Wellness'),
+        ('misc', "Miscellaneous")], 
+        validators=[DataRequired()])
+    description      = TextAreaField('Club Description:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:')
-    submit           = SubmitField('Create Account') 
+    submit           = SubmitField('Create Club') 
 
 class FollowClub(FlaskForm):
     follow = SubmitField('Follow')
@@ -250,7 +262,8 @@ def create_club():
             'avg_rating': 0.0, 
             'events': [], 
             'followers': [], 
-            'photo': ''
+            'photo': '',
+            'category:': form.category.data
         }
 
         club_icon_file = form.club_icon.data
