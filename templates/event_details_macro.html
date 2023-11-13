@@ -1,7 +1,11 @@
 {% macro event_details(data, form=None) %}
     <div class="event-header">
         <div class="event-header-flex-item">
-            <a href="/clubs/{{ data['club_id'] }}" class="club_name_header">{{ data['club_name'] }}</a>
+            {%if data['completed'] == True%}
+                <h3 class="event-completed-header"> Completed </h3>
+            {%else%}
+                <h3 class="event-active-header"> Active </h3>
+            {%endif%}
             <h1 class="club_event_name">{{ data['event_name'] }}</h1>
         </div>
         {% if not data['completed'] %}

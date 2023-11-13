@@ -6,7 +6,8 @@
 
 <div class="container">
     <div class="column" id="column1">
-        <img class="club_event_logo" src="{{data['club_img']}}">
+        <a href="/clubs/{{ data['club_id'] }}"><img class="club_event_logo" src="{{data['club_img']}}"></a>
+        <a href="/clubs/{{ data['club_id'] }}" class="club_name_header">{{ data['club_name'] }}</a>
     </div>
     {% if data['completed'] %}
     <div class="column" id="column2">
