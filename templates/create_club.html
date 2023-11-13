@@ -19,7 +19,7 @@
     <center><p>Fill out form to create a club account</p></center>
 </div>
 <div class="container-registration">
-    <form method="POST" action="/create_club">
+    <form method="POST" action="/create_club" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="row">
             <div class="col-md-6">

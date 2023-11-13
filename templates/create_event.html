@@ -18,7 +18,7 @@
     <center><p>Fill out form to create an event</p></center>
 </div>
 <center>
-    <form class="form-group" method="POST" action="/create_event">
+    <form class="form-group" method="POST" action="/create_event" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <div class="form-fields-1">
             <div class="form-field">

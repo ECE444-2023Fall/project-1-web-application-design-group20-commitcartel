@@ -156,11 +156,11 @@ def clubs(club_id):
                     return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
             
         if is_following:
-            return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club)
+            return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club, name=session['name'])
         else:
-            return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club)
+            return render_template('club.html', data=data, is_user=session['is_user'], form=follow_club, name=session['name'])
     # Club View
-    return render_template('club.html', data=data, is_user=session['is_user'])
+    return render_template('club.html', data=data, is_user=session['is_user'], name=session['name'])
 
 
 @club_pg.route('/clubs/<string:club_id>/<string:event_id>')
@@ -230,7 +230,7 @@ def club_event_view(club_id, event_id):
         data['reviews'] = reviews
         
     
-    return render_template('club_event.html', data=data)
+    return render_template('club_event.html', data=data, is_user=session['is_user'], name=session['name'])
 
 @club_pg.route('/create_club', methods=['GET', 'POST'])
 def create_club():
@@ -283,4 +283,4 @@ def create_club():
 
         return redirect(url_for('user_auth.login', club_id=club_id))
 
-    return render_template('create_club.html', form=form, club_icon=session.get('club_icon'), description=session.get('description'), name=session.get('name'), email=session.get('email'))
+    return render_template('create_club.html', form=form, club_icon=session.get('club_icon'), description=session.get('description'), name=session.get('name'), email=session.get('email'), is_user=session.get('is_user'))

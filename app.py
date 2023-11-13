@@ -88,38 +88,9 @@ class EventFilterForm(FlaskForm):
     end_date = DateField('End Date',validators=[validateRange(), Optional()])
     submit      = SubmitField('Submit')
 
-
-def fetch_user_name(user_id):
-    success, user_data = get_data_one("Users", {"_id": ObjectId(user_id)}, {'name': 1})
-
-    if success and user_data:
-        return user_data.get('name', 'Unknown User')
-    return 'Unknown User'
-
-
-def fetch_club_name(club_id):
-    success, club_data = get_data_one("Clubs", {"_id": ObjectId(club_id)}, {'name': 1})
-
-    if success and club_data:
-        return club_data.get('name', 'Unknown Club')
-    return 'Unknown Club'
-
-
-def get_user_or_club_name():
-    if 'is_user' in session and session['is_user']:
-        # Fetch user name for user
-        user_name = fetch_user_name(session['user_id'])
-        return user_name
-    elif 'is_user' in session and not session['is_user']:
-        # Fetch club name for club
-        club_name = fetch_club_name(session['club_id'])
-        return club_name
-    else:
-        return None
-
 @app.route('/')
 def index():
-    return render_template("homepage.html")
+    return render_template("homepage.html", is_user=session['is_user'], name=session['name'])
 
 @app.before_request
 def check_session():
@@ -131,10 +102,6 @@ def check_session():
                 user_type = 'club'
             elif session.get('user_id') is not None:
                 user_type = 'user'
-            # Fetch user or club name based on the session
-            user_or_club_name = get_user_or_club_name()
-            # Make it available globally to all templates
-            g.user_or_club_name = user_or_club_name
 
         # Check if the requested endpoint is allowed for the user type
         if request.endpoint not in ALLOWED_ROUTES[user_type]:
@@ -172,7 +139,7 @@ def following():
 
     clubs = fix_clubs_format(clubs)
 
-    return render_template('clubs.html', form=form, clubs=clubs, type=type)
+    return render_template('clubs.html', form=form, clubs=clubs, type=type, is_user=session['is_user'], name=session['name'])
 
 @app.route('/events', methods=['GET', 'POST'])
 def events():
@@ -202,7 +169,7 @@ def events():
     
     session['query'] = {}
 
-    return render_template('events.html', form=form, events=events, type=type)
+    return render_template('events.html', form=form, events=events, type=type, is_user=session['is_user'], name=session['name'])
 
 if __name__ == '__main__':
     app.run(debug=True)

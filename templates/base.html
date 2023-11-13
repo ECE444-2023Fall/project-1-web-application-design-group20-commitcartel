@@ -25,14 +25,16 @@
                 </a>
             </li>
             <li class="nav_item"><a href="/">Home</a></li>
-            <li class="nav_item"><a href="/events?type=following">Events</a></li>
-            <li class="nav_item"><a href="/clubs?type=following">Clubs</a></li>
+            {% if is_user==True %}
+                <li class="nav_item"><a href="/events?type=following">Events</a></li>
+                <li class="nav_item"><a href="/clubs?type=following">Clubs</a></li>
+            {% endif %}
             <div class="image-container">
 
                 <img class="user_icon" src="/static/user_icon_white.png" alt="user_icon">
                 <div class="dropdown-content">
                     <div class="user_logo_name">
-                        <strong>{{g.user_or_club_name}}</strong>
+                        <strong>{{name}}</strong>
                     </div>
                     <a href="/logout">Log Out</a>
                 </div>

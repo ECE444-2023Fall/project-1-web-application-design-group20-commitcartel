@@ -62,4 +62,4 @@ def create_user_account():
 
         return redirect(url_for('user_account.create_user_account'))
 
-    return render_template('create_user_account.html', form=form)
+    return render_template('create_user_account.html', form=form, is_user=session['is_user'], name=session['name'])
