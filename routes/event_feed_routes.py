@@ -109,16 +109,24 @@ def get_following_events(user_id, filter={}):
 
 def get_registered_events(user_id, filter={}):
     # Get the list of the user's registered event IDs
-    filter['_id'] = ObjectId(user_id)
+    user_selected_filter = {'_id': ObjectId(user_id)}
 
-    success, data = get_data_one('Users', filter=filter, projection={'registered_events': 1})
-    data = [item for item in data['registered_events']]
+    success, data = get_data_one('Users', filter=user_selected_filter, projection={'registered_events': 1})
 
     if not success:
         return jsonify({'error': str(data)}), 500
     
+    registered_events = [item for item in data['registered_events']]
+
+    # Filter that fetches events
+    filtered_events = {'_id': {'$in': registered_events}}
+
+    # Apply the category filter if applicable
+    if 'categories' in filter:
+        filtered_events['categories'] = filter['categories']
+    
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', filter = {'_id': {'$in': data}}, sort=[("time", -1)])
+    success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
     
     if success:
         return json.loads(json_util.dumps(results))
