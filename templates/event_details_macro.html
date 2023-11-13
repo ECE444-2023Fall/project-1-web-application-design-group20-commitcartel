@@ -2,9 +2,9 @@
     <div class="event-header">
         <div class="event-header-flex-item">
             {%if data['completed'] == True%}
-                <h3 class="event-completed-header"> Completed </h3>
+                <h3 class="event-completed-header"> Past </h3>
             {%else%}
-                <h3 class="event-active-header"> Active </h3>
+                <h3 class="event-active-header"> Upcoming </h3>
             {%endif%}
             <h1 class="club_event_name">{{ data['event_name'] }}</h1>
         </div>

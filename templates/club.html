@@ -35,7 +35,7 @@
         <p>{{ data['club_description'] }}</p>
     </div>  
     <div class="club_current_events">
-        <h2>Upcoming Events</h2>
+        <h2><span style="color: green;">Upcoming</span> Events</h2>
         <div class="scrollable-container">
         {% for event in data['events'] %}
             {% if not event['completed'] %}
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="club_past_events">
-        <h2>Past Events</h2>
+        <h2><span style="color: #E74C3C;">Past</span> Events</h2>
         <div class="scrollable-container">
         {% for event in data['events'] %}
             {% if event['completed'] %}

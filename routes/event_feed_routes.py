@@ -14,9 +14,35 @@ class RegisterForEvent(FlaskForm):
 class UnRegisterForEvent(FlaskForm):
     unregister         = SubmitField('Unregister')
 
+club_cats = {
+    'academic': 'Academic',
+    'arts_culture': 'Arts/Culture',
+    'community_service': 'Community Service',
+    'environment_sustainability': 'Environment',
+    'health_wellness': 'Health/Wellness',
+    'hobby_special_interest': 'Hobby',
+    'leadership': 'Leadership',
+    'misc': 'Miscellaneous',
+    'sports_athletics': 'Sports/Athletics',
+    'technology_innovation': 'Technology'
+}
+
+event_cats = {
+    'arts': 'Arts',
+    'competition': 'Competitions',
+    'community': 'Community',
+    'culinary': 'Culinary',
+    'educational': 'Educational',
+    'fundraiser': 'Fundraiser',
+    'information': 'Information',
+    'networking': 'Networking',
+    'sports': 'Sports',
+    'other': 'Other'
+}
 
 # Events
 def fix_events_format(events):
+    current_time = datetime.now()
     for event in events:
         event['id'] = event['_id']['$oid']
         if "time" not in event:
@@ -31,7 +57,11 @@ def fix_events_format(events):
             event['club_img'] = club_info['photo']
         if('description' in event and len(event['description'])>300):
             event['description'] = event['description'][:300] + "..."
-
+       
+        event['completed'] = timestamp<=current_time
+        
+        for i in range(len(event['categories'])):
+            event['categories'][i] = event_cats[event['categories'][i]]
     return events
 
 def fix_clubs_format(clubs):
@@ -40,6 +70,7 @@ def fix_clubs_format(clubs):
         club['id'] = club['_id']['$oid']
         if('description' in club and len(club['description'])>300):
             club['description'] = club['description'][:300] + "..."
+        club['category'] = club_cats[club['category']]
     return clubs
 
 # Events
