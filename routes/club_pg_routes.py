@@ -108,13 +108,14 @@ def clubs(club_id):
     if not success_events:
         events = []
 
-    current_time = datetime.utcnow()
+    current_time = datetime.now()
 
     # Prepare data for the template
     data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': [], 'club_img': club['photo']}
 
     for event in events:
         timestamp = event['time']
+        print(current_time, timestamp)
         event_completed = timestamp <= current_time
 
         # Get attendees for each event
