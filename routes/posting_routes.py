@@ -50,7 +50,6 @@ class CreateEventForm(FlaskForm):
                         ('competition', 'Competitions'),
                         ('arts', 'The Arts'),
                         ('culinary', 'Culinary'),
-                        ('festive', 'Festive'),
                         ('other', 'Other'),
                     ])
     description     = TextAreaField('Description', validators = [DataRequired()], render_kw={"placeholder": "Enter your club description here..."})

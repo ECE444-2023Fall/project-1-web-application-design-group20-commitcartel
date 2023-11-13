@@ -16,17 +16,16 @@
                 </div>
                 <br>
                 <div>
-                    <b>{{form.category.label()}}</b>
+                    <b>{{form.categories.label()}}</b>
                 </div>
                 <div>
-                    {{(form.category(class_="list-group-override"))}}
+                    {{(form.categories(class_="list-group-override"))}}
                 </div>
                 
                 <br>
                 <div>
                     {{form.submit() }}
                 </div>
-                
                 
             </form>
         </div>
@@ -53,11 +52,16 @@
                     </div>
                 </div>
             </div>
-            {% if clubs|length == 0  and  type == "following" %}
-                
+            {% if clubs|length == 0  %}
+                {% if type == "following" %}
                 <div class="no-events-message">
-                    <div>There are no clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a>.</div>
+                    <div>There are no clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a> or expanding your filters.</div>
                 </div>
+                {% elif type == "explore" %}
+                <div class="no-events-message">
+                    <div>There are no clubs found. Try expanding your filters.</div>
+                </div>
+            {% endif %}
             {% else %}
                 {{list_create.club_list(clubs)}}
             {% endif %}

@@ -25,18 +25,16 @@ class ClubForm(FlaskForm):
     email            = StringField('Club Email Address:', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
-    category         = SelectField("Club Category:", choices=[
-        ('academic', 'Academic'),
-        ('arts_culture', 'Arts and Culture'),
-        ('sports_athletics', 'Sports and Athletics'),
-        ('community_service', 'Community Service'),
-        ('technology_innovation', 'Technology and Innovation'),
-        ('environment_sustainability', 'Environment and Sustainability'),
-        ('leadership', 'Student Government and Leadership'),
-        ('hobby_special_interest', 'Hobby and Special Interest'),
-        ('health_wellness', 'Health and Wellness'),
-        ('misc', "Miscellaneous")], 
-        validators=[DataRequired()])
+    category         = SelectField("Club Category:", choices=[('academic', 'Academic'),
+                                                            ('arts_culture', 'Arts and Culture'),
+                                                            ('community_service', 'Community Service'),
+                                                            ('environment_sustainability', 'Environment and Sustainability'),
+                                                            ('health_wellness', 'Health and Wellness'),
+                                                            ('hobby_special_interest', 'Hobby and Special Interest'),
+                                                            ('misc', "Miscellaneous"),
+                                                            ('sports_athletics', 'Sports and Athletics'),
+                                                            ('leadership', 'Student Government and Leadership'),
+                                                            ('technology_innovation', 'Technology and Innovation')], validators=[DataRequired()])
     description      = TextAreaField('Club Description:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:')
     submit           = SubmitField('Create Club') 
@@ -93,7 +91,7 @@ def is_user_following_club(user_id, club_id):
 
 
 @club_pg.route('/clubs/<string:club_id>', methods=['GET', 'POST'])
-def clubs(club_id):
+def club_view(club_id):
     follow_club = FollowClub()
     unfollow_club = UnfollowClub()
 
@@ -149,11 +147,11 @@ def clubs(club_id):
             if is_following:
                 success,_ = user_unfollow_club(str(session['user_id']), str(club_id))
                 if success:
-                    return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+                    return redirect(url_for('club_pg.club_view', club_id=data['club_id']))
             else:
                 success,_ = user_follow_club(str(session['user_id']), str(club_id))
                 if success:
-                    return redirect(url_for('club_pg.clubs', club_id=data['club_id']))
+                    return redirect(url_for('club_pg.club_view', club_id=data['club_id']))
             
         if is_following:
             return render_template('club.html', data=data, is_user=session['is_user'], form=unfollow_club, name=session['name'])
@@ -245,7 +243,7 @@ def create_club():
             'events': [], 
             'followers': [], 
             'photo': '',
-            'category:': form.category.data
+            'category': form.category.data
         }
 
         club_icon_file = form.club_icon.data
