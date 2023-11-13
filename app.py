@@ -80,16 +80,17 @@ class MultiCheckboxField(SelectMultipleField):
 
 class ClubFilterForm(FlaskForm):
     search = StringField('Search Query')
-    categories = MultiCheckboxField('Categories', choices=[('academic', 'Academic'),
-                                                            ('arts_culture', 'Arts and Culture'),
-                                                            ('community_service', 'Community Service'),
-                                                            ('environment_sustainability', 'Environment and Sustainability'),
-                                                            ('health_wellness', 'Health and Wellness'),
-                                                            ('hobby_special_interest', 'Hobby and Special Interest'),
-                                                            ('misc', "Miscellaneous"),
-                                                            ('sports_athletics', 'Sports and Athletics'),
-                                                            ('leadership', 'Student Government and Leadership'),
-                                                            ('technology_innovation', 'Technology and Innovation')])
+    categories = MultiCheckboxField('Categories', choices=[
+                        ('academic', 'Academic'),
+                        ('arts_culture', 'Arts/Culture'),
+                        ('community_service', 'Community Service'),
+                        ('environment_sustainability', 'Environment'),
+                        ('health_wellness', 'Health/Wellness'),
+                        ('hobby_special_interest', 'Hobby'),
+                        ('leadership', 'Leadership'),
+                        ('misc', "Miscellaneous"), 
+                        ('sports_athletics', 'Sports/Athletics'),
+                        ('technology_innovation', 'Technology')])
     submit      = SubmitField('Submit')
     
 class EventFilterForm(FlaskForm):
