@@ -110,8 +110,7 @@ def clubs(club_id):
         num_attending = len(attendees) if success_attendees else 0
 
         # Get the number of reviews for each event (if completed)
-        if event_completed:
-            num_reviews = len(event.get('event_ratings', []))
+        num_reviews = len(event.get('event_ratings', []))
 
         # Prepare event data
         event_data = {
