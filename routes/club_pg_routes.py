@@ -25,16 +25,18 @@ class ClubForm(FlaskForm):
     email            = StringField('Club Email Address:', validators=[DataRequired() , Email(message = "Please include an '@' in the email address. Email address is missing an '@' ")] )
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
-    category         = SelectField("Club Category:", choices=[('academic', 'Academic'),
-                                                            ('arts_culture', 'Arts and Culture'),
-                                                            ('community_service', 'Community Service'),
-                                                            ('environment_sustainability', 'Environment and Sustainability'),
-                                                            ('health_wellness', 'Health and Wellness'),
-                                                            ('hobby_special_interest', 'Hobby and Special Interest'),
-                                                            ('misc', "Miscellaneous"),
-                                                            ('sports_athletics', 'Sports and Athletics'),
-                                                            ('leadership', 'Student Government and Leadership'),
-                                                            ('technology_innovation', 'Technology and Innovation')], validators=[DataRequired()])
+    category         = SelectField("Club Category:", choices=[
+        ('academic', 'Academic'),
+        ('arts_culture', 'Arts/Culture'),
+        ('sports_athletics', 'Sports/Athletics'),
+        ('community_service', 'Community Service'),
+        ('technology_innovation', 'Technology'),
+        ('environment_sustainability', 'Environment'),
+        ('leadership', 'Leadership'),
+        ('hobby_special_interest', 'Hobby'),
+        ('health_wellness', 'Health and Wellness'),
+        ('misc', "Miscellaneous")], 
+        validators=[DataRequired()])
     description      = TextAreaField('Club Description:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:')
     submit           = SubmitField('Create Club') 
