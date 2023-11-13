@@ -94,7 +94,7 @@ def create_event():
             return redirect(url_for('posting.create_event'))
     
         return redirect(url_for('club_pg.club_event_view', club_id=str(club_id), event_id=str(id)))
-    return render_template('create_event.html', form=form)
+    return render_template('create_event.html', form=form, is_user=session['is_user'], name=session['name'])
 
 # Route to create a new post (POST request)
 @posting.route('/event_post', methods=['POST'])

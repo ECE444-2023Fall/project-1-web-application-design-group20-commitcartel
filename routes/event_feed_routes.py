@@ -44,7 +44,7 @@ def get_explore_events(filter={}, search_string=None):
     if search_string:
         filter["name"] = {"$regex": search_string, "$options": "i"}
 
-    success, result = get_data('Events', filter=filter, sort=[{"time", -1}])
+    success, result = get_data('Events', filter=filter, sort=[("time", -1)])
 
     if success:
         return json.loads(json_util.dumps(result))
@@ -66,7 +66,7 @@ def get_following_events(user_id, filter={}, search_string=None):
         return jsonify({'error': str(clubs)}), 500
 
     # get events from all the club ids
-    success, results = get_data('Events', filter ={'club_id': {'$in': clubs}}, sort=[{"time", -1}])
+    success, results = get_data('Events', filter ={'club_id': {'$in': clubs}}, sort=[("time", -1)])
    
     if success:
         return json.loads(json_util.dumps(results))
@@ -88,7 +88,7 @@ def get_registered_events(user_id, filter={}, search_string=None):
         return jsonify({'error': str(data)}), 500
     
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', filter = {'_id': {'$in': data}}, sort=[{"time", -1}])
+    success, results = get_data('Events', filter = {'_id': {'$in': data}}, sort=[("time", -1)])
     
     if success:
         return json.loads(json_util.dumps(results))
@@ -262,6 +262,6 @@ def view_event_user(event_id):
                 return redirect(url_for('event_feed.view_event_user', event_id=data['event_id']))  
 
     if is_registered:
-        return render_template('view_event_user.html', data=data, form=unregister_form)
+        return render_template('view_event_user.html', data=data, form=unregister_form, is_user=session['is_user'], name=session['name'])
     else:
-        return render_template('view_event_user.html', data=data, form=register_form)
+        return render_template('view_event_user.html', data=data, form=register_form, is_user=session['is_user'], name=session['name'])

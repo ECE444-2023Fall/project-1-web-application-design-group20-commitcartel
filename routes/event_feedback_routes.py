@@ -75,5 +75,5 @@ def leave_event_feedback(event_id):
                         return jsonify({'error': result_avg_rating}), 500
                 else:
                     return jsonify({'error': result_events}), 500
-    return render_template('event_feedback_form.html', form=form, event_id=event_id)
+    return render_template('event_feedback_form.html', form=form, event_id=event_id, is_user=session['is_user'], name=session['name'])
     

@@ -30,21 +30,23 @@ def login():
         password = str(form.password.data)
 
         # Check if the user exists based on email
-        success, user_data = get_data_one("Users", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
+        success, user_data = get_data_one("Users", {"email": email}, {'_id': 1, 'email': 1, 'password': 1, 'name': 1})
 
         if success and user_data:
             if check_password_hash(str(user_data['password']), password):
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
+                session['name'] = str(user_data['name'])
                 
                 return redirect(url_for('index'))
 
-        success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1})
+        success, club_data = get_data_one("Clubs", {"email": email}, {'_id': 1, 'email': 1, 'password': 1, 'name': 1})
 
         if success and club_data:
             if check_password_hash(str(club_data['password']), password):
                 session['is_user'] = False
                 session['club_id'] = str(club_data['_id'])
+                session['name'] = str(club_data['name'])
                 club_id = session['club_id']
 
                 return redirect(url_for('club_pg.clubs', club_id = club_id))
