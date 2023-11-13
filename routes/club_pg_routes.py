@@ -115,7 +115,6 @@ def clubs(club_id):
 
     for event in events:
         timestamp = event['time']
-        print(current_time, timestamp)
         event_completed = timestamp <= current_time
 
         # Get attendees for each event
