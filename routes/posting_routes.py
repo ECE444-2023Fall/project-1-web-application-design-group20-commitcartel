@@ -65,7 +65,7 @@ def create_event():
 
     if form.validate_on_submit():
         datetime_str = f"{form.event_date.data} {form.event_start_time.data}"
-        timestamp = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S").timestamp()
+        timestamp = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
         club_id = session['club_id']
         categories = form.event_category.data
         if len(categories) == 0:
@@ -73,7 +73,7 @@ def create_event():
 
         event_object = {
             'name': form.event_name.data,
-            'time': Timestamp(int(timestamp), 0),
+            'time': timestamp,
             'attendees': [],
             'categories': categories,
             'club_id': ObjectId(club_id), # should be session.get('club_id') when login is merged

@@ -19,7 +19,7 @@ def fix_events_format(events):
         event['id'] = event['_id']['$oid']
         if "time" not in event:
             continue
-        timestamp = datetime.fromtimestamp(event['time']['$timestamp']['t'])
+        timestamp = event['time']
         event['date_formatted'] = timestamp.strftime("%B %d, %Y")
         event['time_formatted'] = timestamp.strftime("%I:%M %p")
         res,club_info = get_data_one('Clubs', {'_id': ObjectId(event['club_id']['$oid'])}, {'name': 1, 'photo': 1})
@@ -208,7 +208,7 @@ def view_event_user(event_id):
 
     # determine if a event has already passed
     current_time = datetime.utcnow()
-    timestamp = datetime.fromtimestamp(event['time'].time)
+    timestamp = event['time']
     event_completed = timestamp <= current_time
     
     is_registered = is_user_registered(session['user_id'], str(event['_id']))
