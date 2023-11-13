@@ -18,10 +18,53 @@
     <h1><strong><center>CampusConnect</center></strong></h1>
     <center><p>Fill out form to create a club account</p></center>
 </div>
+<div class="container">
+    <form method="POST" action="/create_club">
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.name.label(class="form-control-label") }}
+                    {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password_conf.label(class="form-control-label") }}
+                    {{ form.password_conf(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.category.label(class="form-control-label") }}
+                    {{ form.category(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.description.label(class="form-control-label") }}
+                    {{ form.description(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.club_icon.label(class="form-control-label") }}
+                    {{ form.club_icon(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        <center>
+            <br>
+            <br>
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </center>
+    </form>
+</div>
 
-<center><label style="color:#f6f4f3;"> {{ wtf.quick_form(form) }} </label></center>
-<br>
-<center><p>Already have an account? <u><a href="/login" style="color:#f6f4f3;"> Log in</a></u></p></center>
 
 <br>
 <br>
