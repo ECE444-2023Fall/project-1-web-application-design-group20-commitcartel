@@ -109,20 +109,9 @@ def clubs(club_id):
         success_attendees, attendees = get_data('Users', {'_id': {'$in': event['attendees']}})
         num_attending = len(attendees) if success_attendees else 0
 
-        # Get reviews for each event (if completed)
-        reviews = []
+        # Get the number of reviews for each event (if completed)
         if event_completed:
-            for review in event['event_ratings']:
-                success_review_user, user_data = get_data_one('Users', {'_id': ObjectId(review['user_id'])}, {'name': 1})
-
-                if success_review_user:
-                    review_obj = {
-                        'name': user_data.get('name', "N/A"),
-                        'rating': int(review['rating']),
-                        'comment': review['comments']
-                    }
-
-                    reviews.append(review_obj)
+            num_reviews = len(event.get('event_ratings', []))
 
         # Prepare event data
         event_data = {
@@ -135,8 +124,7 @@ def clubs(club_id):
             'time': timestamp.strftime("%I:%M %p"),
             'location': event['location'],
             'completed': event_completed,
-            'reviews': reviews if event_completed else [],
-            'num_reviews': len(reviews),
+            'num_reviews': num_reviews,
             'event_rating_avg': int(event['event_rating_avg']) if 'event_rating_avg' in event else 0
         }
 
