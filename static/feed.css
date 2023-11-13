@@ -33,6 +33,9 @@
 }
 
 .no-events-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 20px;
     margin-top: 20px;

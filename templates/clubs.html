@@ -56,7 +56,7 @@
             {% if clubs|length == 0  and  type == "following" %}
                 
                 <div class="no-events-message">
-                    <p>There are no clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a>.</p>
+                    <div>There are no clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a>.</div>
                 </div>
             {% else %}
                 {{list_create.club_list(clubs)}}
