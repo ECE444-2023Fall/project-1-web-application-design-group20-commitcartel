@@ -13,8 +13,11 @@ class RegisterForEvent(FlaskForm):
 
 class UnRegisterForEvent(FlaskForm):
     unregister         = SubmitField('Unregister')
+
+
 # Events
 def fix_events_format(events):
+    print("SSSSS")
     for event in events:
         event['id'] = event['_id']['$oid']
         if "time" not in event:
@@ -30,11 +33,8 @@ def fix_events_format(events):
     return events
 
 # Events
-def get_explore_events(filter={}, search_string=None):
+def get_explore_events(filter=None):
     # Get most recent events
-    if search_string:
-        filter["name"] = {"$regex": search_string, "$options": "i"}
-
     success, result = get_data('Events', filter=filter, sort=[{"time", -1}])
 
     if success:
@@ -43,19 +43,20 @@ def get_explore_events(filter={}, search_string=None):
         return jsonify({'error': str(result)}), 500
 
 
-def get_following_events(user_id, filter={}, search_string=None):
+def get_following_events(user_id, filter={}):
     # Get clubs user follows
     filter['_id'] = ObjectId(user_id)
-
-    if search_string:
-        filter["name"] = {"$regex": search_string, "$options": "i"}
-    
+    print(filter)
     success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
+    print(data)
     clubs = [item for item in data['following_clubs']]
 
     if not success:
         return jsonify({'error': str(clubs)}), 500
 
+    if len(clubs) == 0:
+        return {}
+    
     # get events from all the club ids
     success, results = get_data('Events', {'club_id': {'$in': clubs}}, {'event_rating': 1}, sort=[{"time", -1}])
 
@@ -65,12 +66,9 @@ def get_following_events(user_id, filter={}, search_string=None):
         return jsonify({'error': str(results)}), 500
 
 
-def get_registered_events(user_id, filter={}, search_string=None):
+def get_registered_events(user_id, filter={}):
     # Get the list of the user's registered event IDs
     filter['_id'] = ObjectId(user_id)
-
-    if search_string:
-        filter["name"] = {"$regex": search_string, "$options": "i"}
 
     success, data = get_data_one('Users', filter=filter, projection={'registered_events': 1})
     data = [item for item in data['registered_events']]
@@ -149,11 +147,8 @@ def get_event_attendees(event_id):
         return jsonify({'error': str(results)}), 500
     
 # Clubs
-def get_explore_clubs(filter={}, search_string=None):
+def get_explore_clubs(filter=None):
     # Get clubs
-    if search_string:
-        filter["name"] = {"$regex": search_string, "$options": "i"}
-
     success, result = get_data('Clubs', filter=filter)
 
     if success:
@@ -162,12 +157,9 @@ def get_explore_clubs(filter={}, search_string=None):
         return jsonify({'error': str(result)}), 500
 
 
-def get_following_clubs(user_id, filter={}, search_string=""):
+def get_following_clubs(user_id, filter={}):
     # Get club ids user follows
     filter['_id'] = ObjectId(user_id)
-
-    if search_string:
-        filter["name"] = {"$regex": search_string, "$options": "i"}
 
     success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
     clubs = [item for item in data['following_clubs']]

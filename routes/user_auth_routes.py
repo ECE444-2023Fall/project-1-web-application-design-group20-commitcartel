@@ -36,6 +36,11 @@ def login():
             if check_password_hash(str(user_data['password']), password):
                 session['is_user'] = True
                 session['user_id'] = str(user_data['_id'])
+                session['search'] = None
+                session['categories'] = None
+                session['start_date'] = None
+                session['end_date'] = None
+                session['filter'] = {}
                 
                 return redirect(url_for('index'))
 
