@@ -6,7 +6,8 @@
 
 .submit-review-button {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px;
+    margin-top: 20px;
     background-color: #007BFF;
     color: #fff;
     text-decoration: none;
@@ -17,6 +18,22 @@
 
 .submit-review-button:hover {
     background-color: #0056b3;
+    display: inline-block;
+    padding: 10px;
+    margin-top: 20px;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.event-completed-header {
+    color: #E74C3C;
+}
+
+.event-active-header {
+    color: green;
 }
 
 .event-header {
@@ -31,7 +48,8 @@
 }
 
 .event-header-flex-item:nth-child(2) {
-    padding: 20px;
+    padding: 10px;
+    padding-left: 20px;
     align-self: flex-end;
 }
 

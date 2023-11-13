@@ -60,8 +60,9 @@ CLUB PAGE EVENT CSS
 
 .club_name_header {
     margin-bottom: 5px;
+    padding: 10px;
     font-family: Verdana, sans-serif;
-    font-size: large;
+    font-size: 28px;
     text-decoration: none; /* Remove underline */
     color: #151515;
 }
@@ -73,12 +74,10 @@ CLUB PAGE EVENT CSS
 
 /* Style for the scrollable container */
 .scrollable-container {
-    max-height: 500px; /* Set the desired height */
+    height: 500px; /* Set the desired height */
     overflow-y: auto; /* Enable vertical scrolling */
     /* border: 1px solid #ccc;  */
     padding: 10px; /* Optional: Add padding for styling */
-
-
 }
 
 /* Style for the attendee box */

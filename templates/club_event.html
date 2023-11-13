@@ -7,6 +7,7 @@
 <div class="container">
     <div class="column" id="column1">
         <img class="club_event_logo" src="{{data['club_img']}}">
+        <a href="/clubs/{{ data['club_id'] }}" class="club_name_header">{{ data['club_name'] }}</a>
     </div>
     <div class="column" id="column2">
         {{event_details.event_details(data)}}
