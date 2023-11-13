@@ -34,7 +34,7 @@ class ClubForm(FlaskForm):
         ('environment_sustainability', 'Environment'),
         ('leadership', 'Leadership'),
         ('hobby_special_interest', 'Hobby'),
-        ('health_wellness', 'Health and Wellness'),
+        ('health_wellness', 'Health/Wellness'),
         ('misc', "Miscellaneous")], 
         validators=[DataRequired()])
     description      = TextAreaField('Club Description:', validators=[DataRequired()])
