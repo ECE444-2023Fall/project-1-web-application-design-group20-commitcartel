@@ -204,25 +204,24 @@ def view_event_user(event_id):
     event_completed = timestamp <= current_time
     
     is_registered = is_user_registered(session['user_id'], str(event['_id']))
-    data = {}
-    # Event data
-    data['event_name'] = event['name']
-    data['event_description'] = event['description']
-    data['num_attending'] = len(event['attendees'])
-    data['date'] = timestamp.strftime("%B %d, %Y")
-    data['time'] = timestamp.strftime("%I:%M %p")
-    data['location'] = event['location']
-    data['completed'] = event_completed
-    data['is_user'] = session['is_user']
-    data['event_id'] = str(event['_id'])
-    data['user_id'] = str(session['user_id'])
-    data['is_registered'] = is_registered
+    data = {
+        'event_name': event['name'],
+        'event_description': event['description'],
+        'num_attending': len(event['attendees']),
+        'categories': event['categories'],
+        'date': timestamp.strftime("%B %d, %Y"),
+        'time': timestamp.strftime("%I:%M %p"),
+        'location': event['location'],
+        'completed': event_completed,
+        'is_user': session['is_user'],
+        'event_id': str(event['_id']),
+        'user_id': str(session['user_id']),
+        'is_registered': is_registered,
+        'club_name': club['name'],
+        'club_id': str(club['_id']),
+        'club_img': club['photo'],
+    }
 
-    # Club data
-    # TODO add imgs
-    data['club_name'] = club['name']
-    data['club_id'] = str(club['_id'])
-    data['club_img'] = club['photo']
     if event_completed:
         # get all reviews of event
         reviews = []

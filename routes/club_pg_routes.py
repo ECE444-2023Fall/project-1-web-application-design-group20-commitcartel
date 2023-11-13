@@ -204,7 +204,7 @@ def club_event_view(club_id, event_id):
     data['time'] = timestamp.strftime("%I:%M %p")
     data['location'] = event['location']
     data['completed'] = event_completed
-
+    data['categories'] = event['categories']
     # Club data
     # TODO add imgs
     data['club_name'] = club['name']

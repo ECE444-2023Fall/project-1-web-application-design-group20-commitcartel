@@ -20,7 +20,7 @@
 <center>
     <form class="form-group" method="POST" action="/create_event">
         {{ form.csrf_token }}
-        <div class="form-fields">
+        <div class="form-fields-1">
             <div class="form-field">
                 <div>
                     <label class="form-label">
@@ -64,11 +64,11 @@
             <div class="form-field">
                 <div>
                     <label class="form-label">
-                        {{ form.description.label }}
+                        {{ form.event_category.label }}
                     </label>
                 </div>
-                <label class = "form-input-label">
-                    {{ form.description() }}
+                <label class="event-category-label">
+                    {{ form.event_category() }}
                 </label>
             </div>
             <div class="form-field">
@@ -77,15 +77,15 @@
                 </label>
             </div>
         </div>
-        <div class="form-fields">
+        <div class="form-fields-2">
             <div class="form-field">
                 <div>
                     <label class="form-label">
-                        {{ form.event_category.label }}
+                        {{ form.description.label }}
                     </label>
                 </div>
-                <label>
-                    {{ form.event_category() }}
+                <label class = "form-text-area-label">
+                    {{ form.description() }}
                 </label>
             </div>
         </div>
