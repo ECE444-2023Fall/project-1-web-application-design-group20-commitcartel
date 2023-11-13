@@ -238,7 +238,7 @@ def view_event_user(event_id):
 
             if success:
                 review_obj = {
-                    'name': user_data.get('name', "N/A"),
+                    'name': review.get('name', "Anonymous"),
                     'rating': int(review['rating']),
                     'comment': review['comments']
                 }
