@@ -114,7 +114,7 @@ def clubs(club_id):
     data = {'club_name': club['name'], 'club_description': club['description'], 'club_id':club_id, 'events': [], 'club_img': club['photo']}
 
     for event in events:
-        timestamp = datetime.fromtimestamp(event['time'].time)
+        timestamp = event['time']
         event_completed = timestamp <= current_time
 
         # Get attendees for each event
@@ -174,7 +174,7 @@ def club_event_view(club_id, event_id):
     
     # determine if a event has already passed
     current_time = datetime.utcnow()
-    timestamp = datetime.fromtimestamp(event['time'].time)
+    timestamp = event['time']
     event_completed = timestamp <= current_time
     
     data = {}
@@ -255,6 +255,7 @@ def create_club():
 
         club_icon_file = form.club_icon.data
         if club_icon_file:
+    
             allowed_extensions = {'jpg', 'jpeg', 'png'}
             filename = secure_filename(club_icon_file.filename)
             file_extension = filename.rsplit('.', 1)[1].lower() if '.' in filename else None
