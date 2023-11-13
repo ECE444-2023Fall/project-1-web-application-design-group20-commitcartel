@@ -5,12 +5,25 @@
             <img src="{{event.club_img}}" alt="{{ event.club_name }} Logo">
         </div>
         <div class="event-info">
-            <h3>{{ event.name }}</h3>
+            <h3 style="font-size: 40px;">{{ event.name }}</h3>
             <p><b>Club</b>: {{ event.club_name}}</p>
             <p><b>Description</b>: {{ event.description }}</p>
             <p><b>Date & Time</b>: {{ event.date_formatted }} @ {{ event.time_formatted }}</p>
             <p><b>Location</b>: {{ event.location }}</p>
+            <p><b>Categories</b>:
+                {% for cat in event.categories %}
+                        {{ cat}}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            
+            </p>
             <a href="/events/{{ event.id }}" class="read-more-btn">View Event</a>
+        </div>
+        <div class = "event-status">
+            {% if event.completed == True %}
+                <span style="color: red; font-size: 30px;">Past</span>
+            {% else %}
+                <span style="color: green; font-size: 30px;">Upcoming</span>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}
@@ -34,8 +47,9 @@
             <img src="/static/ewb_logo.jpg" alt="{{ club.name }} Logo">
         </div>
         <div class="club-info">
-            <h3>{{ club.name }}</h3>
+            <h3 style="font-size: 40px;">{{ club.name }}</h3>
             <p><b>Description</b>: {{ club.description }}</p>
+            <p><b>Category</b>: {{ club.category }}</p>
             <a href="/clubs/{{ club.id }}" class="read-more-btn">View Club</a>
         </div>
     </div>
