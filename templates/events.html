@@ -85,11 +85,11 @@
             {% if events|length == 0 %}
                 {% if type == "following" %}
                 <div class="no-events-message">
-                    <p>There are no events for clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a> or <a href="/events?type=explore">events</a>.</p>
+                    <div>There are no events for clubs you follow. Try exploring <a href="/clubs?type=explore"> clubs </a> or <a href="/events?type=explore"> events </a>.</div>
                 </div>
                 {%elif type == "registered" %}
                 <div class="no-events-message">
-                    <p>There are no events you are registered for. Try exploring <a href="/events?type=explore">events</a>.</p>
+                    <div>There are no events you are registered for. Try exploring <a href="/events?type=explore">events</a>.</div>
                 </div>
                 {% endif %}
             {% else %}
