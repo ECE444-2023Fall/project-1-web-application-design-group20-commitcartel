@@ -3,37 +3,67 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="padding-left: 40px;">
-        <div class="list-top-bar">
-            <!-- Navigation Links for List Types -->
-            <div class="btn-group-container">
-                <div class="btn-container">
-                    {% if type == "following" %}
-                        <a href="clubs?type=following" class="btn btn-primary btn-lg active" disabled>Following</a>
-                    {% else %}
-                        <a href="clubs?type=following" class="btn btn-primary btn-lg">Following</a>
-                    {% endif %}
+    <div class="feed_wrapper">
+        <div class="form_panel" style="padding-left: 0px;">
+            <h3>Filters </h3>
+            <form class="form" method="post" role="form">
+                {{ form.csrf_token }}          
+                <div>
+                    <b>{{ form.search.label() }}</b>
                 </div>
-                <div class="btn-container">
-                    {% if type == "explore" %}
-                        <a href="clubs?type=explore" class="btn btn-primary btn-lg active" disabled>Explore</a>
-                    {% else %}
-                        <a href="clubs?type=explore" class="btn btn-primary btn-lg">Explore</a>
-                    {% endif %}
+                <div>
+                    {{ form.search() }}
                 </div>
-            </div>
-            <form class="form form-horizontal" method="post" role="form">
-                {{ form.hidden_tag() }}
-                {{ wtf.form_errors(form, hiddens="only") }}
-              
-                {{ wtf.form_field(form.search) }}
-                {{ wtf.form_field(form.category) }}
-                {{ wtf.form_field(form.submit, style="margin-bottom: 1rem;") }}
+                <br>
+                <div>
+                    <b>{{form.category.label()}}</b>
+                </div>
+                <div>
+                    {{(form.category(class_="list-group-override"))}}
+                </div>
+                
+                <br>
+                <div>
+                    {{form.submit() }}
+                </div>
+                
+                
             </form>
         </div>
+        <div class="events_panel">
+            <h3 style="padding-left: 32px; margin-bottom: 0px;">Clubs </h3>
+            <div style="display: flex;justify-content: center;padding-top: 0px; align-items: center;">
+                <div class="list-top-bar">
+                    <!-- Navigation Links for List Types -->
+                    <div class="btn-group-container">
+                        <div class="btn-container">
+                            {% if type == "following" %}
+                                <a href="clubs?type=following" class="btn btn-primary btn-md active" disabled>Following</a>
+                            {% else %}
+                                <a href="clubs?type=following" class="btn btn-primary btn-md">Following</a>
+                            {% endif %}
+                        </div>
+                        <div class="btn-container">
+                            {% if type == "explore" %}
+                                <a href="clubs?type=explore" class="btn btn-primary btn-md active" disabled>Explore</a>
+                            {% else %}
+                                <a href="clubs?type=explore" class="btn btn-primary btn-md">Explore</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if clubs|length == 0  and  type == "following" %}
+                
+                <div class="no-events-message">
+                    <p>There are no clubs you follow. Try exploring <a href="/clubs?type=explore">clubs</a>.</p>
+                </div>
+            {% else %}
+                {{list_create.club_list(clubs)}}
+            {% endif %}
+        </div> 
     </div>
     
-    {{list_create.club_list(clubs)}}
     
 {% endblock %}
 
