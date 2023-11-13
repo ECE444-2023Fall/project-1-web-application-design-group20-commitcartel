@@ -56,16 +56,15 @@ class validateRange(object):
               
 # Custom Forms
 class BootstrapListWidget(widgets.ListWidget):
-
     def __call__(self, field, **kwargs):
         kwargs.setdefault("id", field.id)
-        html = [f"<{self.html_tag} {widgets.html_params(**kwargs)}>"]
+        html = [f"<div class='checkbox-list' {widgets.html_params(**kwargs)}>"]
         for subfield in field:
             if self.prefix_label:
-                html.append(f"<li class='list-group-item'>{subfield.label} {subfield(class_='form-check-input ms-1')}</li>")
+                html.append(f"<div class='form-check'>{subfield.label} {subfield(class_='form-check-input')}</div>")
             else:
-                html.append(f"<li class='list-group-item'>{subfield(class_='form-check-input me-1')} {subfield.label}</li>")
-        html.append("</%s>" % self.html_tag)
+                html.append(f"<div class='form-check'>{subfield(class_='form-check-input')} {subfield.label}</div>")
+        html.append("</div>")
         return Markup("".join(html))
 
 class MultiCheckboxField(SelectMultipleField):
