@@ -26,17 +26,17 @@ class ClubForm(FlaskForm):
     password         = PasswordField( 'Create a Password:', validators = [DataRequired(), EqualTo('password_conf', message = 'Password and confirm password do not match') ])
     password_conf    = PasswordField( 'Confirm Password:', validators = [DataRequired()] )
     category         = SelectField("Club Category:", choices=[
-        ('academic', 'Academic'),
-        ('arts_culture', 'Arts/Culture'),
-        ('sports_athletics', 'Sports/Athletics'),
-        ('community_service', 'Community Service'),
-        ('technology_innovation', 'Technology'),
-        ('environment_sustainability', 'Environment'),
-        ('leadership', 'Leadership'),
-        ('hobby_special_interest', 'Hobby'),
-        ('health_wellness', 'Health and Wellness'),
-        ('misc', "Miscellaneous")], 
-        validators=[DataRequired()])
+                        ('academic', 'Academic'),
+                        ('arts_culture', 'Arts/Culture'),
+                        ('community_service', 'Community Service'),
+                        ('environment_sustainability', 'Environment'),
+                        ('health_wellness', 'Health/Wellness'),
+                        ('hobby_special_interest', 'Hobby'),
+                        ('misc', "Miscellaneous"), 
+                        ('sports_athletics', 'Sports/Athletics'),
+                        ('leadership', 'Leadership'),
+                        ('technology_innovation', 'Technology')],
+                        validators=[DataRequired()])
     description      = TextAreaField('Club Description:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:')
     submit           = SubmitField('Create Club') 
