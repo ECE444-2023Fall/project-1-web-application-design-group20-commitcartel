@@ -39,7 +39,7 @@ class ClubForm(FlaskForm):
         validators=[DataRequired()])
     description      = TextAreaField('Club Description:', validators=[DataRequired()])
     club_icon        = FileField('Attach Club Logo:')
-    submit           = SubmitField('Create Account') 
+    submit           = SubmitField('Create Club') 
 
 class FollowClub(FlaskForm):
     follow = SubmitField('Follow')
