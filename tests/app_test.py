@@ -10,7 +10,7 @@ def client():
     BASE_DIR = Path(__file__).resolve().parent.parent
     with app.app_context():
         yield app.test_client() # tests run here
-
+#this is a test
 @pytest.fixture
 def db():
     # Empty out the DB
