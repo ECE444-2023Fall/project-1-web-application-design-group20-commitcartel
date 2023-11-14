@@ -107,6 +107,8 @@ def get_following_events(user_id, filter={}):
     
     if 'time' in filter:
         filtered_events['time'] = filter['time']
+    else:
+        filtered_events['time'] = {'$gte': datetime.now()}  # Ensure only current and future events are displayed, not past
     
     # Get events from all the club ids
     success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
