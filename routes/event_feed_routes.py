@@ -98,23 +98,19 @@ def get_following_events(user_id, filter={}):
 
     followed_clubs = [item for item in data['following_clubs']]
 
-    # Filtered followed clubs' events
-    filtered_events = {'club_id': {'$in': followed_clubs}}
+    # Add followed clubs to the filter
+    filter['club_id'] = {'$in': followed_clubs}
 
-    # Apply the category and time filters if applicable
-    if 'categories' in filter:
-        filtered_events['categories'] = filter['categories']
-    
-    if 'time' in filter:
-        filtered_events['time'] = filter['time']
-    else:
-        filtered_events['time'] = {'$gte': datetime.now()}  # Ensure only current and future events are displayed, not past
-    
-    # Get events from all the club ids
-    success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
+    # Ensure only current and future events are displayed, not past
+    if 'time' not in filter:
+        filter['time'] = {'$gte': datetime.now()}
    
+    # Get events from all the club ids
+    success, results = get_data('Events', filter=filter, sort=[("time", -1)])
+
     if success:
         return json.loads(json_util.dumps(results))
+    
     else:
         return jsonify({'error': str(results)}), 500
 
@@ -129,18 +125,11 @@ def get_registered_events(user_id, filter={}):
     
     registered_events = [item for item in data['registered_events']]
 
-    # Filter that fetches events
-    filtered_events = {'_id': {'$in': registered_events}}
+    # Add registered events to the filter
+    filter['_id'] = {'$in': registered_events}
 
-    # Apply the category and time filters if applicable
-    if 'categories' in filter:
-        filtered_events['categories'] = filter['categories']
-    
-    if 'time' in filter:
-        filtered_events['time'] = filter['time']
-    
     # Get the list of the events from the event IDs
-    success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
+    success, results = get_data('Events', filter = filter, sort=[("time", -1)])
     
     if success:
         return json.loads(json_util.dumps(results))
@@ -234,15 +223,11 @@ def get_following_clubs(user_id, filter={}):
     
     followed_club_ids = [item for item in data['following_clubs']]
 
-    # Filtered followed club
-    filtered_clubs = {'_id': {'$in': followed_club_ids}}
+    # Add followed club IDs to the filter
+    filter['_id'] = {'$in': followed_club_ids}
 
-    # Apply the category filter if applicable
-    if 'category' in filter:
-        filtered_clubs['category'] = filter['category']
-    
     # Get filtered clubs from all the club ids
-    success, results = get_data('Clubs', filter = filtered_clubs)
+    success, results = get_data('Clubs', filter = filter)
     
     if success:
         return json.loads(json_util.dumps(results))
