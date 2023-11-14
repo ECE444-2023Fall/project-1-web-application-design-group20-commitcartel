@@ -85,27 +85,38 @@ def get_explore_events(filter=None):
 
 
 def get_following_events(user_id, filter={}):
-    # Get clubs user follows
-    filter['_id'] = ObjectId(user_id)
+    # Get the list of clubs that user follows
+    user_selected_filter = {'_id': ObjectId(user_id)}
 
-    success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
+    success, data = get_data_one('Users', filter=user_selected_filter, projection={'following_clubs': 1})
 
     if not success:
         return jsonify({'error': str(data)}), 500
     
     if data is None:
-        return {}
+        return []
 
-    clubs = [item for item in data['following_clubs']]
+    followed_clubs = [item for item in data['following_clubs']]
+
+    # Filtered followed clubs' events
+    filtered_events = {'club_id': {'$in': followed_clubs}}
+
+    # Apply the category and time filters if applicable
+    if 'categories' in filter:
+        filtered_events['categories'] = filter['categories']
+    
+    if 'time' in filter:
+        filtered_events['time'] = filter['time']
+    else:
+        filtered_events['time'] = {'$gte': datetime.now()}  # Ensure only current and future events are displayed, not past
     
     # Get events from all the club ids
-    success, results = get_data('Events', filter ={'club_id': {'$in': clubs}}, sort=[("time", -1)])
+    success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
    
     if success:
         return json.loads(json_util.dumps(results))
     else:
         return jsonify({'error': str(results)}), 500
-
 
 def get_registered_events(user_id, filter={}):
     # Get the list of the user's registered event IDs
@@ -121,9 +132,12 @@ def get_registered_events(user_id, filter={}):
     # Filter that fetches events
     filtered_events = {'_id': {'$in': registered_events}}
 
-    # Apply the category filter if applicable
+    # Apply the category and time filters if applicable
     if 'categories' in filter:
         filtered_events['categories'] = filter['categories']
+    
+    if 'time' in filter:
+        filtered_events['time'] = filter['time']
     
     # Get the list of the events from the event IDs
     success, results = get_data('Events', filter = filtered_events, sort=[("time", -1)])
