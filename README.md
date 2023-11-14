@@ -30,9 +30,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel">
-    <img src="" alt="Logo" width="80" height="80">
-  </a>
+  <div align="center">
+    <img width="144" alt="0" src="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/65524500/4c48f268-6680-45ad-88b0-060d427328b2">
+</div>
+
 
 <h3 align="center">CampusConnect</h3>
 
@@ -87,7 +88,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img width="1440" alt="1" src="https://github.com/ECE444-2023Fall/project-1-web-application-design-group20-commitcartel/assets/65524500/ba2d135a-78fa-4535-bf0c-9f69948689d8">
+
 
 Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `ECE444-2023Fall`, `project-1-web-application-design-group20-commitcartel`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `CampusConnect`, `project_description`
 
@@ -148,12 +150,15 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Welcome to our CampusConnect platform! We're delighted to have you explore our application. To get started, use the following sample login credentials:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Username: lucy@mail.utoronto.ca
+
+Password: lucy
+
+Feel free to navigate through the features and functionalities of our platform. Enjoy your exploration!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
