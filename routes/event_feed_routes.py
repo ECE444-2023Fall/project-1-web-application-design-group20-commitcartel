@@ -94,7 +94,7 @@ def get_following_events(user_id, filter={}):
         return jsonify({'error': str(data)}), 500
     
     if data is None:
-        return []
+        return {}
 
     followed_clubs = [item for item in data['following_clubs']]
 
@@ -219,7 +219,7 @@ def get_following_clubs(user_id, filter={}):
         return jsonify({'error': str(data)}), 500
     
     if data is None:
-        return []
+        return {}
     
     followed_club_ids = [item for item in data['following_clubs']]
 
@@ -232,7 +232,7 @@ def get_following_clubs(user_id, filter={}):
     if success:
         return json.loads(json_util.dumps(results))
     else:
-        return []
+        return {}
 
 
 @event_feed.route('/events/<event_id>', methods=['GET', 'POST'])
