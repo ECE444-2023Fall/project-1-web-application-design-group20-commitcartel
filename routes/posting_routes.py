@@ -52,7 +52,7 @@ class CreateEventForm(FlaskForm):
                         ('culinary', 'Culinary'),
                         ('other', 'Other'),
                     ])
-    description     = TextAreaField('Description', validators = [DataRequired()], render_kw={"placeholder": "Enter your club description here..."})
+    description     = TextAreaField('Description', validators = [DataRequired()], render_kw={"placeholder": "Enter your event description here..."})
     submit          = SubmitField('Create Event')
 
 
