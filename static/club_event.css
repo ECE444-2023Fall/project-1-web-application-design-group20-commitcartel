@@ -13,6 +13,8 @@ CLUB PAGE EVENT CSS
 
 /* Style the individual columns */
 .column {
+    display:flex;
+    flex-direction: column;
     flex: 1; /* This makes all columns have an equal width */
     padding: 20px;
     /* border: 1px solid #ccc; */
