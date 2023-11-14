@@ -222,25 +222,32 @@ def get_explore_clubs(filter=None):
 
 def get_following_clubs(user_id, filter={}):
     # Get club ids user follows
-    filter['_id'] = ObjectId(user_id)
+    user_selected_filter = {'_id': ObjectId(user_id)}
 
-    success, data = get_data_one('Users', filter=filter, projection={'following_clubs': 1})
+    success, data = get_data_one('Users', filter=user_selected_filter, projection={'following_clubs': 1})
     
     if not success:
         return jsonify({'error': str(data)}), 500
     
     if data is None:
-        return {}
+        return []
     
-    clubs = [item for item in data['following_clubs']]
+    followed_club_ids = [item for item in data['following_clubs']]
 
-    # Get clubs from all the club ids
-    success, results = get_data('Clubs', {'_id': {'$in': clubs}})
+    # Filtered followed club
+    filtered_clubs = {'_id': {'$in': followed_club_ids}}
+
+    # Apply the category filter if applicable
+    if 'category' in filter:
+        filtered_clubs['category'] = filter['category']
+    
+    # Get filtered clubs from all the club ids
+    success, results = get_data('Clubs', filter = filtered_clubs)
     
     if success:
         return json.loads(json_util.dumps(results))
     else:
-        return jsonify({'error': str(results)}), 500
+        return []
 
 
 @event_feed.route('/events/<event_id>', methods=['GET', 'POST'])
