@@ -115,7 +115,7 @@ def index():
 
 @app.before_request
 def check_session():
-    if (request.endpoint != 'static'):
+    if (request.endpoint != 'static' and request.endpoint != 'health'):
         # Get the user type from the session
         user_type = 'anonymous'
         if session.get('is_user') is not None:
@@ -260,5 +260,10 @@ def events():
 
     return render_template('events.html', form=form, events=events, type=type, is_user=session['is_user'], name=session['name'])
 
+# Health check - always responds with 'OK' 200
+@app.route('/health', methods=['GET'])
+def health():
+    return 'OK', 200  
+                           
 if __name__ == '__main__':
     app.run(debug=True)
