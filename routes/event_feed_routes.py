@@ -75,12 +75,6 @@ def fix_clubs_format(clubs):
 
 # Events
 def get_explore_events(filter=None):
-    if filter is None:
-        filter = {}
-
-    # Only extract events where the time is either equal to the current time or greater than the current time
-    filter['time'] = {'$gte': datetime.now()}  # Ensure only current and future events are displayed, not past
-
     # Get most recent events
     success, result = get_data('Events', filter=filter, sort=[("time", -1)])
 
